@@ -1,6 +1,22 @@
-# Introduction à Docker: atelier
+# Formation Docker: atelier
+# Introduction
+Docker est une solution qui permet de concevoir, tester, partager et déployer rapidement des applications à l'aide de conteneurs sans contrainte d'environnement (OS, hardware, etc).
 
-## Approche initiale: lancer un conteneur connu avec docker run
+Docker permet d'envoyer du code plus rapidement, de standardiser les opérations de vos applications, de migrer aisément du code, et donc de délivrer rapidement et de manière standardisée une application.
+
+Docker est un projet open source (il est devenu de fait un standard multiplateforme incontournable, qui a marginalisé l'utilisation des VMs traditionnelles)
+
+## Ce n'est pas
+Docker n'est pas un gestionnaire de VMs: les conteneurs qu'il manipule sont très légers, et se basent sur l'OS hôte pour tourner.
+
+Docker n'est pas Kubernetes: Docker n'a pas de vocation à gérer un espace multi-machines (sauf éventuellement Docker swarm), alors que Kubernetes si, ce qui en fait un outil idéal pour la gestion d'un cloud. Kubernetes est compatible avec les conteneurs Docker, mais aussi avec d'autres technologies.
+
+## Concepts
+Docker manipule en premier lieu les concepts de containers, images, volumes, network, DockerFile.
+On peut retrouver dans l'ensemble des concepts également: Registry (dont Docker Hub), Compose, Daemon, Engine, Swarm.
+
+
+## Approche initiale (use case 1): lancer un conteneur connu avec docker run
 Je veux faire tourner un app téléchargée depuis internet, par un conteneur "jetable" plutôt qu'un package à installer sur mon PC.
 L'heureux élu est MySQL, dont les tags d'image et la doc sont là: https://hub.docker.com/_/mysql
 
@@ -161,12 +177,13 @@ On remarque:
 
 On peut récupérer localement une image avec `docker pull <repo>:<tag>` ou `docker pull <repo>`.
 
-## Je veux faire tourner une app front (un angular, un react ou même juste du PHP en template) dans un container docker, pour avoir un environnement réutilisable.
-L'app se lance via un `npm start`. Il s'agit d'un serveur express, qui sert la page templatée `index.html.ejs` sur http://localhost:3000/
+## Use case 2: Je veux faire tourner une app front (un angular, un react ou même juste du PHP en template) dans un container docker, pour avoir un environnement réutilisable.
+On part finalement sur une app NodeJS, un serveur express. On peut supposer qu'on part d'un projet fraîchement généré via `npx express-generator --ejs`.
+L'app se lance via un `npm start`. Le serveur sert la page templatée `index.html.ejs` sur http://localhost:3000/
 
 L'arborescence de mon app:
 - mon-front
-  - package.json, qui contient un npm start qui lance un serveur express qui à son tour sert ma page templatée index.html.ejs sur http://localhost:3000/
+  - package.json
   - app.js
   - bin
     - www
@@ -212,8 +229,8 @@ Pourquoi un volume plutôt qu'un bind mount? C'est plus rapide et parfois on ne 
 
 `docker volume` est aux volumes ce que `docker image` est aux images (et ce que docker ps/run/stop/rm est aux containers): un manager de volumes.
 
-## Je veux faire tourner à la fois l'app front et mysql
-### faire communiquer les containers entre eux (le réseau dans Docker)
+## Use case 3: Je veux faire tourner à la fois l'app front et mysql
+### Faire communiquer les containers entre eux (le réseau dans Docker)
 TODO network: (syntaxe), types de networks, communiquer même sans networks
 
 ### De docker run au Docker-compose file (DCF)
