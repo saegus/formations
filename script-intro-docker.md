@@ -69,6 +69,10 @@ Bon, c'est pas ça.
 On peut considérer notre container docker fonctionnellement comme une VM (même si c'est beaucoups plus rapide et plus léger), en particulier sur le volet de l'isolation avec l'hôte. Et donc si on veut que l'hôte et le conteneur communiquent - ici via un host et un port, il faut leur créer un pont.
 Dans Docker, on créé un tel pont par exemple avec `docker run -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3307:3306 mysql`.
 
+> Cette image décrit par exemple le résultat de `docker run -p 8089:80 wordpress`:
+![](https://www.code4it.dev/static/7e983e27425fb44d41cf3189d3835b92/84f4d/Docker-ports.png)
+> Vous pouvez accéder au résultat sur votre machine (sous réserve que le port 8089 ne soit pas occupé par une autre application) sur http://localhost:8089
+
 Re-lançons notre conteneur et notre client avec les modifs qui vont bien; on attend environ 30s après le "docker run" précédent, pour que le serveur soit prêt à recevoir des connexions, puis on lance le client:
 ```
 $ /opt/homebrew/opt/mysql-client/bin/mysql --user=root --password=my-secret-pw --host=127.0.0.1 --port=3307
@@ -193,6 +197,8 @@ L'arborescence de mon app:
   - views
     - index.html.ejs
 
+Note: le 18 janvier, la formation en était à environ 45 min ici, et on a fait un peu plus d'1H en tout.
+
 ### docker image
 Tout d'abord, la commande pour créer un conteneur NodeJS sur lequel va tourner ce serveur: `docker run --rm -p 3000 node:18-alpine`
 
@@ -256,15 +262,15 @@ On note qu'on peut supprimer les volumes liés à un conteneur en même temps qu
 ### Entrypoint et working_dir
 #### docker run --entrypoint
 On peut changer dans le container la commande d'entrée par défaut donnée par l'image (dans l'exemple précédent qqc comme `npm run start`) avec `--entrypoint`.
-En pratique, ça donne par exemple: `docker run --rm --entrypoint echo node:18-alpine hello world`, `docker run --rm --entrypoint ls node:18-alpine -l`.
+En pratique, ça donne par exemple: `docker run --rm --entrypoint ls node:18-alpine -l`, ou encore `docker run --rm --entrypoint npm node:18-alpine install --save axios debug dotenv`.
 
 On peut voir dans `docker ps` la commande lancée par le conteneur, dans la colonne COMMAND. En lançant la commande suivante dans un terminal `bash` et en attendant environ 10s, on a par exemple:
 ```
 $ docker run --rm --entrypoint /bin/sh node:18-alpine -c "echo 'start'; sleep 10; echo 'elapsed: 10s'" & sleep 2; docker ps
 [1] 88082
 start
-CONTAINER ID   IMAGE                    COMMAND                  CREATED         STATUS         PORTS                               NAMES
-e8f21c92d451   node:18-alpine           "/bin/sh -c 'echo 's…"   2 seconds ago   Up 1 second                                        peaceful_vaughan
+CONTAINER ID   IMAGE            COMMAND                  CREATED         STATUS         PORTS   NAMES
+e8f21c92d451   node:18-alpine   "/bin/sh -c 'echo 's…"   2 seconds ago   Up 1 second            peaceful_vaughan
 $ elapsed: 10s
 ```
 Cette commande un peu longue lance une commande bash dans un conteneur mis en arrière-plan du terminal, attends 2 secondes et lance un `docker ps`. La commande lancée dans le terminal du conteneur affiche immédiatement "start", attends 10 secondes puis affiche "elapsed: 10s"; après ça, le terminal interromp son exécution, et le conteneur s'arrête (et vu qu'on a passé --rm, se supprime). on voit donc dans le `docker ps` le conteneur en activité, avec son entrypoint  qui commence bien par notre commande (/bin/sh) et ses arguments (-c "echo 'start'; sleep 10; echo 'elapsed: 10s'"): "/bin/sh -c 'echo 's…".
