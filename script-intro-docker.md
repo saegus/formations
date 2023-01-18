@@ -209,14 +209,30 @@ node         18          14b53699cf24   5 weeks ago   942MB
 
 Une commande utile (puissante donc dangereuse) quand on manque de place sur le PC: `docker image prune`.
 
-### Bind mounts et variables d'environnement
-TODO
--v <path du fichier ou du directory dans l'hôte>:<path du fichier ou du directory dans le container>
-docker run -v ${pwd}:TODO
+### Bind mounts, names, entrypoint et working_dir
+On va lancer notre conteneur en le liant avec notre répertoire actuel avec la commande suivante: `docker run --rm -d -p 3000 -v $(pwd):/usr/src/app node:18-alpine`
 
-Note: si le path dans l'hôte ne pointe vers rien, docker crééra par défaut un dossier avec le nom demandé.
-Note 2: Le bind mount est un type de volume, avec le volume interne.
-Note 3: Docker produit des conteneurs stateless par défaut, un bind mount (ou un volume interne) sert à rendre le conteneur stateful (stateful actoss container reboots).
+La syntaxe pour lier un fichier ou un dossier entre l'hôte et le conteneur est `-v <path du fichier ou du directory dans l'hôte>:<path du fichier ou du directory dans le container>`
+Attention 1: le chemin dépend de votre current working directory (vous pouvez le consulter avec `pwd`)
+Attention 2: si le fichier n'existe pas d'un côté ni de l'autre, Docker créé (réccusrivement) un dossier vide à la place. La fonctionnalité est pratique, mais si vous voyez un dossier vide à la place du fichier/dossier que vous attendiez, vérifiez vos chemins d'accès.
+
+Note 1: Le bind mount est un type de volume, avec le volume interne.
+Note 2: Docker produit des conteneurs stateless par défaut, un bind mount (ou un volume interne) sert à rendre le conteneur stateful (stateful actoss container reboots).
+
+On peut changer dans le container la commande d'entrée par défaut donnée par l'image (ici qqc comme `npm run start`) avec `--entrypoint`.
+En pratique: `docker run --rm --entrypoint echo node:18-alpine hello world`
+
+Une commande pratique pour voir ce qu'il se passe dans un container: `docker run -it --entrypoint /bin/bash <image>` (ou `docker run -it --entrypoint /bin/sh <image>` si la précédente faile): on peut regader l'intérieur d'un container grâce à ça. `-i` et `-t` sont des options permettant d'ouvrir un shell bash interactif, de la même manière qu'un ssh sur un serveur
+
+TODO working dir
+
+TODO On peut choisir le nom d'un container avec `--name`: `docker run --rm -d -p 3000 -v $(pwd):/usr/src/app  --name conteneur-test node:18-alpine`
+### docker name, docker exec et variables d'environnement
+Tout d'a
+De la même manière qu'on a utilisé `docker run --entrypoint`, on peut utiliser `docker exec -it <image> <commande>`, cette fois sur un container déjà lancé (dont le run a potentiellement modifié la composition interne).
+En pratique, on run par exemple un conteneur nommé par exemple "test" : `docker exec -it <image> <commande>`
+
+TODO
 
 ### Builds et Dockerfile
 TODO Notre premier Dockerfile.
