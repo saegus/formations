@@ -1,4 +1,4 @@
-# Formation Docker: atelier
+# Formation - atelier Docker: from zero to hero
 # Introduction
 Docker est une solution qui permet de concevoir, tester, partager et déployer rapidement des applications à l'aide de conteneurs sans contrainte d'environnement (OS, hardware, etc).
 
@@ -179,6 +179,8 @@ On remarque:
 On peut récupérer localement une image avec `docker pull <repo>:<tag>` (`docker pull mysql:latest`) ou `docker pull <repo>`.
 
 ## Use case 2: Je veux faire tourner une app front (un angular, un react ou même juste du PHP en template) dans un container docker, pour avoir un environnement réutilisable.
+Note préliminaire: je pars du principe que vous connaissez `ls`, `echo`, `pwd` et les autres commandes "de base" utilisées par exemple lors d'un ssh à un serveur distant. Si ce n'est pas le cas, vous allez avoir du mal à comprendre ce qui suit.
+
 On part finalement sur une app NodeJS, un serveur express. On peut supposer qu'on part d'un projet fraîchement généré via `npx express-generator --ejs`.
 L'app se lance via un `npm start`. Le serveur sert la page templatée `index.html.ejs` sur http://localhost:3000/
 
@@ -206,20 +208,50 @@ node         18-alpine   8a6b96edfa16   4 weeks ago   167MB
 node         18          14b53699cf24   5 weeks ago   942MB
 ``` 
 
-`docker image` est la commande pour gérer les images docker. Si besoin d'une doc minimaliste (l'usage quoi), il suffit de l'exécuter tel quel, sans argument.
+`docker image` est la commande pour gérer les images docker. Si besoin d'une doc minimaliste (l'usage quoi), il suffit de l'exécuter tel quel, sans argument. On y voit notamment `pull`, dont on a parlé au début.
 
-Une commande utile (puissante donc dangereuse) quand on manque de place sur le PC: `docker image prune`.
+L'équivalent de `docker ps` pour les images:
+```
+$ docker image ls
+REPOSITORY               TAG         IMAGE ID       CREATED       SIZE
+node                     18          b0cef62e0901   7 days ago    945MB
+node                     18-alpine   48dc5bf9cf8c   8 days ago    171MB
+odyssee-backend          latest      b56cf8a65212   2 weeks ago   1.09GB
+odyssee-frontend         latest      984ed41bfb53   3 weeks ago   1.62GB
+mysql                    latest      7b6f3978ca29   6 weeks ago   550MB
+node                     <none>      14b53699cf24   6 weeks ago   942MB
+```
+On note `docker image rm`, l'équivalent de `docker rm`.
 
-### Bind mounts
-Note préliminaire: je pars du principe que vous connaissez `ls`, `echo`, `pwd` et les autres commandes "de base" utilisées par exemple lors d'un ssh à un serveur distant. Si ce n'est pas le cas, vous allez avoir du mal à comprendre ce qui suit.
 
+Une commande utile (puissante donc dangereuse) quand on manque de place sur le PC: `docker image prune`. Elle supprime toutes les images qui n'ont pas de conteneurs en cours ni stoppés.
+
+### Volumes
+Docker produit des conteneurs stateless par défaut, un volume sert à rendre le conteneur stateful (précisément "stateful across container reboots", un peu comme le disque dur sert à rendre votre ordinateur "stateful across reboots"). Les volumes se divisent en 2 types: le bind mount et le volume interne.
+
+#### Bind mounts
 On va incorporer / lier notre répertoire actuel à notre conteneur avec la commande suivante: `docker run --rm -d -p 3000 -v $(pwd):/usr/src/app node:18-alpine`. La nouvelle option ajoutée ici nous permet de lier un fichier ou un dossier entre l'hôte et le conteneur, la syntaxe est `-v <path du fichier ou du directory dans l'hôte>:<path du fichier ou du directory dans le container>`
 
-Notes / attention:
+Attention:
 - le chemin dépend de votre current working directory (vous pouvez le consulter avec `pwd`)
-- si le fichier n'existe pas d'un côté ni de l'autre, Docker créé (réccusrivement) un dossier vide à la place. La fonctionnalité est pratique, mais si vous voyez un dossier vide à la place du fichier/dossier que vous attendiez, vérifiez vos chemins d'accès.
-- Le bind mount est un type de volume, avec le volume interne. Le volume interne est traité un peu plus loin.
-- Docker produit des conteneurs stateless par défaut, un volume sert à rendre le conteneur stateful (stateful across container reboots).
+- si le fichier n'existe pas d'un côté ni de l'autre, Docker créé (récursivement) un dossier vide à la place. La fonctionnalité est pratique, mais si vous voyez un dossier vide à la place du fichier/dossier que vous attendiez, vérifiez vos chemins d'accès.
+
+#### Volumes internes
+TODO on met un volume sur node_modules.
+
+Pourquoi un volume interne plutôt qu'un bind mount? C'est plus rapide (perfs) et parfois on ne veut juste pas permettre facilement un accès à cette partie stateful (l'accès est difficile mais pas impossible si vous êtes administrateur de votre machine).
+
+#### Gestion
+`docker volume` est aux volumes ce que `docker image` est aux images (et ce que docker ps/run/stop/rm est aux containers): un manager de volumes. On va d'ailleurs y retrouver les mêmes commandes de management; par exemple:
+```
+$ docker volume ls
+DRIVER    VOLUME NAME
+local     0c4019bc77cc500cda8794460ad11f14d3c6f017f3aa84d46f8a899e0384387c
+local     odyssee_node_modules_back
+local     odyssee_node_modules_front
+```
+
+On note qu'on peut supprimer les volumes liés à un conteneur en même temps que celui-ci: `docker rm --volumes <container>`.
 
 ### Entrypoint et working_dir
 #### docker run --entrypoint
@@ -240,7 +272,7 @@ Cette commande un peu longue lance une commande bash dans un conteneur mis en ar
 En particulier, une commande pratique pour voir ce qu'il y a dans une image: `docker run -it --entrypoint /bin/bash <image>` (ou `docker run -it --entrypoint /bin/sh <image>` si la précédente échoue): on peut ouvrir un shell à l'intérieur d'un container grâce à ça. `-i` et `-t` sont des options permettant d'ouvrir un shell bash interactif, de la même manière qu'un ssh sur un serveur distant.
 
 #### docker exec
-Pouvoir lancer une image avec une commande de notre choix qui nous permet d'intéragir avec (`docker run --entrypoint ...`) c'est puissant, mais ce qui va plus souvent nous occuper, c'est d'intéragir avec un conteneur qui a lancé sa commande "originale".
+Pouvoir lancer une image avec une commande de notre choix qui nous permet d'intéragir avec (`docker run --entrypoint ...`) c'est puissant, mais ce qui va plus souvent nous occuper, c'est d'intéragir avec un conteneur dans lequel est déjà lancé sa commande "originale".
 
 De la même manière qu'on a utilisé `docker run --entrypoint`, on peut utiliser `docker exec -it <container> <commande>`, cette fois sur un container déjà lancé (dont le run a potentiellement modifié la composition interne).
 En pratique, on lance par exemple un shell (`/bin/sh` ici) interactif (`-it`) dans le conteneur nommé "test-container" avec: `docker exec -it /bin/sh test-container`.
@@ -263,13 +295,6 @@ Pour docker exec il s'agit de la même option `-w`, mais un dossier qui n'existe
 TODO Notre premier Dockerfile.
 Utilité d'un Dockerfile: créer une image custom avec un processus d'installation (et de configuration statique), un peu comme si on provisionnait une VM avec Vagrant ou Ansible.
 
-### Volumes
-TODO on met un volume sur node_modules.
-
-Pourquoi un volume interne plutôt qu'un bind mount? C'est plus rapide et parfois on ne veut juste pas permettre facilement un accès à cette partie stateful.
-
-`docker volume` est aux volumes ce que `docker image` est aux images (et ce que docker ps/run/stop/rm est aux containers): un manager de volumes.
-
 ## Use case 3: Je veux faire tourner à la fois l'app front et mysql
 ### Faire communiquer les containers entre eux (le réseau dans Docker)
 TODO network: (syntaxe), types de networks, communiquer même sans networks
@@ -280,7 +305,7 @@ Il possède une version qui définit la version du langage à utiliser à l'int�
 
 Les services contiennent les informations sur les conteneurs.
 TODO quasiment toutes les options de `docker run` vues précédemment ont un équivalent dans un DCF:
-- les bind mounts: `-v devient`
+- les bind mounts: `-v devient` TODO
 
 ### .env file et builds
 TODO parler de build contexts
