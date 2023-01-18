@@ -31,8 +31,9 @@ On commence par lancer le conteneur de la manière la plus simple possible - `do
     - MYSQL_ALLOW_EMPTY_PASSWORD
     - MYSQL_RANDOM_ROOT_PASSWORD
 ```
+Ceci ressemble fortement à une erreur d'exécution. En allant voir la doc du container, on constate qu'il a effectivement besoin d'une de ces variables pour tourner, et que donc cette "erreur" était totalement prévisible.
 
-Le container me redonne la main, tourne-t-il toujours? Allons voir dans `docker ps` pour comprendre ce qu'il se passe:
+Le container m'a redonné la main, tourne-t-il toujours? Allons voir dans `docker ps` pour comprendre ce qu'il se passe:
 ```
 $ docker ps
 CONTAINER ID   IMAGE                    COMMAND                  CREATED       STATUS       PORTS                    NAMES
@@ -175,7 +176,7 @@ On remarque:
 - les versions 8 et 5 de mysql: on a donc plusieurs versions de l'application qui nous sont proposées
 - les versions `oracle` et `debian`; il s'agit d'images sur laquelle est installée l'app actuelle. Debian est une image Linux très utilisée et dont les outils sont bien connus; Oracle est une version "customisée" d'une autre image Linux (je parierais sur Red Hat / CentOs), avec des additions de l'éditeur du logiciel (Oracle).
 
-On peut récupérer localement une image avec `docker pull <repo>:<tag>` ou `docker pull <repo>`.
+On peut récupérer localement une image avec `docker pull <repo>:<tag>` (`docker pull mysql:latest`) ou `docker pull <repo>`.
 
 ## Use case 2: Je veux faire tourner une app front (un angular, un react ou même juste du PHP en template) dans un container docker, pour avoir un environnement réutilisable.
 On part finalement sur une app NodeJS, un serveur express. On peut supposer qu'on part d'un projet fraîchement généré via `npx express-generator --ejs`.
@@ -209,30 +210,54 @@ node         18          14b53699cf24   5 weeks ago   942MB
 
 Une commande utile (puissante donc dangereuse) quand on manque de place sur le PC: `docker image prune`.
 
-### Bind mounts, names, entrypoint et working_dir
-On va lancer notre conteneur en le liant avec notre répertoire actuel avec la commande suivante: `docker run --rm -d -p 3000 -v $(pwd):/usr/src/app node:18-alpine`
+### Bind mounts
+Note préliminaire: je pars du principe que vous connaissez `ls`, `echo`, `pwd` et les autres commandes "de base" utilisées par exemple lors d'un ssh à un serveur distant. Si ce n'est pas le cas, vous allez avoir du mal à comprendre ce qui suit.
 
-La syntaxe pour lier un fichier ou un dossier entre l'hôte et le conteneur est `-v <path du fichier ou du directory dans l'hôte>:<path du fichier ou du directory dans le container>`
-Attention 1: le chemin dépend de votre current working directory (vous pouvez le consulter avec `pwd`)
-Attention 2: si le fichier n'existe pas d'un côté ni de l'autre, Docker créé (réccusrivement) un dossier vide à la place. La fonctionnalité est pratique, mais si vous voyez un dossier vide à la place du fichier/dossier que vous attendiez, vérifiez vos chemins d'accès.
+On va incorporer / lier notre répertoire actuel à notre conteneur avec la commande suivante: `docker run --rm -d -p 3000 -v $(pwd):/usr/src/app node:18-alpine`. La nouvelle option ajoutée ici nous permet de lier un fichier ou un dossier entre l'hôte et le conteneur, la syntaxe est `-v <path du fichier ou du directory dans l'hôte>:<path du fichier ou du directory dans le container>`
 
-Note 1: Le bind mount est un type de volume, avec le volume interne.
-Note 2: Docker produit des conteneurs stateless par défaut, un bind mount (ou un volume interne) sert à rendre le conteneur stateful (stateful actoss container reboots).
+Notes / attention:
+- le chemin dépend de votre current working directory (vous pouvez le consulter avec `pwd`)
+- si le fichier n'existe pas d'un côté ni de l'autre, Docker créé (réccusrivement) un dossier vide à la place. La fonctionnalité est pratique, mais si vous voyez un dossier vide à la place du fichier/dossier que vous attendiez, vérifiez vos chemins d'accès.
+- Le bind mount est un type de volume, avec le volume interne. Le volume interne est traité un peu plus loin.
+- Docker produit des conteneurs stateless par défaut, un volume sert à rendre le conteneur stateful (stateful across container reboots).
 
-On peut changer dans le container la commande d'entrée par défaut donnée par l'image (ici qqc comme `npm run start`) avec `--entrypoint`.
-En pratique: `docker run --rm --entrypoint echo node:18-alpine hello world`
+### Entrypoint et working_dir
+#### docker run --entrypoint
+On peut changer dans le container la commande d'entrée par défaut donnée par l'image (dans l'exemple précédent qqc comme `npm run start`) avec `--entrypoint`.
+En pratique, ça donne par exemple: `docker run --rm --entrypoint echo node:18-alpine hello world`, `docker run --rm --entrypoint ls node:18-alpine -l`.
 
-Une commande pratique pour voir ce qu'il se passe dans un container: `docker run -it --entrypoint /bin/bash <image>` (ou `docker run -it --entrypoint /bin/sh <image>` si la précédente faile): on peut regader l'intérieur d'un container grâce à ça. `-i` et `-t` sont des options permettant d'ouvrir un shell bash interactif, de la même manière qu'un ssh sur un serveur
+On peut voir dans `docker ps` la commande lancée par le conteneur, dans la colonne COMMAND. En lançant la commande suivante dans un terminal `bash` et en attendant environ 10s, on a par exemple:
+```
+$ docker run --rm --entrypoint /bin/sh node:18-alpine -c "echo 'start'; sleep 10; echo 'elapsed: 10s'" & sleep 2; docker ps
+[1] 88082
+start
+CONTAINER ID   IMAGE                    COMMAND                  CREATED         STATUS         PORTS                               NAMES
+e8f21c92d451   node:18-alpine           "/bin/sh -c 'echo 's…"   2 seconds ago   Up 1 second                                        peaceful_vaughan
+$ elapsed: 10s
+```
+Cette commande un peu longue lance une commande bash dans un conteneur mis en arrière-plan du terminal, attends 2 secondes et lance un `docker ps`. La commande lancée dans le terminal du conteneur affiche immédiatement "start", attends 10 secondes puis affiche "elapsed: 10s"; après ça, le terminal interromp son exécution, et le conteneur s'arrête (et vu qu'on a passé --rm, se supprime). on voit donc dans le `docker ps` le conteneur en activité, avec son entrypoint  qui commence bien par notre commande (/bin/sh) et ses arguments (-c "echo 'start'; sleep 10; echo 'elapsed: 10s'"): "/bin/sh -c 'echo 's…".
 
-TODO working dir
+En particulier, une commande pratique pour voir ce qu'il y a dans une image: `docker run -it --entrypoint /bin/bash <image>` (ou `docker run -it --entrypoint /bin/sh <image>` si la précédente échoue): on peut ouvrir un shell à l'intérieur d'un container grâce à ça. `-i` et `-t` sont des options permettant d'ouvrir un shell bash interactif, de la même manière qu'un ssh sur un serveur distant.
 
-TODO On peut choisir le nom d'un container avec `--name`: `docker run --rm -d -p 3000 -v $(pwd):/usr/src/app  --name conteneur-test node:18-alpine`
-### docker name, docker exec et variables d'environnement
-Tout d'a
-De la même manière qu'on a utilisé `docker run --entrypoint`, on peut utiliser `docker exec -it <image> <commande>`, cette fois sur un container déjà lancé (dont le run a potentiellement modifié la composition interne).
-En pratique, on run par exemple un conteneur nommé par exemple "test" : `docker exec -it <image> <commande>`
+#### docker exec
+Pouvoir lancer une image avec une commande de notre choix qui nous permet d'intéragir avec (`docker run --entrypoint ...`) c'est puissant, mais ce qui va plus souvent nous occuper, c'est d'intéragir avec un conteneur qui a lancé sa commande "originale".
 
-TODO
+De la même manière qu'on a utilisé `docker run --entrypoint`, on peut utiliser `docker exec -it <container> <commande>`, cette fois sur un container déjà lancé (dont le run a potentiellement modifié la composition interne).
+En pratique, on lance par exemple un shell (`/bin/sh` ici) interactif (`-it`) dans le conteneur nommé "test-container" avec: `docker exec -it /bin/sh test-container`.
+
+#### working dir
+Le working directory d'un conteneur est l'endroit où l'entrypoint va être lancé. Étant donné que pas mal de commandes dépendent de ce working directory et des paths où nous avons monté nos volumes (bind mounts ou volumes internes), le connaître et le changer sont deux choses à savoir.
+
+On peut obtenir le working directory d'une image notamment en l'instanciant avec `docker run <image> pwd`
+
+Pour choisir le volume d'un conteneur, on va utiliser `-w`:
+```
+$ docker run --rm -w /mon/dossier --entrypoint pwd node:18-alpine
+/mon/dossier
+```
+On remarque au passage que si le working directory demandé n'existe pas, Docker le créé pour nous, évitant à `pwd` de planter.
+
+Pour docker exec il s'agit de la même option `-w`, mais un dossier qui n'existe pas génèrera une erreur.
 
 ### Builds et Dockerfile
 TODO Notre premier Dockerfile.
@@ -241,7 +266,7 @@ Utilité d'un Dockerfile: créer une image custom avec un processus d'installati
 ### Volumes
 TODO on met un volume sur node_modules.
 
-Pourquoi un volume plutôt qu'un bind mount? C'est plus rapide et parfois on ne veut juste pas permettre facilement un accès à cette partie stateful.
+Pourquoi un volume interne plutôt qu'un bind mount? C'est plus rapide et parfois on ne veut juste pas permettre facilement un accès à cette partie stateful.
 
 `docker volume` est aux volumes ce que `docker image` est aux images (et ce que docker ps/run/stop/rm est aux containers): un manager de volumes.
 
