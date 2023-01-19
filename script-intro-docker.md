@@ -53,9 +53,11 @@ Il se passe pas mal de logs, puis la dernière ligne se fixe à:
 2023-01-11T14:40:10.592984Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.0.31'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
 ```
 
-Fort bien! Il est plus que temps d'interagir avec cette base de données!
-Pour ça je vais utiliser le client en ligne de commande, mais un MySQL Workbench aurait aussi pu faire l'affaire.
-... Mais au fait, qu'est-ce que je mets dans les infi de connexion?
+### Port binding
+Fort bien, notre container tourne! Il est plus que temps d'interagir avec cette base de données!
+
+Pour ça je vais utiliser le client MySQL en ligne de commande, mais un MySQL Workbench aurait aussi pu faire l'affaire.
+... Mais au fait, qu'est-ce que je mets dans les info de connexion?
 Autant pour l'utilisateur (root) et le mot de passe (my-secret-pw) je vois la chose, autant pour l'host et le port il va falloir deviner. `localhost` et `3306`?
 
 Testons:
@@ -65,15 +67,18 @@ mysql: [Warning] Using a password on the command line interface can be insecure.
 ERROR 2003 (HY000): Can't connect to MySQL server on '127.0.0.1:3306' (61)
 ```
 Bon, c'est pas ça.
+Il y a un problème avec le container: on ne lui a pas dit comment interagir avec l'hôte, et notamment sur quel(s) port(s) faire circuler de l'info.
 
-On peut considérer notre container docker fonctionnellement comme une VM (même si c'est beaucoups plus rapide et plus léger), en particulier sur le volet de l'isolation avec l'hôte. Et donc si on veut que l'hôte et le conteneur communiquent - ici via un host et un port, il faut leur créer un pont.
+On peut à notre niveau considérer notre container docker fonctionnellement comme une VM (même si c'est beaucoup plus rapide et plus léger), en particulier sur le volet de l'isolation avec l'hôte. Et donc si on veut que l'hôte et le conteneur communiquent - ici via un host et un port, il faut leur créer un pont.
 Dans Docker, on créé un tel pont par exemple avec `docker run -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3307:3306 mysql`.
+
+Mais d'où sort ce `3307` ? Eh bien figurez-vos qu'on n'est pas obligé de faire correspondre le port 3306 du conteneur avec le port 3306 de l'hôte. J'ai donc demandé à Docker de connecter le port 3306 du conteneur au port 3307 de mon hôte. On peut donc lire ce binding de port comme `-p <port de l'hôte>:<port du conteneur>`.
 
 > Cette image décrit par exemple le résultat de `docker run -p 8089:80 wordpress`:
 ![](https://www.code4it.dev/static/7e983e27425fb44d41cf3189d3835b92/84f4d/Docker-ports.png)
-> Vous pouvez accéder au résultat sur votre machine (sous réserve que le port 8089 ne soit pas occupé par une autre application) sur http://localhost:8089
+> Vous pouvez accéder à l'assistant d'installation Wordpress sur votre machine sur http://localhost:8089 (sous réserve que le port 8089 ne soit pas occupé par une autre application).
 
-Re-lançons notre conteneur et notre client avec les modifs qui vont bien; on attend environ 30s après le "docker run" précédent, pour que le serveur soit prêt à recevoir des connexions, puis on lance le client:
+Re-lançons notre conteneur et notre client avec les modifs qui vont bien; on attend environ 30s après le "docker run" précédent, pour que le serveur soit prêt à recevoir des connexions, puis on lance le client (avec le port mis à jour):
 ```
 $ /opt/homebrew/opt/mysql-client/bin/mysql --user=root --password=my-secret-pw --host=127.0.0.1 --port=3307
 mysql: [Warning] Using a password on the command line interface can be insecure.
@@ -81,7 +86,7 @@ Welcome to the MySQL monitor.  Commands end with ; or \g.
 ...
 mysql>
 ```
-Looks nice! Mais d'où sort ce `3307` ? Eh bien figurez-vos que j'ai méjà installé mysql sur mon hôte, et cete instance utilise déjà le port 3306. J'ai donc demandé à Docker de connecter le conteneur au port 3307 de mon hôte. Le `3306` restant dit au conteneur que c'est son port 3306 à lui qu'on connecte au port 3307 de l'hôte; et donc on peut lire ce binding de port comme `-p <port de l'hôte>:<port du conteneur>`.
+Looks nice! 
 
 De mémoire, on avait une colonne `PORTS` vide dans le précédent résultat de `docker ps`, regardons si elle est modifiée par ce -p:
 ```
