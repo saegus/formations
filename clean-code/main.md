@@ -74,9 +74,11 @@ t_2_2_nc / t_2_1_c = f.(v1/v2)
 ==== Exemple 1: un composant ReactJS ====
 Il faut savoir ici que l'état interne du composant (l'équivalent de l'attribut d'une instance issu d'une classe) est géré un peu différemment des classes:
 - il est initialisé et lu via `this.state` (et pas simplement `this`, car `this.state` est une propriété spéciale au sein d'un composant de classe React)
-- il est mis à jour avec `this.setState()`
+- il est mis à jour avec `this.setState()`. Ainsi, `this.attr = 42` devient souvent `this.setState({...this.state, attr: 42})`.
 
-Également, la méthode `render()`, qui n'est pas montrée ici, va consommer tous les éléments du state pour produire le code HTML attendu.
+Également, la méthode `render()`, qui a été simplifiée ici, va consommer tous les éléments du state pour produire le code HTML attendu, dans un langage proche de l'HTML (le JSX).
+
+Le point d'entrée pour les deux sujets est la méthode `componentDidMount`, qui sera exécutée à l'initialisation de l'objet.
 
 === Sujet non cleané ===
 Le développeur désigné par l'animateur va utiliser le sujet `./exemple_1_original.js`.
@@ -86,9 +88,15 @@ Le développeur désigné par l'animateur va utiliser le sujet `./exemple_1_clea
 TODO
 
 === Barème technique et fonctionnel ===
-- Basiquement, le code ressemble au listener TODO
+On valide parmi les points suivants lesquels sont répondus (de manière correcte ou mauvaise) et lesquels ne le sont pas. Si il y a d'autres données pertinentes, on les ajoutera ci-dessous.
 
-TODO
+- Basiquement, le code sert à remplir le state interne du component (qui servira ensuite à l'affichage des données récupérées dans le HTML), en faisant des appels à une API, vraisemblablement HTTP.
+- il est exécuté à l'initialisation du composant
+- en pratique, il fait des appels API puis remplit le state avec de manière asynchrone, en une fois.
+- suivant si l'utilisateur passé en argument est un admin ou pas, il ne charge pas les mêmes données:
+  * si admin, on récupère des indicateurs
+  * si pas admin, on récupère des données de classement dépendantes de l'utilisateur "1"
+  * dans tous les cas, on fait appel à une fonction qui nous récupère le classement général
 
 
 ==== Exemple 2: TODO ====
@@ -289,11 +297,17 @@ class Classement extends Component {
 ```
 
 ===== Conclusion =====
-42 lignes pour la réécriture, vs 30 lignes pour l'original => on a 50% de lignes en plus
-820 chars pour la réécriture, 820 pour l'original (surprise!): on a le même nombre de chars.
-1 fonction pour l'original vs 4 fonctions et 1 constante pour la réécriture.
-Taille max des fonctions: 30l pour l'original, 12l pour la réécriture
-Taille max des blocs de code: le code n'est pas aéré vs 5l pour la réécriture
-Temps de compréhension du code à la première lecture: ???
+- 42 lignes pour la réécriture, vs 30 lignes pour l'original => on a 50% de lignes en plus
+- 820 chars pour la réécriture, 820 pour l'original => Surprise! On a le même nombre de chars.
+- 1 fonction pour l'original vs 4 fonctions et 1 constante pour la réécriture.
+- Taille max des fonctions: 30l pour l'original, 12l pour la réécriture => 2X plus petites fonctions
+- Taille max des blocs de code: le code n'est pas aéré vs 5l pour la réécriture
+- ratio d'efficacité par les temps de compréhension à la lecture du code: À calculer avec les données précédentes
 
+Pas mal de choses ont changé, mais les fonctionnaliés restent les mêmes.
+Les métriques du code sont quasiment toutes altérées par les changements de style, ce qui rend des codes "brouillons" et des codes "clean" peu comparables entre eux.
 
+Reste encore quelques questions en suspens, comme par exemple:
+- quel est le ratio de temps dû à l'effort supplémentaire d'écrire dès le début du clean code, par rapport à simplement écrire du code "brouillon"?
+- le ratio des temps de compréhension avec et sans clean code augmente-t-il bien exponentiellement avec le nombre de lignes à comprendre avec une fonctionnalité donnée? Et le taux de bonne compréhension?
+- Est-il plus facile d'ajouter une fonctionnalité au sein d'un code clean? Si oui, à quel point?
