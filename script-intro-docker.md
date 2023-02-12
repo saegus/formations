@@ -50,10 +50,7 @@ Oui! Il s'est bien lancé, puis s'est arrêté.
 ## Variables d'environnement
 Bon maintenant, on va appliquer ce qui nous a été proposé dans le container, à savoir ajouter une des variables proposées. Pour ajouter une variable d'environnement à notre conteneur, on utilise `-e NOM_VARIABLE="valeur de ma variable"` ou `-e NOM_VARIABLE=valeur-de_ma.variable`. On peut mettre plusieurs `-e ...` dans un même `docker run` pour préciser plusieurs variables d'environnement.
 
-Il existe évalement un argument `--env-file`, qui permet de préciser un fichier contenant une ou plusieurs variables d'environnement, au format Dotenv. Voici comment l'utiliser:
-```
-
-```
+Il existe évalement un argument `--env-file`, qui permet de préciser un fichier contenant une ou plusieurs variables d'environnement, au format Dotenv.
 
 Pour notre cas, on va donc lancer la commande: `docker run -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql`.
 
@@ -507,11 +504,11 @@ Hello World
 </pre>
 ```
 
-TODO dessin du port binding dans le network ici
-
 On note qu'il y a différents types de réseaux docker, et que nous n'utilisons ici que celui par défaut.
 
 Les réseaux permettent d'expliquer les résultats parfois surprenants du port binding et de l'exposition de ports, mais c'est un peu long pour être décrit en détail ici.
+
+Voici un article expliquant précisément le networking (y compris comprendre comment communiquer entre conteneurs): https://www.learnitguide.net/2018/09/understanding-docker-port-mapping-to.html
 
 ### De docker à docker-compose
 Jusque-là on a utilisé `docker run` pour lancer nos conteneurs, mais on commence à avoir un certain nombre d'options d'options à préciser, ça surcharge pas mal la ligne de commande et la rend difficile à lire et modifier. De plus, on veut lancer non pas un conteneur, mais un ensemble de conteneurs, et les faire communiquer entre eux; `docker network` va également être nécessaire.
@@ -534,6 +531,7 @@ Les commandes précédentes nous montrent notamment qu'on peut gérer le cycle d
 - `docker-compose down` appelle `docker-compose stop <container>; docker-compose rm <container>` sur tous les conteneurs. Il supprime également les réseaux. Mais il peut aller encore plus loin:
   - Si on lui rajoute l'option `--volumes`, il exécute également `docker volume rm <volume>` sur tout les volumes créés.
   - L'option `--remove-orphans` permet quant à elle de supprimer les conteneurs qui ne sont liés à aucun DCF; pratique lorsqu'on renomme/déplace le projet, ou qu'on modifie en profondeur le DCF - ce qui a tendance à créer des conteneurs orphelins et donc hors de contrôle du DCF si on ne fait pas attention.
+- `docker-compose build` sans précision de nom de service s'execute sur l'ensemble des services.
 
 #### Docker-Compose File / DCF
 Le DCF permet de définir de manière déclarative et centralisée la grande majorité des fonctionnalités (et leurs paramètres) qu'on a vu précédemment avec `docker`, c'est lui qui va contenir les directives permettant à `docker-compose` de gérer notre projet.
@@ -551,7 +549,7 @@ version: "3.7"
 services:
   mon_service_node:
     container_name: node-installed  # docker run --name
-    build: .                        # docker-compose build
+    build: .                        # docker build
     working_dir: /usr/src/app       # docker run -w
     user: root                      # docker run --user
     environment:                    # docker run -e
@@ -598,12 +596,12 @@ build:
 - docker run --entrypoint: le directive ENTRYPOINT existe également, et est similaire à CMD
 - docker run --env-file: Petit avertissement de sécurité: ça n'est pas une bonne pratique de sécurité d'utiliser un/des env_file qui ne sont pas dédiés au conteneur (par exemple l'envfile du DCF ou l'envfile d'un autre conteneur): par exemple le front n'est pas sensé avoir accès aux variables spécifiques au back.
 - volume interne de mon_service_node: il s'agit d'une astuce pour que les node_modules construits lors du builds ne soient pas écrasés par le bind mount.
-- docker network: docker-compose créé par défaut un réseau auquel il connecte tous les conteneurs. les directives `network` mentionnées précédemment ne sont donc pas obligatoires pour les besoins réseau les plus basiques, je les ai mentionné pour montrer la correspondance avec les commandes vues précédemment.
+- docker network: docker-compose créé par défaut un réseau auquel il connecte tous les conteneurs. Les directives `network` mentionnées précédemment ne sont donc pas obligatoires pour les besoins réseau les plus basiques, je les ai mentionné pour montrer la correspondance avec les commandes vues précédemment. Également: les conteneurs ne sont plus connectés au réseau hôte par défaut comme avec `docker run`; pour qu'ils soient accessibles depuis le navigateur local, il faut utiliser le port binding.
 
 Il existe d'autres directives dédiées au DCF couramment utilisées:
-- `restart`: permet dedéfinir à quel point on doit redémarrer le conteneur lorqu'il se termine. Par exemple `restart:always` permet de redémarrer le conteneur au redémarrage de l'ordinateur
-- `depends_on`: TODO
-- `healthcheck`: TODO
+- `restart`: permet de définir à quel point on doit redémarrer le conteneur lorqu'il se termine. Par exemple `restart:always` permet de redémarrer le conteneur au redémarrage de l'ordinateur
+- `depends_on`: déclarer que ce service dépend d'autres services, et sera lancé (une à plusieurs secondes) après les services listés
+- `healthcheck`: configure une routine que docker va exécuter régulièrement pour s'assurer que le conteneur est "healthy" / en bonne santé. Il s'agit d'un monitoring minimaliste, répondant aux besoins les plus basiques en la matière.
 
 Comme dit plus haut, le nom du DCF est libre; toutefois si il n'est pas précisé `docker-compose` utilise `docker-compose.y(a)ml`. Pour le préciser et choisir un autre nom/emplacement, on utilise `docker-compose -f chemin/d'accès/du/DCF`.
 
