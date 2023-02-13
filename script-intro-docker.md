@@ -195,6 +195,7 @@ On peut récupérer localement une image avec `docker pull <repo>:<tag>` (`docke
 
 ## Use case 2: Je veux faire tourner une app front (un angular, un react ou même juste du PHP en template) dans un container docker, pour avoir un environnement réutilisable.
 Note préliminaire: je pars du principe que vous connaissez `ls`, `echo`, `pwd` et les autres commandes "de base" utilisées par exemple lors d'un `ssh` à un serveur distant. Si ce n'est pas le cas, vous allez avoir du mal à comprendre ce qui suit.
+Je vais également utiliser les "here documents" (https://fr.wikipedia.org/wiki/Here_document) pour vous vous montrer des exemples minimaux reproductibles (https://en.wikipedia.org/wiki/Minimal_reproducible_example, ou équivalent comme les SSCCE ou les MCVE) en shell.
 
 On va finalement jeter notre dévolu sur une app NodeJS, un serveur express. On peut supposer qu'on part d'un projet fraîchement généré via `npx express-generator --ejs`.
 L'app se lance via un `npm start`. Le serveur sert la page templatée `index.html.ejs` sur http://localhost:3000/
