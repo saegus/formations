@@ -275,7 +275,7 @@ $ docker stop mon-conteneur;
 $ docker run -v mon-volume:/point/de/montage2 --entrypoint ls wordpress /point/de/montage2
 fichier-persistent
 ```
-On observe bien la persistance du fichier dans le volume alors que le conteneur est détruit puis recréé.
+On observe bien la persistance du fichier dans le volume alors que le conteneur est détruit puis recréé - et le point de montage changé.
 
 #### Gestion des volumes
 `docker volume` est aux volumes ce que `docker image` est aux images (et ce que docker ps/run/stop/rm est aux containers): un manager de volumes. On va d'ailleurs y retrouver les mêmes commandes de management; par exemple:
@@ -306,19 +306,35 @@ $ elapsed: 10s
 Cette commande un peu longue lance une commande bash dans un conteneur mis en arrière-plan du terminal, attends 2 secondes et lance un `docker ps`. La commande lancée dans le terminal du conteneur affiche immédiatement "start", attends 10 secondes puis affiche "elapsed: 10s"; après ça, le terminal interromp son exécution, et le conteneur s'arrête (et vu qu'on a passé --rm, se supprime). on voit donc dans le `docker ps` le conteneur en activité, avec son entrypoint  qui commence bien par notre commande (/bin/sh) et ses arguments (-c "echo 'start'; sleep 10; echo 'elapsed: 10s'"): "/bin/sh -c 'echo 's…".
 
 En particulier, une commande pratique pour voir ce qu'il y a dans une image: `docker run -it --entrypoint /bin/bash <image>` (ou `docker run -it --entrypoint /bin/sh <image>` si la précédente échoue): on peut ouvrir un shell à l'intérieur d'un container grâce à ça. `-i` et `-t` sont des options permettant d'ouvrir un shell bash interactif, de la même manière qu'un ssh sur un serveur distant.
+```
+$ docker run --rm -it --entrypoint /bin/sh node:18-alpine
+/ # ls
+bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbin   srv    sys    tmp    usr    var
+/ # echo "Dans le conteneur" > temp.txt; cat temp.txt
+Dans le conteneur
+/ # exit
+$ docker ps
+CONTAINER ID   IMAGE            COMMAND                  CREATED         STATUS         PORTS   NAMES
+```
 
 #### Lancer une commande en plus de celle en cours: docker exec
 Pouvoir lancer une image avec une commande de notre choix qui nous permet d'intéragir avec (`docker run --entrypoint ...`) c'est puissant, mais ce qui va plus souvent nous occuper, c'est d'intéragir avec un conteneur dans lequel est déjà lancé sa commande "originale".
 
 De la même manière qu'on a utilisé `docker run --entrypoint`, on peut utiliser `docker exec -it <container> <commande>`, cette fois sur un container déjà lancé (dont le run a potentiellement modifié la composition interne).
 En pratique, on lance par exemple un shell (`/bin/sh` ici) interactif (`-it`) dans le conteneur nommé "node-container" avec: `docker exec -it node-container /bin/sh`.
+```
+$ docker run --rm --name mon-sql mysql
+$ docker exec -it mon-sql /bin/sh
+/ # ls
+bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbin   srv    sys    tmp    usr    var
+```
 
-Pour une commande non interactive, on va préférer omettre `-it`. Par exemple: `docker exec node-container echo hello`
+Pour une commande non interactive, on va préférer omettre `-it`. Par exemple: `docker exec node-container echo hello` .
 
 #### Changer le dossier courant
 Le working directory d'un conteneur est l'endroit où l'entrypoint va être lancé. Étant donné que pas mal de commandes dépendent de ce working directory et des paths où nous avons monté nos volumes (bind mounts ou volumes internes), le connaître et le changer sont deux choses à savoir.
 
-On peut obtenir le working directory d'une image notamment en l'instanciant avec `docker run <image> pwd`
+On peut obtenir le working directory d'une image notamment en l'instanciant avec `docker run <image> pwd` .
 
 Pour choisir le volume d'un conteneur, on va utiliser `-w`:
 ```
@@ -329,7 +345,7 @@ On remarque au passage que si le working directory demandé n'existe pas, Docker
 
 Pour docker exec il s'agit de la même option `-w`, mais un dossier qui n'existe pas génèrera une erreur.
 
-### Créer un conteneur: Builds
+### Créer une image: Dockerfile et docker build
 On veut installer automatiquement les dépendances npm du projet, pour ne pas qu'un dev ait à saisir manuellement la commande à chaque nouvelle installation.
 
 Avec Docker, on peut créer facilement des conteneurs où ces commandes ont été préalablement exécutées. Les modèles de ces conteneurs sont des images, et on va en construire une.
@@ -462,26 +478,78 @@ cat << EOF > package.json
 EOF
 
 cat << EOF > Dockerfile
-FROM node:18
-COPY ./package.json .
+FROM node:18-alpine
+WORKDIR /usr/src/app
+COPY ./mon-front/package.json . # Note: on peut ajouter package-lock.json ici, si il existe.
 RUN npm install
 EOF
 
 docker build . --tag node-installed;
+
+docker run --entrypoint head node-installed -n4 node_modules/express/package.json
+# {
+#   "name": "express",
+#   "description": "Fast, unopinionated, minimalist web framework",
+#   "version": "4.18.2",
 ```
 
-Et voilà, plus besoin de lancer `npm install` à chaque nouvelle installation de notre projet, si on fait dès maintenant `docker run -w $(pwd):/usr/src/app node-installed`!
+Et voilà, plus besoin de lancer `npm install` à chaque nouvelle installation de notre projet!
 
 Au point où on en est, rien qu'avec ce Dockerfile on a un environnement de travail reproductible - et donc par exemple utilisable pour du devops, ou à se partager entre devs. Il suffit d'ajouter ce fichier au repository Git.
 
+Il y a toutefois une chose qu'on a oublié de vérifier: est-ce que le point de montage interfère avec `node_modules`?
+```
+docker run --rm \
+-v $(pwd)/mon-front:/usr/src/app \
+-w /usr/src/app \
+--entrypoint ls \
+node-installed
+# app.js
+# bin
+# package.json
+# views
+```
+Catastrophe, `node_modules` a disparu, il faut tout refaire!
+Plusieurs possibilités pour contourner ce problème épineux:
+- les volumes internes (comme ce qui existait sur l'Odyssée avant mon arrivée).
+- node_modules dans l'hôte (mais du coup on ne l'installe plus dans l'image)
+- installer les nodes_modules dans un dossier accessible à node pour le projet, mais qui n'est pas overrided par nos bind mounts.
+
+Je ne détaille pas ici les tenants et les aboutissants, mais l'approche que je vous conseille (pas ma préférée mais facile à mettre en place) est celle des volumes internes:
+```
+# Note: on peut ajouter package-lock.json à côté de package.json, si il existe.
+cat << EOF > Dockerfile
+FROM node:18-alpine
+WORKDIR /usr/src/app
+COPY ./mon-front/package.json .
+RUN npm install
+VOLUME /usr/src/app/node_modules
+EOF
+
+docker build . --tag node-installed;
+
+docker run --rm \
+-v $(pwd)/mon-front:/usr/src/app \
+-w /usr/src/app \
+--entrypoint ls \
+node-installed
+# app.js
+# bin
+# node_modules
+# package.json
+# views
+```
+Bingo!
+Notez toutefois le principas inconvénient de cette méthode: il faut penser à détruire puis re-générer le volume à chaque fois que vous changez package.json .
+
 ## Use case 3: Je veux faire tourner à la fois l'app node et mysql
 
-### Faire communiquer les containers entre eux (le réseau dans Docker)
+### Faire communiquer les conteneurs entre eux (le réseau dans Docker)
 Référence: https://docs.docker.com/engine/reference/commandline/network/
 
-On a vu précédemment qu'on pouvait faire des environnements de travail pour chacun de nos process, ce qui est très puissant. Il arrive régulièrement qu'une application soit composée de plusieurs processus; on a besoin qu'ils puissent communiquer entre eux.
+On a vu précédemment qu'on pouvait faire des environnements de travail pour chacun de nos process, ce qui est très puissant. Il arrive régulièrement qu'une application soit composée de plusieurs processus; on a besoin qu'ils puissent communiquer entre eux. Toutefois, on n'a pas forcément envie que tous les conteneurs communiquent entre eux en passant pas une interface "publique" comme notre localhost.
 
-En l'occurence ici, on veut que l'application en Node.JS ait accès à une base de données MySQL.
+En l'occurence ici, on veut que l'application en Node.JS ait accès à une base de données MySQL, mais pas que MySQL soit exposée.
 
 Docker permet de créer un réseau virtuel sur une machine, sur lequel on peut brancher des conteneurs. Le hostname d'un conteneur, son identifiant réseau, est tout simplement son nom de conteneur (celui qu'on voit avec un `docker ps`).
 
@@ -498,8 +566,7 @@ Hello World
 ...
 </pre>
 $ docker network connect mon-reseau hello-world-container
-$ docker run --rm --network=mon-reseau curlimages/curl hello-world-container:8000
-<pre>
+$ docker run --rm --network=mon-reseau curlimages/curl hello-world-container:8000 # curl depuis l'intérieur du réseau
 Hello World
 ...
 </pre>
@@ -558,13 +625,14 @@ services:
     ports:                          # docker run -p
       - "3000:3000"
     volumes:
-      - ./projet:/usr/src/app       # bind mount
+      - ./mon-front:/usr/src/app    # bind mount
                                     # volume interne:
       - node_modules_volume:/usr/src/app/node_modules
     command: ["npm", "run", "dev"]  # docker run --entrypoint / --command
-    expose: 3000                    # docker run 
+    expose:
+      - 3000                        # docker run --expose
     networks:
-      - backend                     # docker run --network / docker network connect
+      - reseau_dedie                # docker run --network / docker network connect
   db:
     image: mysql                    # docker run mysql
     container_name: ma-base-de-donnees
@@ -572,9 +640,9 @@ services:
     volumes:
       - base_de_donnees_volume:/var/lib/mysql
     ports:
-      - "5433:5432"
+      - "5434:5432"
     networks:
-      - backend
+      - reseau_dedie
 
 volumes:
   node_modules_volume:              # docker volume create
@@ -585,7 +653,7 @@ networks:
 ```
 Quelques notes:
 - le DCF est un fichier YAML. Son nom est libre, mais il est plus pratique de le nommer `docker-compose.yml` ou `docker-compose.yaml`.
-- on commence par en préciser la version, car la syntaxe change au cour des versions. La syntaxe que nous expliquons ici est la 3.7, nous ne nous avançons pas sur les versions ultérieures.
+- on commence par en préciser la version, car la syntaxe change avec la version. La syntaxe que nous utilisaons ici est la 3.8 (la dernière à l'heure de l'écriture de ces lignes), nous ne nous avançons pas sur les versions ultérieures. A priori, l'ensemble des options que nous montrons dans ce DCF existent depuis la version 2.0 .
 - docker-compose build: le build sera lancé automatiquement si le conteneur n'existe pas. De plus, existe une écriture alternative de `build` dissociant le Dockerfile du contexte de build:
 ```
 build:
@@ -595,7 +663,7 @@ build:
 - docker run --user: j'ai précisé l'utilisateur `root`; mais vu qu'il s'agit de l'utilisateur par défaut, il n'y a pas besoin de le préciser. Je l'ai fait pour les besoins pédagogiques.
 - bind mount: Attention ici, "." dans le path hôte fait référence au working directory, pas à l'emplacement du DCF.
 - docker run --entrypoint: le directive ENTRYPOINT existe également, et est similaire à CMD
-- docker run --env-file: Petit avertissement de sécurité: ça n'est pas une bonne pratique de sécurité d'utiliser un/des env_file qui ne sont pas dédiés au conteneur (par exemple l'envfile du DCF ou l'envfile d'un autre conteneur): par exemple le front n'est pas sensé avoir accès aux variables spécifiques au back.
+- docker run --env-file: Petit avertissement de sécurité: ça n'est pas une bonne pratique de sécurité de partager un env_file entre plusisuers conteneurs, ou entre un conteneur et le DCF: par exemple le front n'est pas sensé avoir accès aux variables spécifiques au back.
 - volume interne de mon_service_node: il s'agit d'une astuce pour que les node_modules construits lors du builds ne soient pas écrasés par le bind mount.
 - docker network: docker-compose créé par défaut un réseau auquel il connecte tous les conteneurs. Les directives `network` mentionnées précédemment ne sont donc pas obligatoires pour les besoins réseau les plus basiques, je les ai mentionné pour montrer la correspondance avec les commandes vues précédemment. Également: les conteneurs ne sont plus connectés au réseau hôte par défaut comme avec `docker run`; pour qu'ils soient accessibles depuis le navigateur local, il faut utiliser le port binding.
 
@@ -606,6 +674,22 @@ Il existe d'autres directives dédiées au DCF couramment utilisées:
 
 Comme dit plus haut, le nom du DCF est libre; toutefois si il n'est pas précisé `docker-compose` utilise `docker-compose.y(a)ml`. Pour le préciser et choisir un autre nom/emplacement, on utilise `docker-compose -f chemin/d'accès/du/DCF`.
 
+##### Let the magic be
+Enregistrons le DCF précédent sous `docker-compose.yml`.
+Pour coller à une petite modification (pédagogique) du DCF précédent, ajoutons les lignes suivantes au package.json:
+```
+  "scripts": {
+    "dev": "node ./bin/www"
+  },
+```
+On peut maintenant exécuter:
+```
+$ cat << EOF > .env
+> MYSQL_ROOT_PASSWORD=mot-de-passe
+> EOF
+$ docker-compose up
+```
+Et là la magie opère: nos conteneurs sont lancés, leurs volumes et leur réseau sont paramétrés! Ne manque plus qu'à renseigner les bonnes options dans le connecteur MySQL sur le conteneur NodeJS pour permettre la connexion entre les conteneurs.
 #### envfile
 Si un fichier envfile (par défaut `.env`) est dans le même dossier que le DCF, il peut venir paramétrer celui-ci au-delà de `env_file`, par exemple:
 ```
@@ -639,6 +723,8 @@ services:
       - ${ENV}
 ```
 Ici, toutes les variables entre `${}` proviennent d'un tel fichier `.env`.
+
+L'utilité peut être (comme ici avec le .env) d'avoir une single source of truth pour les variables de la DB, qui sont dupliquées entre 2 conteneurs et le DCF lui-même. Ou même plus simplement d'avoir une SSoT pour l'ensemble des variables d'environnement (les constantes d'application pouvant rester dans les conteneurs).
 
 Il est possible de dire à `docker-compose` d'aller chercher le envfile ailleurs avec l'argument `docker-compose --env-file ./chemin/vers/le/.env/choisi`.
 
