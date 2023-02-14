@@ -721,6 +721,8 @@ services:
       - "npm"
       - "run"
       - ${ENV}
+    ports:
+      - "3000:3000"
 ```
 Ici, toutes les variables entre `${}` proviennent d'un tel fichier `.env`.
 
@@ -735,4 +737,47 @@ Et quand même ces commandes ne suffisent pas?
 
 Sous Mac, le démon docker tourne quand même moins bien que sous Ubuntu: les containers ne veulent parfois plus s'arrêter, même à l'aide des commandes précédentes.
 
-Dans ce cas, on redémarre le démon docker (la procédure diffère selon l'OS hôte), puis ça devrait remarcher. Notez qu'en temps normal, c'est assez peu utile pour stopper ces containers, et peut causer des problèmes si il y a des containers auxquels vous tenez en même temps que ceux qui posent problème.
+Dans ce cas, on redémarre le démon docker (la procédure diffère selon l'OS hôte, sous mac on ferme et ré-ouvre l'app Docker Desktop), puis ça devrait remarcher. Notez qu'en temps normal, c'est assez peu utile pour stopper ces containers, et peut causer des problèmes si il y a des containers auxquels vous tenez en même temps que ceux qui posent problème.
+
+### Un conteneur du même nom existe déjà
+```
+$ docker-compose up
+[+] Running 3/3
+ ⠿ Network test_default
+ Created                                                0.0s
+ ⠿ Container node-installed
+ Created                                                0.1s
+ ⠿ Container mysql
+Error response from daemon: Conflict. The container name "/mysql" is already in use by container "0d58a786fecb9110a12dc916d20dea49dcd35696a06fb8016417ca000c3f45da". You have to remove (or rename) that container to be able to reuse that name.
+```
+`docker ps -a | grep <nom du conteneur>` vous donne approximativement le conteneur avec ce nom. Si vous le trouvez ici, utilisez `docker stop` et `docker rm` pour libérer le nom, ou alors `docker compose down` dans le dossier du projet.
+```
+$ docker ps -a | grep mysql
+CONTAINER ID   IMAGE     COMMAND                  CREATED        STATUS                     PORTS                    NAMES
+fe0dd68b9276   mysql     "docker-entrypoint.s…"   24 hours ago   Exited (255) 3 hours ago   0.0.0.0:3306->3306/tcp   mysql
+```
+
+### Le port hôte auquel se branche le conteneur est déjà utilisé
+```
+$ docker-compose up
+[+] Running 3/3
+ ⠿ Network test_default
+ Created                                                0.0s
+ ⠿ Container node-installed
+ Created                                                0.1s
+ ⠿ Container mysql
+ Created                                                0.1s
+Attaching to node-installed, mysql
+Error response from daemon: driver failed programming external connectivity on endpoint node-installed (3238055cca24767c68fb707e05a76f19a742be7be49748280d397a982505f35f): Bind for 0.0.0.0:3000 failed: port is already allocated
+```
+
+`docker ps -a | grep <port>` vous donne approximativement la liste des conteneurs utilisant le port demandé. Si vous le trouvez ici, utilisez `docker stop` et `docker rm` pour libérer le port, ou alors `docker compose down` dans le dossier du projet.
+```
+$ docker ps -a | grep 3000
+CONTAINER ID   IMAGE              COMMAND                  CREATED        STATUS                     PORTS                    NAMES
+fe0dd68b9276   node-installed     "docker-entrypoint.s…"   24 hours ago   Exited (255) 3 hours ago   0.0.0.0:3000->3000/tcp   node-installed
+```
+
+Si ce n'est pas suffisant, il faut regarder quels programmes utilisent les ports sur l'hôte.
+Sous Linux et Mac, `lsof -i :<port>` vous donne la liste des programmes utilisant le port TCP et/ou UDP demandé. Faites en sorte que le process n'utilise plus le port que cous demandez, ou changez le port binding de votre conteneur pour pointer sur un port libre de l'hôte.
+
