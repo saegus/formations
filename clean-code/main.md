@@ -1,4 +1,13 @@
-====== Clean code ======
+====== Clean Code ======
+
+==== Préambule ====
+Cette formation est la concaténation d'un atelier et d'une expérience.
+
+L'atelier est une forme d'introduction au Clean Code par la pratique, et vise à démystifier ce concept et en montrer la portée concrète dans le travail d'un développeur.
+
+Là où l'atelier vise à en montrer la portée concrète, l'expérience vise à mettre en évidence (et même évaluer et mesurer) l'utilité et le gain de performance qu'on obtient en suivant ses principes.
+
+Cette formation ne rentre pas du tout dans le détail de Clean Code, et se veut plus comme une vitrine, publicité et vulgarisation pour des néophytes, afin de les inciter à se renseigner plus en détail sur les bienfaits de ce mouvement.
 
 ===== Introduction =====
 ==== Quoi? ====
@@ -11,7 +20,7 @@ La plupart de ces pratiques ne sont pas liées à un paradigme de programmation 
 Il y a plusieurs autres bonnes pratiques qui agissent également au niveau des fonctions et des variables: SOLID, DRY, WET, YAGNI, twelve-factors methodology, Separation of concerns, etc.
 
 Par contraste, les méthodes agiles (SCRUM, Kanban, XP, Software Craftsmanship, etc) sont plus proche des intéractions entre acteurs d'un projet. 
-Au passage, même si XP et le Software Craftsmanship ne sont par nature pas comparables au clean code, ils possèdent tout de même des références (assumées ou pas) vers celui-ci.
+Au passage, même si XP et le Software Craftsmanship ne sont par nature pas comparables au Clean Code, ils possèdent tout de même des références (assumées ou pas) vers celui-ci.
 
 Également, des méthodes structurant le code à des niveaux architecturaux plus hauts: Single source of truth, TDD, BDD, DevOps, Event Sourcing, etc.
 
@@ -21,11 +30,13 @@ D'autre part, il existe des (design) patterns et anti-patterns également au niv
 
 Au final, ces méthodologies ont (dans leur grande majorité) des domaines de définition disjoints: chaque méthodologie est pour faire simple la meilleure de son domaine. Les exceptions à cette règle se résolvent facilement, pour peu qu'on prenne 1/2H pour comparer 2 méthodologies aux domaines similaires.
 
+Petite note spécialement aux devs un peu sceptiques face au Clean Code, mais fans des principes SOLID: les deux viennent du même auteur, Uncle Bob... Donnez-leur leur chance plutôt que de les préjuger :-)
+
 ==== Plan ====
 Ces bonnes pratiques ont des effets directement mesurables sur notre produtivité.
 On va d'abord constater un de ces effets, en testant notre rapidité à comprendre du code "plutôt propre" et du code "plutôt pas propre".
 
-Ensuite on va voir sur un exemple particulier en javascript comment appliquer une partie des règles de clean code.
+Ensuite on va voir sur un exemple particulier en javascript comment appliquer une partie des règles de Clean Code.
 
 ===== Expérience / Atelier: rapidité de compréhension =====
 ==== Principe ====
@@ -57,19 +68,25 @@ Le modèle stipule:
 - les devs devraient être un peu plus rapide à la 2e phase qu'à la première d'un facteur d'habitude h (avec h > 1)
 - la facilité de compréhension d'un code cleané vs un code non cleané devrait être d'un facteur f (avec f > 1)
 - chaque sujet est d'une complexité de compréhension "de base" (hors code cleané donc) c1 et c2
+- chaque dev a une expertise/aisance relative avec la techno d'un sujet. Ici on va supposer que ces aisances sont complètement indépendantes du fait que le sujet soit cleané ou pas (ie qu'on peut les représenter par un coeff `a<dev><techno>` qui permet de garder l'équation linéaire).
 
 On cherche à déterminer f.
 Soient les temps théoriques de compréhension pour chaque couple dev/sujet:
-- phase 1, dev 1, code non cleané: t_1_1_nc = c1 / v1
-- phase 1, dev 2, code cleané: t_1_2_c = c1 / (v2.f)
-- phase 2, dev 1, code cleané: t_2_1_c = c2 / (v1.h.f)
-- phase 2, dev 2, code non cleané: t_2_2_nc = c2 / (v2.h)
+- phase 1, dev 1, code non cleané: t_1_1_nc = c1 * (a11 / v1) = c1 / v1
+- phase 1, dev 2, code cleané: t_1_2_c = c1 * a21 / (v2.f) = c1 / (v2.f)
+- phase 2, dev 1, code cleané: t_2_1_c = c2 * a12 / (v1.h.f) = c2 / (v1.h.f)
+- phase 2, dev 2, code non cleané: t_2_2_nc = c2 * a22 / (v2.h) = c2 / (v2.h)
 
 En résolvant le système, on a:
 t_1_1_nc / t_1_2_c = f.(v2/v1)
 t_2_2_nc / t_2_1_c = f.(v1/v2)
 
-=> f = sqrt(t_1_1_nc.t_2_2_nc / (t_1_2_c.t_2_1_c))
+=> `f = sqrt(t_1_1_nc.t_2_2_nc / (t_1_2_c.t_2_1_c))`
+
+=== Avertissement ===
+Bien que la méthode a pour objectif de mesurer une vitesse de compréhension moyenne entre les développeurs, l'expérience a besoin d'une condition supplémentaire pour que le résultat soit pleinement valide: il faut que les deux sujets portent sur la même technologie, et idéalement sur les mêmes sous-composants de cette technologie (2 routes create d'un CRUD Hapi, 2 composants de classe React JSX maniant uniquement du state local, etc.).
+
+Sans cela, il existe un biais dans le choix de distribution lorsque les technos des sujets ne sont pas les mêmes, et si on considère que l'aisance relative n'est pas linéaire avec le fait que le code soit cleané ou pas (par exemple qu'il est beaucoup plus difficile de comprendre sans erreur un code non cleané dans une techno qu'on en connait pas plutôt que dans une techno qu'on connait).
 
 ==== Exemple 1: un composant ReactJS ====
 Il faut savoir ici que l'état interne du composant (l'équivalent de l'attribut d'une instance issu d'une classe) est géré un peu différemment des classes:
@@ -115,10 +132,10 @@ TODO
 ===== Étude de cas =====
 Note: On part d'un composant react existant réel, qui provient du code de l'Odyssée
 
-On va suivre uniquement un sous-ensemble des principes du clean code, listés ici:
+On va suivre uniquement un sous-ensemble des principes du Clean Code, listés ici:
 https://github.com/ryanmcdermott/clean-code-javascript
 
-Les principes issus de cette page Github sont pour partie des interprétations claires du livre de clean code original, et d'autres sont un peu plus sujettes à concurrence, ou sont mal adaptables au contraintes de nos environnement de développement (JS, NodeJS, ...). 
+Les principes issus de cette page Github sont pour partie des interprétations claires du livre de Clean Code original, et d'autres sont un peu plus sujettes à concurrence, ou sont mal adaptables au contraintes de nos environnement de développement (JS, NodeJS, ...). 
 
 Plus concrètement, voici une liste numérotée (à dessein) des règles qui vont nous intéresser dans cet exemple:
 #1 https://github.com/ryanmcdermott/clean-code-javascript#use-meaningful-and-pronounceable-variable-names
@@ -207,7 +224,7 @@ class Classement extends Component {
   }
 
   ...
-  // #5 Le nom de la classe dit qu'il s'agit d'un composant de classement. On "load" rarement autre chose que des data. Ces deux mots ("data" et "classement") peuvent sauter. à la place, on peut par exemple dire qu'il s'agit de l'ensemble des appels API fait dans ce composant (loadAll), ou alors que cette fonction est appelée à l'initialisation du composant (initialLoad).
+  // #5 Le nom de la classe dit qu'il s'agit d'un composant de classement. On "load" rarement autre chose que des data, même si on peut supposer ici qu'il s'agit de charger des données "de state" plutôt qu'une vue complète (avec du HTML et/ou du JS). Ces deux mots ("data" et "classement") peuvent sauter. À la place, on peut par exemple dire qu'il s'agit de l'ensemble des appels API fait dans ce composant (loadAll), ou alors que cette fonction est appelée à l'initialisation du composant (initialLoad).
   // #6 Cette fonction charge le classement de l'entreprise (ça correspond à son nom), mais charge aussi des statistiques sur ledit classement
   _loadDataClassement = () => {
     // #1 #3 pourquoi "tab" dans "tabBatch"? Pourquoi pas un nom en rapport avec ce quis est asynchrone, comme les jobs en bash, ou alors plus généralement les tasks?
@@ -246,7 +263,7 @@ class Classement extends Component {
 }
 ```
 
-==== Fonction réécrite en suivant les principes du clean code ====
+==== Fonction réécrite en suivant les principes du Clean Code ====
 ```
 class Classement extends Component {
   ...
@@ -308,6 +325,19 @@ Pas mal de choses ont changé, mais les fonctionnaliés restent les mêmes.
 Les métriques du code sont quasiment toutes altérées par les changements de style, ce qui rend des codes "brouillons" et des codes "clean" peu comparables entre eux.
 
 Reste encore quelques questions en suspens, comme par exemple:
-- quel est le ratio de temps dû à l'effort supplémentaire d'écrire dès le début du clean code, par rapport à simplement écrire du code "brouillon"?
-- le ratio des temps de compréhension avec et sans clean code augmente-t-il bien exponentiellement avec le nombre de lignes à comprendre avec une fonctionnalité donnée? Et le taux de bonne compréhension?
+- quel est le ratio de temps dû à l'effort supplémentaire d'écrire dès le début du Clean Code, par rapport à simplement écrire du code "brouillon"?
+- le ratio des temps de compréhension avec et sans Clean Code augmente-t-il bien exponentiellement avec le nombre de lignes à comprendre avec une fonctionnalité donnée? Et le taux de bonne compréhension?
 - Est-il plus facile d'ajouter une fonctionnalité au sein d'un code clean? Si oui, à quel point?
+
+===== Voir aussi =====
+- "Clean Code" ("coder proprement" en français) de Robert C. Martin, livre que nous avons au bureau et que je vous encourage vivement à lire. Je me permets d'insister, LISEZ-LE: c'est 400 pages obligatoires à lire (et chacune vaut le coup, don't cherry pick dudes) pour pouvoir prétendre à être un développeur senior sur le marché du travail. Qu'on soit d'accord ou pas avec l'ensembles des points abordés est une autre histoire, mais votre compétence en tant que dev non-junior sera jugée par vos pairs notamment sur votre capacité à comprendre de quoi il est question et à défendre vos choix par rapport à ces points.
+- https://medium.com/@futariboy/bref-voici-comment-je-nomme-mes-variables-et-mes-fonctions-d35f31f443b2
+
+===== Et pour la suite? =====
+Avez-vous envie de formation qui rentrent plus dans le détail de Clean Code (sur "comment bien nommer ses variables et ses fonctions", sur "comment bien comprendre les intentions d'un programmeur qui suit Clean Code à la lettre", sur les fonctions, les commentaires, le TDD, ...)?
+
+
+Ou sur des bonnes pratiques d'un autre niveau, par exemple la twelve factors methodology (qui fait un peu de devops)?
+
+Ou sur différentes manières d'architecturer une application, afin de pouvoir argumenter desvant le client des différents tenants et aboutissants?
+(et au delà de vous être utile professionnellement, les connaissances architecturales permettent de vous faire briller dans les conversations techniques, de la même manière que si vous sortiez de la philosophie dans un repas mondain ^^')

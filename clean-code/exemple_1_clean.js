@@ -47,7 +47,7 @@ class Classement extends Component {
     else this._loadForUser();
   };
 
-  async _loadForUser() {
+  async _loadForAdmin() {
     const [listUser, listIndicateur] = await Promise.all([
       this._load(),
       ClassementAPI.getIndicateur(),
@@ -60,7 +60,7 @@ class Classement extends Component {
     });
   };
 
-  async _loadForAdmin() {
+  async _loadForUser() {
     const [listUser, classementCurrentUser] = await Promise.all([
       this._load(),
       this._load({user: 1}),
