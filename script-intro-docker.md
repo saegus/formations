@@ -1,22 +1,27 @@
 # Formation - atelier Docker: from zero to hero
-# Introduction
+## Préambule
+Ce document est une formation par l'exemple, sous forme de cas d'usages posés comme des problématiques concrètes et vécues, qu'on va résoudre ensemble. C'est une sorte de script détaillé du storytelling donné par le formateur.
+
+Le public visé a déjà approché l'outil Docker via problématique ponctuelle qu'il a dû résoudre dessus, mais n'a pas appris à s'en servir au-delà. Cette formation lui donne les clés des utilisations courantes de Docker, de débutant à intermédiaire (et début d'avancé). 
+
+## Introduction
 Docker est une solution qui permet de concevoir, tester, partager et déployer rapidement des applications à l'aide de conteneurs sans contrainte d'environnement (OS, hardware, etc).
 
 Docker permet d'envoyer du code plus rapidement, de standardiser les opérations de vos applications, de migrer aisément du code, et donc de délivrer rapidement et de manière standardisée une application.
 
 Docker est un projet open source (il est devenu de fait un standard multiplateforme incontournable, qui a marginalisé l'utilisation des VMs traditionnelles)
 
-## Ce n'est pas
+### Ce n'est pas
 Docker n'est pas un gestionnaire de VMs: les conteneurs qu'il manipule sont très légers, et se basent sur l'OS hôte pour tourner.
 
 Docker n'est pas Kubernetes: Docker n'a pas de vocation à gérer un espace multi-machines (sauf éventuellement Docker swarm), alors que Kubernetes si, ce qui en fait un outil idéal pour la gestion d'un cloud. Kubernetes est compatible avec les conteneurs Docker, mais aussi avec d'autres technologies.
 
-## Concepts
+### Concepts
 Docker manipule en premier lieu les concepts de containers, images, volumes, network, DockerFile.
 On peut retrouver dans l'ensemble des concepts également: Registry (dont Docker Hub), Compose, Daemon, Engine, Swarm.
 
-
 ## Approche initiale (use case 1): lancer un conteneur connu avec docker run
+### Le commencement
 Je veux faire tourner un app téléchargée depuis internet, par un conteneur "jetable" plutôt qu'un package à installer sur mon PC.
 L'heureux élu est MySQL, dont les tags d'image et la doc sont là: https://hub.docker.com/_/mysql
 
@@ -47,7 +52,18 @@ f8f443270a71   mysql   "docker-entrypoint.s…"   39 seconds ago   Exited (1) 38
 ```
 Oui! Il s'est bien lancé, puis s'est arrêté.
 
-## Variables d'environnement
+### Écriture alternative
+La plupart des commandes qu'on va voir dans cette section ont une syntaxe alternative, qui consiste à les préfixer par `image` ou `container`. Bien que plus longue, je vous recommande dans un premier temps de l'utiliser, car elle donne un namespace indiquant l'bjet Docker qu'on gère (conteneurs ou images ici). Ceci est valable depuis longtemps (les "management commands" datent de Docker 1.13.0, ie 2017), toutefois les commandes raccourcies sont en partie restées dans les usages, notamment de par leur antériorité mais aussi leur facilité d'usage.
+
+Les commandes suivantes manipulent des conteneurs, et se retrouvent préfixées par `container`: `docker run/start/stop/restart/rm/exec`. Par exemple, `docker start` exécute le même algorithme que `docker container start`.
+
+Les commandes suivantes manipulent des images, et se retrouvent préfixées par `image`: `docker pull`. Par exemple, `docker pull` exécute le même algorithme que `docker image pull`.
+
+On a également quelques alias moins réguliers:
+- `docker container ls` est un alias de `docker container ps / docker ps`
+- `docker image rm` est un alias de `docker rmi`
+
+### Variables d'environnement
 Bon maintenant, on va appliquer ce qui nous a été proposé dans le container, à savoir ajouter une des variables proposées. Pour ajouter une variable d'environnement à notre conteneur, on utilise `-e NOM_VARIABLE="valeur de ma variable"` ou `-e NOM_VARIABLE=valeur-de_ma.variable`. On peut mettre plusieurs `-e ...` dans un même `docker run` pour préciser plusieurs variables d'environnement.
 
 Il existe évalement un argument `--env-file`, qui permet de préciser un fichier contenant une ou plusieurs variables d'environnement, au format Dotenv.
@@ -242,6 +258,8 @@ node                     <none>      14b53699cf24   6 weeks ago   942MB
 On note `docker image rm`, l'équivalent de `docker rm`.
 
 Une commande utile (puissante donc dangereuse) quand on manque de place sur le PC: `docker image prune`. Elle supprime toutes les images qui n'ont pas de conteneurs en cours ni stoppés.
+
+Il existe une déclinaison de `prune` ("supprime ce qui n'est pas actuellement utilisé") pour quasiment tous les objets Docker, et il y a même une commande pour les rassembler toutes: `docker system prune`. Elle est parfaite pour faire le ménage, mais réfléchissez à deux fois avant de l'utiliser: vous pourriez bien perdre définitivement des données...
 
 ### Les volumes
 Docker produit des conteneurs stateless par défaut, un volume sert à rendre le conteneur stateful (précisément "stateful across container reboots", un peu comme le disque dur sert à rendre votre ordinateur "stateful across reboots"). Les volumes se divisent en 2 types: le bind mount et le volume interne.
@@ -743,11 +761,9 @@ Dans ce cas, on redémarre le démon docker (la procédure diffère selon l'OS h
 ```
 $ docker-compose up
 [+] Running 3/3
- ⠿ Network test_default
- Created                                                0.0s
- ⠿ Container node-installed
- Created                                                0.1s
- ⠿ Container mysql
+ ⠿ Network test_default      Created                           0.1s
+ ⠿ Container node-installed  Creating                          0.0s
+ ⠿ Container mysql           Creating                          0.0s
 Error response from daemon: Conflict. The container name "/mysql" is already in use by container "0d58a786fecb9110a12dc916d20dea49dcd35696a06fb8016417ca000c3f45da". You have to remove (or rename) that container to be able to reuse that name.
 ```
 `docker ps -a | grep <nom du conteneur>` vous donne approximativement le conteneur avec ce nom. Si vous le trouvez ici, utilisez `docker stop` et `docker rm` pour libérer le nom, ou alors `docker compose down` dans le dossier du projet.
@@ -761,12 +777,9 @@ fe0dd68b9276   mysql     "docker-entrypoint.s…"   24 hours ago   Exited (255) 
 ```
 $ docker-compose up
 [+] Running 3/3
- ⠿ Network test_default
- Created                                                0.0s
- ⠿ Container node-installed
- Created                                                0.1s
- ⠿ Container mysql
- Created                                                0.1s
+ ⠿ Network test_default      Created                           0.0s
+ ⠿ Container node-installed  Created                           0.1s
+ ⠿ Container mysql           Created                           0.1s
 Attaching to node-installed, mysql
 Error response from daemon: driver failed programming external connectivity on endpoint node-installed (3238055cca24767c68fb707e05a76f19a742be7be49748280d397a982505f35f): Bind for 0.0.0.0:3000 failed: port is already allocated
 ```
@@ -781,3 +794,19 @@ fe0dd68b9276   node-installed     "docker-entrypoint.s…"   24 hours ago   Exit
 Si ce n'est pas suffisant, il faut regarder quels programmes utilisent les ports sur l'hôte.
 Sous Linux et Mac, `lsof -i :<port>` vous donne la liste des programmes utilisant le port TCP et/ou UDP demandé. Faites en sorte que le process n'utilise plus le port que cous demandez, ou changez le port binding de votre conteneur pour pointer sur un port libre de l'hôte.
 
+### Différences entre plateformes hôtes
+TODO Des choses sont possibles sous windows qui ne le sont pas sous linux, par exemple.
+
+### J'ai oublié une commande
+Je sais ce que je veux faire avec Docker, mais j'ai oublié la commande pour le faire...
+
+Pas de quoi paniquer, retenez en priorité cette commande: `docker --help`. Elle vous donne une liste des "management commands" (contenant `container`, `image`, etc) ainsi que des commandes raccourcies (`ps` qui donne `docker ps`, `stop`, `restart`, etc).
+
+Une fois que vous avez votre management command (ou que vous savez quel objet Docker vous voulez manipuler), faites `docker <management command> --help` et vous aurez la liste des commandes que rassemble cette management command.
+
+Par exemple, `docker compose --help` nous liste (notamment) `build`, `down`, `exec`, `logs`, `restart` et `up`.
+
+## DevOps
+Docker est l'un des fer de lance du mouvement DevOps, car il est actuellement (et depuis plus d'une décennie) l'outil de prédilection pour uniformiser les environnements de développement et de production d'une application type webapp ou headless.
+
+Il est utilisé assez souvent avec Kubernetes, notamment car une DCF se conovertit très facilement en fichier de configuration Kubernetes. Cette formation portant uniquement sur Docker, on ne creusera pas le sujet plus loin ici.
