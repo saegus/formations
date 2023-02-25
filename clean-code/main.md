@@ -313,7 +313,7 @@ class Classement extends Component {
 }
 ```
 
-===== Conclusion =====
+==== Analyse des résultats ====
 - 42 lignes pour la réécriture, vs 30 lignes pour l'original => on a 50% de lignes en plus
 - 820 chars pour la réécriture, 820 pour l'original => Surprise! On a le même nombre de chars.
 - 1 fonction pour l'original vs 4 fonctions et 1 constante pour la réécriture.
@@ -327,17 +327,28 @@ Les métriques du code sont quasiment toutes altérées par les changements de s
 Reste encore quelques questions en suspens, comme par exemple:
 - quel est le ratio de temps dû à l'effort supplémentaire d'écrire dès le début du Clean Code, par rapport à simplement écrire du code "brouillon"?
 - le ratio des temps de compréhension avec et sans Clean Code augmente-t-il bien exponentiellement avec le nombre de lignes à comprendre avec une fonctionnalité donnée? Et le taux de bonne compréhension?
-- Est-il plus facile d'ajouter une fonctionnalité au sein d'un code clean? Si oui, à quel point?
+- Est-il plus facile d'ajouter une fonctionnalité au sein d'un code clean? Si oui, à quel point (métriques)?
+
+===== Conclusion =====
+On a approché le Clean code par une dizaine de ses règles, et on a vu à quel point ça changeait d'une part le style du code et d'autre part le 
+
+Clean Code est un formidable outil pour un développeur, quel que soit son langage de prédilection. En effet, bien qu'écrit avec le Java en tête et dans un style très orienté objet, la plupart des points qu'il aborde sont valables pour la programmation de manière générale et les projets informatiques développés en équipe en particulier, quel que soient leur langage et le(s) paradigme(s) de programmation utilisé(s).
+
+Toutefois, aussi fourni soit-il en conseils sur des "patterns" et "anti-patterns" de structuration du code au niveau le plus local (on n'est par exemple pas en train de parler de la structuration des fichiers de code, mais bien de la structuration de leur contenu), ne peut pas couvrir parfaitement l'ensemble des méthodes de développement connues (et c'est tant mieux, le livre est déjà suffisamment épais comme ça!).
+
+On peut par exemple noter qu'il ne parle pas (ni en bien ni en mal) de l'écriture des fonctions avec des gardes ( https://en.wikipedia.org/wiki/Guard_(computer_science), https://www.codementor.io/@clintwinter/use-guard-clauses-for-cleaner-code-1rrsczgwxp ), une technique qui vise à linéariser le flot d'exécution au sein d'une fonction et ainsi limiter les scopes imbriqués.
+
+Également, Clean Code, de par le nombre de ses conseils judicieux (et le prestige de son auteur) a su initier une réflexion de fond sur l'excellence de la profession de développeur informatique, au niveau de la communauté mondiale des développeurs. Cette réflexion n'est toujours pas terminée, mais a déjà permis de perfectionner cette collection de bonnes partiques en corrigeant celles qui en avaient besoin et en en ajoutant de nouvelles (TODO refs ici). En bref, les choses bougent et, même ci ce livre est excellent, il ne serait pas forcément pertinent de considérer les idées qu'il défend comme absolues ou de les faire passer pour telles. Néanmoins, ne pas connaître ce livre de 2008 ou au moins les propos qu'il défend a de fortes chances de freiner l'excellence professionnelle du développeur de notre ère.
 
 ===== Voir aussi =====
 - "Clean Code" ("coder proprement" en français) de Robert C. Martin, livre que nous avons au bureau et que je vous encourage vivement à lire. Je me permets d'insister, LISEZ-LE: c'est 400 pages obligatoires à lire (et chacune vaut le coup, don't cherry pick dudes) pour pouvoir prétendre à être un développeur senior sur le marché du travail. Qu'on soit d'accord ou pas avec l'ensembles des points abordés est une autre histoire, mais votre compétence en tant que dev non-junior sera jugée par vos pairs notamment sur votre capacité à comprendre de quoi il est question et à défendre vos choix par rapport à ces points.
+- Clean Architecture (A Craftsman's Guide to Software Structure and Design), du même auteur, qui parle d'architecture de plus haut niveau. 
 - https://medium.com/@futariboy/bref-voici-comment-je-nomme-mes-variables-et-mes-fonctions-d35f31f443b2
 
 ===== Et pour la suite? =====
 Avez-vous envie de formation qui rentrent plus dans le détail de Clean Code (sur "comment bien nommer ses variables et ses fonctions", sur "comment bien comprendre les intentions d'un programmeur qui suit Clean Code à la lettre", sur les fonctions, les commentaires, le TDD, ...)?
 
+Ou sur des bonnes pratiques d'un autre niveau, par exemple la twelve factors methodology (qui fait un peu de DevOps et de SaaS)?
 
-Ou sur des bonnes pratiques d'un autre niveau, par exemple la twelve factors methodology (qui fait un peu de devops)?
-
-Ou sur différentes manières d'architecturer une application, afin de pouvoir argumenter desvant le client des différents tenants et aboutissants?
+Ou sur différentes manières d'architecturer une application (MVC, Oinion Architecture / heaxgonal / Ports & Adapters, Microservices & SOA, ...), afin de pouvoir argumenter desvant le client des différents tenants et aboutissants?
 (et au delà de vous être utile professionnellement, les connaissances architecturales permettent de vous faire briller dans les conversations techniques, de la même manière que si vous sortiez de la philosophie dans un repas mondain ^^')
