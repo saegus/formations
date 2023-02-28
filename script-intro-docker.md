@@ -398,7 +398,6 @@ Une partie des fonctionnalités qu'on a vu précédemment avec `docker run` ont 
 | ----------- | ----------- |
 | node:18-alpine | FROM node:18-alpine |
 | -e ma_variable="ma valeur" | ENV ma_variable=ma valeur |
-| -p 3000 | EXPOSE 3000 |
 | -v /var/lib/postgresql/data | VOLUME /var/lib/postgresql/data |
 | -v $(pwd):/usr/src/app | COPY . /usr/src/app (voir aussi ADD) |
 | -w /mon/dossier | WORKDIR /mon/dossier |
@@ -420,6 +419,9 @@ Avec USER, on peut changer l'utilisateur qui exécute les commandes ultérieures
 
 L'user par défaut étant root, c'est utile lorsqu'on veut dé-privilégier les commandes du conteneur, pour des raisons de sécurité par exemple.
 USER est l'équivalent de `--user="mon.user"` (ou `--user="<uid>:<gid>"`) de `docker run`, que nous n'avons pas vu jusque-là.
+
+###### EXPOSE
+EXPOSE / --expose (pour `docker run`) est différent de -p / --publish: il sert plus ou moins de documentation pour que le lecteur sache sur quel port l'app écoute, Docker lui-même n'en fait rien de particulier.
 
 #### docker build
 Une fois qu'on a notre Dockerfile, on va construire une image à partir de celui-ci.
@@ -595,6 +597,8 @@ On note qu'il y a différents types de réseaux docker, et que nous n'utilisons 
 Les réseaux permettent d'expliquer les résultats parfois surprenants du port binding et de l'exposition de ports, mais c'est un peu long pour être décrit en détail ici.
 
 Voici un article expliquant précisément le networking (y compris comprendre comment communiquer entre conteneurs): https://www.learnitguide.net/2018/09/understanding-docker-port-mapping-to.html
+
+Une autre ressource utile pour comprendre le réseau, officielle cette fois: https://docs.docker.com/config/containers/container-networking/
 
 ### De docker à docker-compose
 Jusque-là on a utilisé `docker run` pour lancer nos conteneurs, mais on commence à avoir un certain nombre d'options d'options à préciser, ça surcharge pas mal la ligne de commande et la rend difficile à lire et modifier. De plus, on veut lancer non pas un conteneur, mais un ensemble de conteneurs, et les faire communiquer entre eux; `docker network` va également être nécessaire.
@@ -806,7 +810,62 @@ Une fois que vous avez votre management command (ou que vous savez quel objet Do
 
 Par exemple, `docker compose --help` nous liste (notamment) `build`, `down`, `exec`, `logs`, `restart` et `up`.
 
+## Pour aller plus loin
+### Réseaux
+Il existe différents modes de mise en réseau de conteneurs Docker - 7 à l'écriture de ces lignes. On va se limiter aux plus connus/utilisés ici.
+
+Celui utilisé par défaut (lorsqu'on créé un réseau sans en préciser) est le `bridge`. Les containers sur un réseau de type bridge peuvent communiquer entre eux, tandis que ceux qui ne sont pas dessus ne peuvent pas joindre les containers en question.
+
+Tous les containers dont aucun network n'est précisé explicitement (typiquement dans un `docker run mon-image` ou dans un DCF sans instructions de network) sont automatiquement raccordés au réseau par défaut de Docker, lui aussi en bridge. Attention toutefois: contrairement aux réseaux bridge définis manuellement ("user-defined networks"), les conteneurs sur le réseau par défaut ne peuvent communiquer que par leurs IPs, ils n'ont pas de hostname.
+```
+$ docker run -d --rm -p 8000 crccheck/hello-world
+$ # Un serveur minimaliste écoute sur le port 8000 de ce conteneur.
+$ curl localhost:8000
+<pre>
+Hello World
+...
+</pre>
+```
+
+Le second type de réseau assez connu est `none`, et vous comprenez normalement comment l'utiliser d'après ce qui précède. Au cas où: il coupe entièrement le container de faire des requêtes sur internet.
+```
+$ docker run -d --rm --network none -p 8000 crccheck/hello-world
+$ curl localhost:8000
+curl: (7) Failed to connect to localhost port 8000 after 5 ms: Connection refused
+```
+
+Le troisième et dernier type dont on va parler ici est `host`. Dans ce mode, le conteneur est directement mis sur le port de l'hôte. C'est-à-dire qu'il n'a pas besoin de `-p` pour que les ports sur lesquels il écoute soient accessibles via `localhost`. Attention à ce que les ports sur lesquels se branche le conteneur soient bien libres sur l'hôte.
+```
+$ docker run -d --rm --network host crccheck/hello-world
+$ curl localhost:8000
+<pre>
+Hello World
+...
+</pre>
+```
+
+### Volumes internes: MàJ sur les drapeaux (flags)
+`cached`, `delegated` et `ro`: ces flags ne sont plus officiellement documentés et n'ont notamment plus d'effet sur Mac (https://github.com/docker/for-mac/issues/5402).
+
+### DCF
+#### Interpolation de variables
+TODO on peut mettre des variables par défaut dans les DCF
+https://docs.docker.com/compose/compose-file/#interpolation
+
+#### Fragments de configuration
+TODO il est possible de réutiliser des morceaux de configuration
+https://docs.docker.com/compose/compose-file/#fragments
+
+#### Debugguer un DCF
+Commande pour voir un DCF avec ses valeurs réelles/calculées juste avant son utilisation par le Docker Engine: `docker compose config`.
+https://docs.docker.com/engine/reference/commandline/compose_config/
+
+### Swarm et secrets
+Docker Swarm est un concurrent direct de Kubernetes. Je n'ai pas pris le temps de m'intéresser à Swarm, cette section est juste pour mentionner/rappeler son existance.
+
+Les secrets Docker sont utiles à Swarm, un peu de la même manière que la section https://github.com/<user>/<repo>/settings/secrets/actions permet de stocker des secrets utiles opur vos github actions.
+
 ## DevOps
 Docker est l'un des fer de lance du mouvement DevOps, car il est actuellement (et depuis plus d'une décennie) l'outil de prédilection pour uniformiser les environnements de développement et de production d'une application type webapp ou headless.
 
-Il est utilisé assez souvent avec Kubernetes, notamment car une DCF se conovertit très facilement en fichier de configuration Kubernetes. Cette formation portant uniquement sur Docker, on ne creusera pas le sujet plus loin ici.
+Il est utilisé assez souvent avec Kubernetes, notamment car une DCF se convertit très facilement en fichier de configuration Kubernetes. Kubernetes est un concurrent direct de Docker Swarm. Cette formation portant uniquement sur Docker, on ne creusera pas le sujet de Kubernetes plus loin ici.
