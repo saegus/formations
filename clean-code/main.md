@@ -40,7 +40,7 @@ Ensuite on va voir sur un exemple particulier en javascript comment appliquer un
 
 ===== Expérience / Atelier: rapidité de compréhension =====
 ==== Principe ====
-On va avoir besoin de deux développeurs.
+On va avoir besoin de deux développeurs (au moins).
 
 === Phase 1 ===
 Les deux devs reçoivent simultanément deux versions différentes d'un même code, qui visent à effectuer les mêmes fonctionnalités.
@@ -57,6 +57,8 @@ Les conclusions doivent répondre directement ou indirectement aux questions sui
   * Est-ce le listener d'un évènement HTML (onclick, onfocus, onhover, onpaste, etc)?
   * Est-ce un simple helper, ie une fonction sans objectif métier précis qui résout un problème simple et/ou réccurent?
   * etc.
+
+Les sujets peuvent contenir une question bonus, spécifique.
 
 === Phase 2 ===
 On répète la phase 1 avec un autre exemple, sauf que le dev ayant précédemment eu la version non cleanée se retrouve avec la version cleanée, et vice versa.
@@ -102,32 +104,30 @@ Le développeur désigné par l'animateur va utiliser le sujet `./exemple_1_orig
 
 === Sujet cleané ===
 Le développeur désigné par l'animateur va utiliser le sujet `./exemple_1_clean.js`.
-TODO
 
-=== Barème technique et fonctionnel ===
-On valide parmi les points suivants lesquels sont répondus (de manière correcte ou mauvaise) et lesquels ne le sont pas. Si il y a d'autres données pertinentes, on les ajoutera ci-dessous.
+=== Question bonus ===
+Un dev a changé le code du render() pour qu'il contienne uniquement `return (<p>Nb joueurs: {listIndicateur?.nbJoueur + (listIndicateur?.nbJoueur != 1 ? "joueurs" : "joueur")}</p>)`; qu'aurait rendu ce code avec un utilisateur non-admin?
 
-- Basiquement, le code sert à remplir le state interne du component (qui servira ensuite à l'affichage des données récupérées dans le HTML), en faisant des appels à une API, vraisemblablement HTTP.
-- il est exécuté à l'initialisation du composant
-- en pratique, il fait des appels API puis remplit le state avec de manière asynchrone, en une fois.
-- suivant si l'utilisateur passé en argument est un admin ou pas, il ne charge pas les mêmes données:
-  * si admin, on récupère des indicateurs
-  * si pas admin, on récupère des données de classement dépendantes de l'utilisateur "1"
-  * dans tous les cas, on fait appel à une fonction qui nous récupère le classement général
+==== Exemple 2: Une route Hapi ====
+Le code présenté dans le sujet devrait être splitté dans plusieurs fichiers différents; mais pour des raisons de praticité, j'ai tout rassemblé ici.
 
+Les commentaires indiquent dans quel fichier devrait se trouver tel ou tel code.
 
-==== Exemple 2: TODO ====
-TODO
+Concernant spécifiquement Hapi, sachez que request.state contient les cookies de la requête.
 
 === Sujet non cleané ===
-TODO
+Le développeur désigné par l'animateur va utiliser le sujet `./exemple_2_original.js`.
 
 === Sujet cleané ===
-TODO
+Le développeur désigné par l'animateur va utiliser le sujet `./exemple_2_clean.js`.
 
-=== Barème technique et fonctionnel ===
-TODO
+=== Question bonus ===
+Vous devez répondre à David, qui après un RDV avec le client du projet vous demande (questions du client interprétées par David):
+1/ que renvoie le champ "before" de la réponse?
+2/ Pour quelles raisons décide-t-on de lui donner telle ou telle valeur?
 
+==== Correction ====
+Le "prototype de correction" est caché un peu plus bas dans ce doc, résistez à l'envie d'aller le voir avant la fin des mesures ou vous fausserez les résultats!
 
 ===== Étude de cas =====
 Note: On part d'un composant react existant réel, qui provient du code de l'Odyssée
@@ -266,19 +266,15 @@ class Classement extends Component {
 ==== Fonction réécrite en suivant les principes du Clean Code ====
 ```
 class Classement extends Component {
-  ...
-  componentDidMount() {
-    this._initialLoad();
-  }
-
   ADMIN_ID_ROLE = 2;
-  async _initialLoad() {
-    const isAdmin = this.props.currentUser.id_role == ADMIN_ID_ROLE;
+
+  componentDidMount() {
+    const isAdmin = this.props.currentUser.id_role == this.ADMIN_ID_ROLE;
     if (isAdmin) this._loadForAdmin();
     else this._loadForUser();
   };
 
-  async _loadForUser() {
+  async _loadForAdmin() {
     const [listUser, listIndicateur] = await Promise.all([
       this._load(),
       ClassementAPI.getIndicateur(),
@@ -291,7 +287,7 @@ class Classement extends Component {
     });
   };
 
-  async _loadForAdmin() {
+  async _loadForUser() {
     const [listUser, classementCurrentUser] = await Promise.all([
       this._load(),
       this._load({user: 1}),
@@ -315,7 +311,7 @@ class Classement extends Component {
 
 ==== Analyse des résultats ====
 - 42 lignes pour la réécriture, vs 30 lignes pour l'original => on a 50% de lignes en plus
-- 820 chars pour la réécriture, 820 pour l'original => Surprise! On a le même nombre de chars.
+- 820 chars pour la réécriture, 820 pour l'original => Surprise! On a le même nombre de chars. Note: c'est loin d'être la règle, on peut par exemple doubler le nombre de chars. 
 - 1 fonction pour l'original vs 4 fonctions et 1 constante pour la réécriture.
 - Taille max des fonctions: 30l pour l'original, 12l pour la réécriture => 2X plus petites fonctions
 - Taille max des blocs de code: le code n'est pas aéré vs 5l pour la réécriture
@@ -344,6 +340,35 @@ On peut par exemple noter qu'il ne parle pas (ni en bien ni en mal) de l'écritu
 - "Clean Code" ("coder proprement" en français) de Robert C. Martin, livre que nous avons au bureau et que je vous encourage vivement à lire. Je me permets d'insister, LISEZ-LE: c'est 400 pages obligatoires à lire (et chacune vaut le coup, don't cherry pick dudes) pour pouvoir prétendre à être un développeur senior sur le marché du travail. Qu'on soit d'accord ou pas avec l'ensembles des points abordés est une autre histoire, mais votre compétence en tant que dev non-junior sera jugée par vos pairs notamment sur votre capacité à comprendre de quoi il est question et à défendre vos choix par rapport à ces points.
 - Clean Architecture (A Craftsman's Guide to Software Structure and Design), du même auteur, qui parle d'architecture de plus haut niveau. 
 - https://medium.com/@futariboy/bref-voici-comment-je-nomme-mes-variables-et-mes-fonctions-d35f31f443b2
+
+===== Exemples de réponses aux sujets =====
+==== Sujet 1 ====
+On valide parmi les points suivants lesquels sont répondus (de manière correcte ou mauvaise) et lesquels ne le sont pas. Si il y a d'autres données pertinentes, on les ajoutera ci-dessous.
+
+- Basiquement, le code sert à remplir le state interne du component (qui servira ensuite à l'affichage des données récupérées dans le HTML), en faisant des appels à une API, vraisemblablement HTTP.
+- il est exécuté à l'initialisation du composant
+- en pratique, il fait des appels API puis remplit le state avec de manière asynchrone, en une fois.
+- suivant si l'utilisateur passé en argument est un admin ou pas, il ne charge pas les mêmes données:
+  * si admin, on récupère des indicateurs
+  * si pas admin, on récupère des données de classement dépendantes de l'utilisateur "1"
+  * dans tous les cas, on fait appel à une fonction qui nous récupère le classement général
+
+==== Question bonus ====
+Le code aurait rendu 'undefinedjoueurs'.
+
+==== Sujet 2 ====
+On valide parmi les points suivants lesquels sont répondus (de manière correcte ou mauvaise) et lesquels ne le sont pas. Si il y a d'autres données pertinentes, on les ajoutera ci-dessous.
+
+TODO
+
+==== Question bonus ====
+Note préliminaire: C'est David, il est intelligent (bisou David pense à mon augmentation) mais il n'a pas dev depuis un certain temps. Et surtout il est dans son rôle de commercial, avec le client. La réponse doit être particulièrement digeste, et l'accent doit probablement être mis sur le métier.
+
+1/ le champ "before" de la réponse renvoie un nombre variable de récompenses journalières que l'utilisateur a obtenu lors de ses connexions précédentes à l'app.
+
+2/ Le nombre de récompenses dépend du nombre de jours où l'utilisateur s'est connecté à l'app:
+- le dernier jour de campagne, l'app renvoie les 3 récompenses précédentes.
+- les jours précédents, il renvoie les récompenses des deux jours précédant la récompense d'aujourd'hui.
 
 ===== Et pour la suite? =====
 Avez-vous envie de formation qui rentrent plus dans le détail de Clean Code (sur "comment bien nommer ses variables et ses fonctions", sur "comment bien comprendre les intentions d'un programmeur qui suit Clean Code à la lettre", sur les fonctions, les commentaires, le TDD, ...)?

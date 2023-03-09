@@ -1,6 +1,8 @@
 const ClassementAPI = require("...");
 
 class Classement extends Component {
+  ADMIN_ID_ROLE = 2;
+
   constructor(props /* IClassementProps */) {
     super(props);
     this.state = {
@@ -11,37 +13,6 @@ class Classement extends Component {
   }
 
   componentDidMount() {
-    this._initialLoad();
-  }
-
-  _setCurrentView = (view) => {}
-
-  _calculMauvaiseReponse = (item) => {};
-
-  _renderPoint(item) {}
-
-  _renderPodiumElement(user) {}
-
-  render() {
-    // Note: j'ai écrit cette fonction a posteriori pour vous
-    // permettre de visualiser plus facilement l'utilité du composant.
-    // J'ai essayé de coller au mieux au style utilisé dans
-    // le reste du composant.
-    const {listIndicateur} = this.state;
-    const {currentUser} = this.props;
-    const isAdmin = currentUser.id_role == this.ADMIN_ID_ROLE;
-    return (
-      <div>
-        <h1>Classements du programme en cours</h1>
-        { isAdmin && (
-          <p>Nb joueurs: {listIndicateur?.nbJoueur}</p>
-        )}
-      </div>
-    );
-  }
-
-  ADMIN_ID_ROLE = 2;
-  async _initialLoad() {
     const isAdmin = this.props.currentUser.id_role == this.ADMIN_ID_ROLE;
     if (isAdmin) this._loadForAdmin();
     else this._loadForUser();
@@ -79,4 +50,30 @@ class Classement extends Component {
       monde: this.state.viewMonde,
     });
   };
+
+  _setCurrentView = (view) => {}
+
+  _calculMauvaiseReponse = (item) => {};
+
+  _renderPoint(item) {}
+
+  _renderPodiumElement(user) {}
+
+  render() {
+    // Note: j'ai écrit cette fonction a posteriori pour vous
+    // permettre de visualiser plus facilement l'utilité du composant.
+    // J'ai essayé de coller au mieux au style utilisé dans
+    // le reste du composant.
+    const {listIndicateur} = this.state;
+    const {currentUser} = this.props;
+    const isAdmin = currentUser.id_role == this.ADMIN_ID_ROLE;
+    return (
+      <div>
+        <h1>Classements du programme en cours</h1>
+        { isAdmin && (
+          <p>Nb joueurs: {listIndicateur?.nbJoueur}</p>
+        )}
+      </div>
+    );
+  }
 }
