@@ -25,9 +25,9 @@ const rewardsDetails = async (UserLogins, user) => {
   const nbDaysOfConnexion = parseInt(nbDaysOfConnexionRaw[0].length) - 1;
 
   const result = {
-    current: currentRewards(nbDaysOfConnexion),
-    before: previousRewards(nbDaysOfConnexion),
-    after: nextRewards(nbDaysOfConnexion),
+    current: currentRewards(dailyRewards, nbDaysOfConnexion),
+    before: previousRewards(dailyRewards, nbDaysOfConnexion),
+    after: nextRewards(dailyRewards, nbDaysOfConnexion),
   };
 
   return result;
