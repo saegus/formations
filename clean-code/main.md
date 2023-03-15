@@ -371,9 +371,13 @@ Note préliminaire: C'est David, il est intelligent (bisou David pense à mon au
 - les jours précédents, il renvoie les récompenses des deux jours précédant la récompense d'aujourd'hui.
 
 ===== Et pour la suite? =====
-Avez-vous envie de formation qui rentrent plus dans le détail de Clean Code (sur "comment bien nommer ses variables et ses fonctions", sur "comment bien comprendre les intentions d'un programmeur qui suit Clean Code à la lettre", sur les fonctions, les commentaires, le TDD, ...)?
+Dans l'optique de perfectionner votre expertise de développeur...
+
+Avez-vous envie de formations qui entrent plus dans le détail de Clean Code (sur "comment bien nommer ses variables et ses fonctions", sur "comment bien comprendre les intentions d'un programmeur qui suit Clean Code à la lettre", sur les fonctions, les commentaires, le TDD, ...)?
 
 Ou sur des bonnes pratiques d'un autre niveau, par exemple la twelve factors methodology (qui fait un peu de DevOps et de SaaS)?
 
 Ou sur différentes manières d'architecturer une application (MVC, Oinion Architecture / heaxgonal / Ports & Adapters, Microservices & SOA, ...), afin de pouvoir argumenter desvant le client des différents tenants et aboutissants?
 (et au delà de vous être utile professionnellement, les connaissances architecturales permettent de vous faire briller dans les conversations techniques, de la même manière que si vous sortiez de la philosophie dans un repas mondain ^^')
+
+Bref, quelle direction donnez-vous à votre vie professionnelle? :-)
