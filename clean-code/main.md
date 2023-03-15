@@ -138,16 +138,16 @@ https://github.com/ryanmcdermott/clean-code-javascript
 Les principes issus de cette page Github sont pour partie des interprétations claires du livre de Clean Code original, et d'autres sont un peu plus sujettes à concurrence, ou sont mal adaptables au contraintes de nos environnement de développement (JS, NodeJS, ...). 
 
 Plus concrètement, voici une liste numérotée (à dessein) des règles qui vont nous intéresser dans cet exemple:
-#1 https://github.com/ryanmcdermott/clean-code-javascript#use-meaningful-and-pronounceable-variable-names
-#2 remove magic numbers https://github.com/ryanmcdermott/clean-code-javascript#use-searchable-names
-#3 https://github.com/ryanmcdermott/clean-code-javascript#use-explanatory-variables
-#4 https://github.com/ryanmcdermott/clean-code-javascript#avoid-mental-mapping
-#5 https://github.com/ryanmcdermott/clean-code-javascript#dont-add-unneeded-context
-#6 https://github.com/ryanmcdermott/clean-code-javascript#functions-should-do-one-thing
-#7 https://github.com/ryanmcdermott/clean-code-javascript#functions-should-only-be-one-level-of-abstraction
-#8 https://github.com/ryanmcdermott/clean-code-javascript#dont-use-flags-as-function-parameters
-#9 https://github.com/ryanmcdermott/clean-code-javascript#single-responsibility-principle-srp
-#10 https://github.com/ryanmcdermott/clean-code-javascript#asyncawait-are-even-cleaner-than-promises
+- #1 https://github.com/ryanmcdermott/clean-code-javascript#use-meaningful-and-pronounceable-variable-names
+- #2 remove magic numbers https://github.com/ryanmcdermott/clean-code-javascript#use-searchable-names
+- #3 https://github.com/ryanmcdermott/clean-code-javascript#use-explanatory-variables
+- #4 https://github.com/ryanmcdermott/clean-code-javascript#avoid-mental-mapping
+- #5 https://github.com/ryanmcdermott/clean-code-javascript#dont-add-unneeded-context
+- #6 https://github.com/ryanmcdermott/clean-code-javascript#functions-should-do-one-thing
+- #7 https://github.com/ryanmcdermott/clean-code-javascript#functions-should-only-be-one-level-of-abstraction
+- #8 https://github.com/ryanmcdermott/clean-code-javascript#dont-use-flags-as-function-parameters
+- #9 https://github.com/ryanmcdermott/clean-code-javascript#single-responsibility-principle-srp
+- #10 https://github.com/ryanmcdermott/clean-code-javascript#asyncawait-are-even-cleaner-than-promises
 
 On s'intéresse plus particulièrement à la fonction (originalement) _loadDataClassement(),
 qu'on va d'abord commenter, puis réécrire.
