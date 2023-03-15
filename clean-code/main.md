@@ -1,6 +1,6 @@
-====== Clean Code ======
+# Clean Code
 
-==== Préambule ====
+### Préambule
 Cette formation est la concaténation d'un atelier et d'une expérience.
 
 L'atelier est une forme d'introduction au Clean Code par la pratique, et vise à démystifier ce concept et en montrer la portée concrète dans le travail d'un développeur.
@@ -9,14 +9,14 @@ Là où l'atelier vise à en montrer la portée concrète, l'expérience vise à
 
 Cette formation ne rentre pas du tout dans le détail de Clean Code, et se veut plus comme une vitrine, publicité et vulgarisation pour des néophytes, afin de les inciter à se renseigner plus en détail sur les bienfaits de ce mouvement.
 
-===== Introduction =====
-==== Quoi? ====
+## Introduction
+### Quoi?
 Une série de bonnes pratiques pour rendre son code lisible, devenues populaires vers 2015.
 Ça part du livre éponyme de Martin C. Flowers, devenu une bible avec le développement du mouvement (éponyme lui aussi).
 
 La plupart de ces pratiques ne sont pas liées à un paradigme de programmation en particulier, et sont adaptables à tous les langages.
 
-==== Contexte ====
+### Contexte
 Il y a plusieurs autres bonnes pratiques qui agissent également au niveau des fonctions et des variables: SOLID, DRY, WET, YAGNI, twelve-factors methodology, Separation of concerns, etc.
 
 Par contraste, les méthodes agiles (SCRUM, Kanban, XP, Software Craftsmanship, etc) sont plus proche des intéractions entre acteurs d'un projet. 
@@ -32,17 +32,17 @@ Au final, ces méthodologies ont (dans leur grande majorité) des domaines de d�
 
 Petite note spécialement aux devs un peu sceptiques face au Clean Code, mais fans des principes SOLID: les deux viennent du même auteur, Uncle Bob... Donnez-leur leur chance plutôt que de les préjuger :-)
 
-==== Plan ====
+### Plan
 Ces bonnes pratiques ont des effets directement mesurables sur notre produtivité.
 On va d'abord constater un de ces effets, en testant notre rapidité à comprendre du code "plutôt propre" et du code "plutôt pas propre".
 
 Ensuite on va voir sur un exemple particulier en javascript comment appliquer une partie des règles de Clean Code.
 
-===== Expérience / Atelier: rapidité de compréhension =====
-==== Principe ====
+## Expérience / Atelier: rapidité de compréhension
+### Principe
 On va avoir besoin de deux développeurs (au moins).
 
-=== Phase 1 ===
+#### Phase 1
 Les deux devs reçoivent simultanément deux versions différentes d'un même code, qui visent à effectuer les mêmes fonctionnalités.
 Un chronomètre est lancé au début de leur lecture, et l'animateur notera le temps écoulé pour chacun au moment où ils penseront avoir compris le fonctionnement et l'utilité du code.
 Dès que leur temps est noté, ils écrivent sur leur ordinateur (pour ne pas que le voisin se contente de dire "même chose" lors d'une restitution orale) leurs conclusions.
@@ -60,10 +60,10 @@ Les conclusions doivent répondre directement ou indirectement aux questions sui
 
 Les sujets peuvent contenir une question bonus, spécifique.
 
-=== Phase 2 ===
+#### Phase 2
 On répète la phase 1 avec un autre exemple, sauf que le dev ayant précédemment eu la version non cleanée se retrouve avec la version cleanée, et vice versa.
 
-=== Phase 3 ===
+#### Phase 3
 On récupère les résultats, et on les compare au modèle.
 Le modèle stipule:
 - chacun des deux développeurs a une vitesse moyenne de compréhension du code: v1 et v2
@@ -85,12 +85,12 @@ t_2_2_nc / t_2_1_c = f.(v1/v2)
 
 => `f = sqrt(t_1_1_nc.t_2_2_nc / (t_1_2_c.t_2_1_c))`
 
-=== Avertissement ===
+#### Avertissement
 Bien que la méthode a pour objectif de mesurer une vitesse de compréhension moyenne entre les développeurs, l'expérience a besoin d'une condition supplémentaire pour que le résultat soit pleinement valide: il faut que les deux sujets portent sur la même technologie, et idéalement sur les mêmes sous-composants de cette technologie (2 routes create d'un CRUD Hapi, 2 composants de classe React JSX maniant uniquement du state local, etc.).
 
 Sans cela, il existe un biais dans le choix de distribution lorsque les technos des sujets ne sont pas les mêmes, et si on considère que l'aisance relative n'est pas linéaire avec le fait que le code soit cleané ou pas (par exemple qu'il est beaucoup plus difficile de comprendre sans erreur un code non cleané dans une techno qu'on en connait pas plutôt que dans une techno qu'on connait).
 
-==== Exemple 1: un composant ReactJS ====
+### Exemple 1: un composant ReactJS
 Il faut savoir ici que l'état interne du composant (l'équivalent de l'attribut d'une instance issu d'une classe) est géré un peu différemment des classes:
 - il est initialisé et lu via `this.state` (et pas simplement `this`, car `this.state` est une propriété spéciale au sein d'un composant de classe React)
 - il est mis à jour avec `this.setState()`. Ainsi, `this.attr = 42` devient souvent `this.setState({...this.state, attr: 42})`.
@@ -99,37 +99,37 @@ Il faut savoir ici que l'état interne du composant (l'équivalent de l'attribut
 
 Le point d'entrée pour les deux sujets est la méthode `componentDidMount`, qui sera exécutée à l'initialisation de l'objet.
 
-=== Sujet non cleané ===
+#### Sujet non cleané
 Le développeur désigné par l'animateur va utiliser le sujet `./exemple_1_original.js`.
 
-=== Sujet cleané ===
+#### Sujet cleané
 Le développeur désigné par l'animateur va utiliser le sujet `./exemple_1_clean.js`.
 
-=== Question bonus ===
+#### Question bonus
 Un dev a changé le code du render() pour qu'il contienne uniquement `return (<p>Nb joueurs: {listIndicateur?.nbJoueur + (listIndicateur?.nbJoueur != 1 ? "joueurs" : "joueur")}</p>)`; qu'aurait rendu ce code avec un utilisateur non-admin?
 
-==== Exemple 2: Une route Hapi ====
+### Exemple 2: Une route Hapi
 Le code présenté dans le sujet devrait être splitté dans plusieurs fichiers différents; mais pour des raisons de praticité, j'ai tout rassemblé ici.
 
 Les commentaires indiquent dans quel fichier devrait se trouver tel ou tel code.
 
 Concernant spécifiquement Hapi, sachez que request.state contient les cookies de la requête.
 
-=== Sujet non cleané ===
+#### Sujet non cleané
 Le développeur désigné par l'animateur va utiliser le sujet `./exemple_2_original.js`.
 
-=== Sujet cleané ===
+#### Sujet cleané
 Le développeur désigné par l'animateur va utiliser le sujet `./exemple_2_clean.js`.
 
-=== Question bonus ===
+#### Question bonus
 Vous devez répondre à David, qui après un RDV avec le client du projet vous demande (questions du client interprétées par David):
 1/ que renvoie le champ "before" de la réponse?
 2/ Pour quelles raisons décide-t-on de lui donner telle ou telle valeur?
 
-==== Correction ====
+### Correction
 Le "prototype de correction" est caché un peu plus bas dans ce doc, résistez à l'envie d'aller le voir avant la fin des mesures ou vous fausserez les résultats!
 
-===== Étude de cas =====
+## Étude de cas
 Note: On part d'un composant react existant réel, qui provient du code de l'Odyssée
 
 On va suivre uniquement un sous-ensemble des principes du Clean Code, listés ici:
@@ -152,7 +152,7 @@ Plus concrètement, voici une liste numérotée (à dessein) des règles qui von
 On s'intéresse plus particulièrement à la fonction (originalement) _loadDataClassement(),
 qu'on va d'abord commenter, puis réécrire.
 
-==== Fonction originale, avec son contexte ====
+### Fonction originale, avec son contexte
 ```
 const ClassementAPI = require("...");
 
@@ -216,7 +216,7 @@ class Classement extends Component {
 }
 ```
 
-==== Fonction originale, avec les problèmes commentés ====
+### Fonction originale, avec les problèmes commentés
 ```
 class Classement extends Component {
   componentDidMount() {
@@ -263,7 +263,7 @@ class Classement extends Component {
 }
 ```
 
-==== Fonction réécrite en suivant les principes du Clean Code ====
+### Fonction réécrite en suivant les principes du Clean Code
 ```
 class Classement extends Component {
   ADMIN_ID_ROLE = 2;
@@ -309,7 +309,7 @@ class Classement extends Component {
 }
 ```
 
-==== Analyse des résultats ====
+### Analyse des résultats
 - 42 lignes pour la réécriture, vs 30 lignes pour l'original => on a 50% de lignes en plus
 - 820 chars pour la réécriture, 820 pour l'original => Surprise! On a le même nombre de chars. Note: c'est loin d'être la règle, on peut par exemple doubler le nombre de chars. 
 - 1 fonction pour l'original vs 4 fonctions et 1 constante pour la réécriture.
@@ -325,7 +325,7 @@ Reste encore quelques questions en suspens, comme par exemple:
 - le ratio des temps de compréhension avec et sans Clean Code augmente-t-il bien exponentiellement avec le nombre de lignes à comprendre avec une fonctionnalité donnée? Et le taux de bonne compréhension?
 - Est-il plus facile d'ajouter une fonctionnalité au sein d'un code clean? Si oui, à quel point (métriques)?
 
-===== Conclusion =====
+## Conclusion
 On a approché le Clean code par une dizaine de ses règles, et on a vu à quel point ça changeait d'une part le style du code et d'autre part le 
 
 Clean Code est un formidable outil pour un développeur, quel que soit son langage de prédilection. En effet, bien qu'écrit avec le Java en tête et dans un style très orienté objet, la plupart des points qu'il aborde sont valables pour la programmation de manière générale et les projets informatiques développés en équipe en particulier, quel que soient leur langage et le(s) paradigme(s) de programmation utilisé(s).
@@ -336,13 +336,13 @@ On peut par exemple noter qu'il ne parle pas (ni en bien ni en mal) de l'écritu
 
 Également, Clean Code, de par le nombre de ses conseils judicieux (et le prestige de son auteur) a su initier une réflexion de fond sur l'excellence de la profession de développeur informatique, au niveau de la communauté mondiale des développeurs. Cette réflexion n'est toujours pas terminée, mais a déjà permis de perfectionner cette collection de bonnes partiques en corrigeant celles qui en avaient besoin et en en ajoutant de nouvelles (TODO refs ici). En bref, les choses bougent et, même ci ce livre est excellent, il ne serait pas forcément pertinent de considérer les idées qu'il défend comme absolues ou de les faire passer pour telles. Néanmoins, ne pas connaître ce livre de 2008 ou au moins les propos qu'il défend a de fortes chances de freiner l'excellence professionnelle du développeur de notre ère.
 
-===== Voir aussi =====
+## Voir aussi
 - "Clean Code" ("coder proprement" en français) de Robert C. Martin, livre que nous avons au bureau et que je vous encourage vivement à lire. Je me permets d'insister, LISEZ-LE: c'est 400 pages obligatoires à lire (et chacune vaut le coup, don't cherry pick dudes) pour pouvoir prétendre à être un développeur senior sur le marché du travail. Qu'on soit d'accord ou pas avec l'ensembles des points abordés est une autre histoire, mais votre compétence en tant que dev non-junior sera jugée par vos pairs notamment sur votre capacité à comprendre de quoi il est question et à défendre vos choix par rapport à ces points.
 - Clean Architecture (A Craftsman's Guide to Software Structure and Design), du même auteur, qui parle d'architecture de plus haut niveau. 
 - https://medium.com/@futariboy/bref-voici-comment-je-nomme-mes-variables-et-mes-fonctions-d35f31f443b2
 
-===== Exemples de réponses aux sujets =====
-==== Sujet 1 ====
+## Exemples de réponses aux sujets
+### Sujet 1
 On valide parmi les points suivants lesquels sont répondus (de manière correcte ou mauvaise) et lesquels ne le sont pas. Si il y a d'autres données pertinentes, on les ajoutera ci-dessous.
 
 - Basiquement, le code sert à remplir le state interne du component (qui servira ensuite à l'affichage des données récupérées dans le HTML), en faisant des appels à une API, vraisemblablement HTTP.
@@ -353,15 +353,15 @@ On valide parmi les points suivants lesquels sont répondus (de manière correct
   * si pas admin, on récupère des données de classement dépendantes de l'utilisateur "1"
   * dans tous les cas, on fait appel à une fonction qui nous récupère le classement général
 
-==== Question bonus ====
+### Question bonus
 Le code aurait rendu 'undefinedjoueurs'.
 
-==== Sujet 2 ====
+### Sujet 2
 On valide parmi les points suivants lesquels sont répondus (de manière correcte ou mauvaise) et lesquels ne le sont pas. Si il y a d'autres données pertinentes, on les ajoutera ci-dessous.
 
 TODO
 
-==== Question bonus ====
+### Question bonus
 Note préliminaire: C'est David, il est intelligent (bisou David pense à mon augmentation) mais il n'a pas dev depuis un certain temps. Et surtout il est dans son rôle de commercial, avec le client. La réponse doit être particulièrement digeste, et l'accent doit probablement être mis sur le métier.
 
 1/ le champ "before" de la réponse renvoie un nombre variable de récompenses journalières que l'utilisateur a obtenu lors de ses connexions précédentes à l'app.
@@ -370,7 +370,7 @@ Note préliminaire: C'est David, il est intelligent (bisou David pense à mon au
 - le dernier jour de campagne, l'app renvoie les 3 récompenses précédentes.
 - les jours précédents, il renvoie les récompenses des deux jours précédant la récompense d'aujourd'hui.
 
-===== Et pour la suite? =====
+## Et pour la suite?
 Dans l'optique de perfectionner votre expertise de développeur...
 
 Avez-vous envie de formations qui entrent plus dans le détail de Clean Code (sur "comment bien nommer ses variables et ses fonctions", sur "comment bien comprendre les intentions d'un programmeur qui suit Clean Code à la lettre", sur les fonctions, les commentaires, le TDD, ...)?
