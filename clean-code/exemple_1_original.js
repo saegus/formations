@@ -27,11 +27,12 @@ class Classement extends Component {
     // permettre de visualiser plus facilement l'utilité du composant.
     // J'ai essayé de coller au mieux au style utilisé dans
     // le reste du composant.
+    const {listIndicateur} = this.state;
     return (
       <div>
         <h1>Classements du programme en cours</h1>
         { this.props.currentUser?.id_role == 2 && (
-          <p>Nb joueurs: {this.state.listIndicateur?.nbJoueur}</p>
+          <p>Nb joueurs: {listIndicateur?.nbJoueur}</p>
         )}
       </div>
     );

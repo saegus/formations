@@ -225,7 +225,13 @@ L'arborescence de cette app:
   - views
     - index.html.ejs
 
-Note: le 18 janvier, la formation en était à environ 45 min ici, et on a fait un peu plus d'1H en tout.
+Pour créer rapidement cette arborescence:
+```
+mkdir -p mon-front/bin
+cd mon-front
+mkdir views
+touch package.json app.js bin/www views/index.html.ejs
+```
 
 ### Gérer les images 
 Tout d'abord, la commande pour créer un conteneur NodeJS sur lequel va tourner notre serveur: `docker run --rm -p 3000 node:18-alpine`
@@ -487,7 +493,7 @@ Pour ça, notre Dockerfile va:
 
 Voici un script shell auto-suffisant pour générer notre image:
 ```
-cat << EOF > package.json
+cat << EOF > ./mon-front/package.json
 {
   "name": "test",
   "version": "0.0.1",
@@ -497,14 +503,14 @@ cat << EOF > package.json
 }
 EOF
 
-cat << EOF > Dockerfile
+cat << EOF > ./mon-front/Dockerfile
 FROM node:18-alpine
 WORKDIR /usr/src/app
 COPY ./mon-front/package.json . # Note: on peut ajouter package-lock.json ici, si il existe.
 RUN npm install
 EOF
 
-docker build . --tag node-installed;
+docker build ./mon-front --tag node-installed;
 
 docker run --entrypoint head node-installed -n4 node_modules/express/package.json
 # {
@@ -538,15 +544,15 @@ Plusieurs possibilités pour contourner ce problème épineux:
 Je ne détaille pas ici les tenants et les aboutissants, mais l'approche que je vous conseille (pas ma préférée mais facile à mettre en place) est celle des volumes internes:
 ```
 # Note: on peut ajouter package-lock.json à côté de package.json, si il existe.
-cat << EOF > Dockerfile
+cat << EOF > ./mon-front/Dockerfile
 FROM node:18-alpine
 WORKDIR /usr/src/app
-COPY ./mon-front/package.json .
+COPY ./package.json .
 RUN npm install
 VOLUME /usr/src/app/node_modules
 EOF
 
-docker build . --tag node-installed;
+docker build ./mon-front --tag node-installed;
 
 docker run --rm \
 -v $(pwd)/mon-front:/usr/src/app \
@@ -606,7 +612,8 @@ Jusque-là on a utilisé `docker run` pour lancer nos conteneurs, mais on commen
 Il exsite un autre programme faisant partie de la suite Docker: `docker-compose`. Comme son nom l'indique, il permet de composer différentes commandes docker, et est tout indiqué pour gérer un projet multi-conteneurs. `docker-compose` exécute différentes commandes d'orchestration des conteneurs, réseaux et volumes en se basant sur un docker-compose file (que nous appelleront de manière raccourcie DCF dans la suite).
 
 #### De "docker-compose" à "docker compose"
-Par facilité pédagogique, je vais séparer dans ce qui suit `docker` et `docker-compose`. Toutefois, `docker compose` existe depuis plusieurs années avec le même objectif d'orchestrer les ressources Docker d'un projet; et il a signé l'arrêt de mort de `docker-compose`, qui ne sera plus distribué dès juin 2023. Les arguments de `docker-compose` sont tous compatibles avec `docker compose`, qui vient également avec des fonctionnalités supplémentaires (que nous ne verront pas ici, la formation étant déjà assez longue ^^').
+Par facilité pédagogique, je vais séparer dans ce qui suit `docker` et `docker-compose`. Toutefois, `docker compose` existe depuis plusieurs années avec le même objectif d'orchestrer les ressources Docker d'un projet; et il a signé l'arrêt de mort de `docker-compose`, qui ne sera plus distribué dès juin 2023. Les arguments de `docker-compose` sont tous compatibles avec `docker compose`, qui vient également avec des fonctionnalités supplémentaires.
+Parmi ces nouvelles fonctionnalités, nous avons par exemple `docker compose ps`, `docker compose stats`; toutefois nous ne les verrons pas en détail ici, la formation étant déjà assez longue ^^'
 
 #### docker-compose
 La commande standard pour lancer un projet paramétré via un DCF est `docker-compose up`.
@@ -798,6 +805,69 @@ fe0dd68b9276   node-installed     "docker-entrypoint.s…"   24 hours ago   Exit
 Si ce n'est pas suffisant, il faut regarder quels programmes utilisent les ports sur l'hôte.
 Sous Linux et Mac, `lsof -i :<port>` vous donne la liste des programmes utilisant le port TCP et/ou UDP demandé. Faites en sorte que le process n'utilise plus le port que cous demandez, ou changez le port binding de votre conteneur pour pointer sur un port libre de l'hôte.
 
+### Impossible d'arrêter le projet: volume en utilisation
+TODO ajouter des explications
+
+Problème:
+```
+$ docker-compose down --volumes
+ ⠿ Container node-installed       Removed                   11.6s
+ ⠿ Container mysql                Removed                   11.6s
+ ⠏ Volume node_modules            Removing                   0.9s
+ ⠿ Network test_default           Removed                    0.1s
+Error response from daemon: remove node_modules: volume is in use - [32830c96e7f11be257defd00cc73dfab4c9e486bd0fd894aaaaf791f88d851b4]
+```
+
+Confirmation du diagnostic:
+```
+$ docker compose ps -a
+NAME                             COMMAND  SERVICE  STATUS      PORTS
+node-installed_run_32830c96e7f1  "sh"     front    exited (0)       
+```
+
+Solution optimale:
+```
+$ docker stop 32830c96e7f1 # Si le conteneur est en cours d'utulisation, il faut exécuter un docker stop
+$ docker rm 32830c96e7f1
+...
+$ docker-compose down --volumes
+...
+```
+
+Solution du fainéant - car dangereuse (mais efficace):
+```
+$ docker container prune -f
+Deleted Containers:
+32830c96e7f11be257defd00cc73dfab4c9e486bd0fd894aaaaf791f88d851b4
+
+Total reclaimed space: 5B
+$ docker-compose down --volumes
+...
+```
+
+### Package not found
+Note: NodeJS/npm edition (cependant transposable à d'autres ecosystèmes type NodeJS/Yarn, Python, Ruby, etc)
+
+L'exécution de votre app vous renvoie une erreur type "Package not found". Vous installez le package (`docker compose exec mon-conteneur npm install --save mon-package`) et re-buildez le conteneur, sans plus de succès.
+
+Cela arrive alors que vous venez de faire un `npm install`, de rebuilder votre container ou de télécharger un repo et essayez de la faire marcher.
+
+Votre `docker-compose.yml`ressemble à ça:
+```
+services:
+  node-installed:
+    volumes:
+    - .:/path/mon/app
+    - volume_node_modules:path/mon/app/node_modules
+...
+volumes:
+  volume_node_modules:
+```
+
+2 possibilités:
+- Soit, à un moment, vous avez exécuté (vraisemblablement par erreur) un `npm install` hors du conteneur (vérifiez dans VSCode si vous avez un dossier `node_modules`). Si c'est bien le cas, supprimez-le
+- Soit, lorsque vous avez re-buildé votre conteneur, vous avez oublié de supprimer l'ancien volume de `node_modules`qui ne contenait pas ce package. Pour corriger ça, on supprime le volume en question lorsqu'on rebuild, avant `docker compose up`; on utilise souvent `docker compose down --volumes`, moyennement selectif mais pratique.
+
 ### Différences entre plateformes hôtes
 TODO Des choses sont possibles sous windows qui ne le sont pas sous linux, par exemple.
 
@@ -860,12 +930,23 @@ https://docs.docker.com/compose/compose-file/#fragments
 Commande pour voir un DCF avec ses valeurs réelles/calculées juste avant son utilisation par le Docker Engine: `docker compose config`.
 https://docs.docker.com/engine/reference/commandline/compose_config/
 
+#### DCF override et extension
+TODO https://docs.docker.com/compose/extends/
+
 ### Swarm et secrets
 Docker Swarm est un concurrent direct de Kubernetes. Je n'ai pas pris le temps de m'intéresser à Swarm, cette section est juste pour mentionner/rappeler son existance.
 
 Les secrets Docker sont utiles à Swarm, un peu de la même manière que la section https://github.com/<user>/<repo>/settings/secrets/actions permet de stocker des secrets utiles opur vos github actions.
 
+## Dockerfile multi-stages
+TODO cool pour le déploiement d'une app contenant un composant front JS utilisant un conteneur de dev
+
 ## DevOps
 Docker est l'un des fer de lance du mouvement DevOps, car il est actuellement (et depuis plus d'une décennie) l'outil de prédilection pour uniformiser les environnements de développement et de production d'une application type webapp ou headless.
 
 Il est utilisé assez souvent avec Kubernetes, notamment car une DCF se convertit très facilement en fichier de configuration Kubernetes. Kubernetes est un concurrent direct de Docker Swarm. Cette formation portant uniquement sur Docker, on ne creusera pas le sujet de Kubernetes plus loin ici.
+
+TODO
+docker build --progress=plain
+docker stats, le htop de docker
+

@@ -1,67 +1,3 @@
-// Dans le fichier: /routes/user
-const {hapiHandler, HTTPResponse} = require("./handler-to-controller");
-const dailyRewards = require("./daily_rewards.json");
-
-server.route({
-  path: baseUrl + "/current-reward",
-  method: "GET",
-  handler: hapiHandler(getCurrentRewardController),
-});
-
-const getCurrentRewardController = async (request, model) => {
-  const {user} = request;
-  const {UserLogins} = model;
-
-  if (user.isAdmin()) return HTTPResponse({
-    payload: true,
-  });
-
-  const payload = await rewardsDetails(UserLogins, user);
-  return HTTPResponse({payload});
-}
-
-const rewardsDetails = async (UserLogins, user) => {
-  const nbDaysOfConnexionRaw = await UserLogins.nbDaysOfConnexion(user.id_user);
-  const nbDaysOfConnexion = parseInt(nbDaysOfConnexionRaw[0].length) - 1;
-
-  const result = {
-    current: currentRewards(dailyRewards, nbDaysOfConnexion),
-    before: previousRewards(dailyRewards, nbDaysOfConnexion),
-    after: nextRewards(dailyRewards, nbDaysOfConnexion),
-  };
-
-  return result;
-}
-
-const currentRewards = (dailyRewards, nbDaysOfConnexion) => {
-  return dailyRewards[nbDaysOfConnexion];
-}
-
-const previousRewards = (dailyRewards, nbDaysOfConnexion) => {
-  const lastDayCampaignIndex = dailyRewards.length - 1;
-  if (nbDaysOfConnexion === lastDayCampaignIndex) {
-    return dailyRewards.slice(lastDayCampaignIndex - 4, lastDayCampaignIndex);
-  }
-
-  let rewardStartIndex = nbDaysOfConnexion - 2;
-  if (rewardStartIndex < 0) rewardStartIndex = 0;
-  return dailyRewards.slice(rewardStartIndex, nbDaysOfConnexion);
-}
-
-const nextRewards = (dailyRewards, nbDaysOfConnexion) => {
-  const lastDayCampaignIndex = dailyRewards.length - 1;
-  const nextConnectionRewardIndex = nbDaysOfConnexion + 1;
-  const nbDaysFirstWeek = 5;
-
-  if (nbDaysOfConnexion <= 1) {
-    return dailyRewards.slice(nextConnectionRewardIndex, nbDaysFirstWeek);
-  } else if (nbDaysOfConnexion == lastDayCampaignIndex) {
-    return dailyRewards.slice(lastDayCampaignIndex, lastDayCampaignIndex + 1);
-  } else {
-    return dailyRewards.slice(nextConnectionRewardIndex, nextConnectionRewardIndex + 2);
-  }
-}
-
 // Dans le fichier: /routes/handler-to-controller
 const HTTPResponse = ({httpStatusCode, payload}) => {
   // Note: si vous trouvez ce code bizarre, je ne l'ai écrit que pour correspondre au comportement original de la fonction.
@@ -146,3 +82,68 @@ const staticMethods = {
   }
 };
 // ...
+
+// Dans le fichier: /routes/user
+const {hapiHandler, HTTPResponse} = require("./handler-to-controller");
+const dailyRewards = require("./daily_rewards.json");
+
+server.route({
+  path: baseUrl + "/current-reward",
+  method: "GET",
+  handler: hapiHandler(getCurrentRewardController),
+});
+
+const getCurrentRewardController = async (request, model) => {
+  const {user} = request;
+  const {UserLogins} = model;
+
+  if (user.isAdmin()) return HTTPResponse({
+    payload: true,
+  });
+
+  const payload = await rewardsDetails(UserLogins, user);
+  return HTTPResponse({payload});
+}
+
+const rewardsDetails = async (UserLogins, user) => {
+  const nbDaysOfConnexionRaw = await UserLogins.nbDaysOfConnexion(user.id_user);
+  const nbDaysOfConnexion = parseInt(nbDaysOfConnexionRaw[0].length) - 1;
+
+  const result = {
+    current: currentRewards(dailyRewards, nbDaysOfConnexion),
+    before: previousRewards(dailyRewards, nbDaysOfConnexion),
+    after: nextRewards(dailyRewards, nbDaysOfConnexion),
+  };
+
+  return result;
+}
+
+const currentRewards = (dailyRewards, nbDaysOfConnexion) => {
+  return dailyRewards[nbDaysOfConnexion];
+}
+
+const previousRewards = (dailyRewards, nbDaysOfConnexion) => {
+  const lastDayCampaignIndex = dailyRewards.length - 1;
+  if (nbDaysOfConnexion === lastDayCampaignIndex) {
+    return dailyRewards.slice(lastDayCampaignIndex - 4, lastDayCampaignIndex);
+  }
+
+  let rewardStartIndex = nbDaysOfConnexion - 2;
+  if (rewardStartIndex < 0) rewardStartIndex = 0;
+  return dailyRewards.slice(rewardStartIndex, nbDaysOfConnexion);
+}
+
+const nextRewards = (dailyRewards, nbDaysOfConnexion) => {
+  const lastDayCampaignIndex = dailyRewards.length - 1;
+  const nextConnectionRewardIndex = nbDaysOfConnexion + 1;
+  const nbDaysFirstWeek = 5;
+
+  if (nbDaysOfConnexion <= 1) {
+    return dailyRewards.slice(nextConnectionRewardIndex, nbDaysFirstWeek);
+  } else if (nbDaysOfConnexion == lastDayCampaignIndex) {
+    return dailyRewards.slice(lastDayCampaignIndex, lastDayCampaignIndex + 1);
+  } else {
+    return dailyRewards.slice(nextConnectionRewardIndex, nextConnectionRewardIndex + 2);
+  }
+}
+
