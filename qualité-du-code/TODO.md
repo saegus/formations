@@ -11,6 +11,12 @@ https://fragiledeveloper.com/2019/06/09/the-principle-of-applying-principles-(PO
 
 ===== Avis de David =====
 ==== un logiciel quali ====
+Quelles sont les qualités & défauts du logiciel dont tu serais client / PO (ex.: foreseeds)?
+
+=== Pendant le dev ===
+- accès à des beta
+- qu'il fasse plus de 80% des features que j'attends
+
 === Après livraison ===
 - si j'arrive à le connecter à mon Azure AD, c'est bon
 - pas d'installation chez moi: tout dans le cloud
@@ -18,14 +24,10 @@ https://fragiledeveloper.com/2019/06/09/the-principle-of-applying-principles-(PO
 - rapidité de prise en main du logiciel
 - parcours UX intuitif
 - fonctionnalité auxquelle je n'aurais pas pensé et qui me fait découvrir des choses
-- responsive (moible too)
-
-=== Pendant le dev ===
-- accès à des beta
-- qu'il fasse plus de 80% des features que j'attends
+- responsive (mobile too)
 
 ==== Mon dream developer ====
-Quelles sont les qualités/défaut du dev avec lequel tu aimerais travailler?
+Quelles sont les qualités & défauts du dev avec lequel tu aimerais (ou pas) travailler en tant que manager / chef de projet?
 
 === qualités ===
 - c'est un référent
@@ -36,3 +38,25 @@ Quelles sont les qualités/défaut du dev avec lequel tu aimerais travailler?
 - reporting: je ne sais pas où ça en est
 - les pbs me sont reportés trop tard
 
+===== Avis de Fred =====
+==== un logiciel quali ====
+Quelles sont les qualités & défauts du logiciel dont tu serais client / PO (ex.: foreseeds)?
+
+=== Pendant le dev ===
+TODO
+
+=== Après livraison ===
+TODO
+
+==== Mon dream developer ====
+Quelles sont les qualités & défauts du dev avec lequel tu aimerais (ou pas) travailler en tant que manager / chef de projet?
+
+=== qualités ===
+TODO
+
+=== défauts ===
+TODO
+
+
+===== Avis de Charlotte =====
+TODO
