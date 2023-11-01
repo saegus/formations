@@ -1,74 +1,4 @@
-# Qualité du développement informatique
-## Introduction
-La qualité est souvent une discipline complexe intéragissant avec de multiples domaines, et l'informatique n'échappe pas à cette règle.
-
-J'étais parti initialement pour vous parler uniquement de qualité de code, et de pourquoi / en quoi elle est importante et bénéfique pour les projets; bref, vous donner suffisamment envie d'en faire pour que vous mettiez en pratique de vous-même ce que l'on a vu lors de l'atelier "Clean Code".
-
-Je me suis rendu compte peu de temps après l'avoir commencé de deux choses. D'une part que la qualité du code dépend certes d'outils et de méthodologies, mais aussi en partie de processus et d'intéractions avec des membres de l'équipe (sans toutefois empiéter sur notre "shift accelerator" favori ^^), dev/tech ou pas.
-
-D'autre part, il me manquait des avis humains de ceux qui travaillent avec nous, et parmi eux encore plus ceux qui signent notre chèque mensuel ou décident de nous augmenter en fin d'année, et ceux qui innfluent sur ces derniers. Le monde a cela d'injuste que ce que nous valons (notre revenu) n'est pas décidé par des experts de notre domaine, mais par d'autres membres. Leur apporter ce qu'ils considèrent comme la qualité (pour un peu qu'ils sachent ce qu'ils veulent et aient une bonne capacité de judgement, bien évidemment; mais ça, je laisse chacun en juger lui-même), c'est pragmatiquement augmenter votre salaire.
-
-### Plan
-1. Qualité du projet: le travail d'équipe lorsqu'on est tech.
-2. Qualité du consultant informatique: Soyez ce qu'on attend de vous, et raflez toujours plus de $$$, à Saegus comme ailleurs.
-3. Qualité du code: le sujet initial. On va parler méthodologies et cas pratiques; un mélange entre formations théoriques et ateliers donc.
-
-## Qualité du projet informatique
-Une introduction nous permettant d'évoquer quelques valeurs importantes à garder en tête pour ce qui suit.
-
-#### État de l'art
-D'après https://fr.wikipedia.org/wiki/Qualit%C3%A9_logicielle .
-
-Indicateurs de qualité logicielle - norme ISO 25010:
-  * la capacité fonctionnelle (les fonctionnalités utilisateurs). En font partie la précision, l'interopérabilité, la conformité aux normes et la sécurité ;
-  * la facilité d'utilisation. En font partie la facilité de compréhension, d'apprentissage et d'exploitation et la robustesse - une utilisation incorrecte n'entraîne pas de dysfonctionnement ;
-  * la fiabilité. En font partie la tolérance aux pannes - la capacité d'un logiciel de fonctionner même en étant handicapé par la panne d'un composant (logiciel ou matériel) ;
-  * la performance. En font partie le temps de réponse, le débit et l'extensibilité - capacité à maintenir la performance même en cas d'utilisation intensive ;
-  * la maintenabilité, qui mesure l'effort nécessaire à corriger ou transformer le logiciel. En font partie l'extensibilité, c'est-à-dire le peu d'effort nécessaire pour y ajouter de nouvelles fonctions ;
-  * la portabilité, c'est-à-dire l'aptitude d'un logiciel à fonctionner dans un environnement matériel ou logiciel différent de son environnement initial. En font partie la facilité d'installation et de configuration dans le nouvel environnement.
-
-On peut les voir comme des objectifs haut niveau et long terme du projet. À garder dans un coin de la tête et à ressortir quand on doit prendre une décision avec impact à long terme, comme l'introduction d'une dépendance, un changement d'architecture, le choix d'un linter, introduction initiale de tests, ...
-
-### Prise de conscience au sein des équipes de projet
-Tous les indicateurs ci-dessus sont importants, on doit donc s'assurer de les adresser tous simultanément dans nos projets.
-
-La capacité fonctionnelle et la facilité d'utilisation sont les domaines du PO et de l'ergonome (designer?).
-
-La fiabilité est un point déjà considéré comme important par les chefs de projets (essayez de livrer des codes peu fiables, c'est nettement plus difficile à faire passer auprès du client que des codes peu maintenables).
-
-La performance est un problème pas toujours bien adressé (par manque de connaissances), et source de sur-ingénierie (over-engineering). Toutefois notre marge de manoeuvre - à nous les devs - est faible dans le cadre des projets que nous livrons habituellement à Saegus, et une grande partie de ce qui doit être mis en place dans ce domine l'est déjà (en partie par les frameworks et outils que nous utilisons).
-
-La portabilité est pour les webapps souvent divisée en une partie orientée techs (ex: serveurs tournant sour Mac, Windows, Python2 ou 3, ...) et une partie orientée utilisateurs (ex: UI sous écrans 13", 20", responsive tablette/mobile, ...).
-
-Last but not least: la maintenabilité.
-
-#### Focus sur la maintenabilité
-Ce domaine-là est celui sur lequel nous, les experts de la technique, avons un entier pouvoir et maîtrisons le mieux.
-Mais c'est aussi celui que nous négligeons le plus:
-  * d'une part parce que nous sommes quasiment les seuls à pouvoir en comprendre les tenants et les aboutissants
-  * d'autre part car cette discipline est complexe, et que le champ de recherche est pluri-disciplinaire: architecture logicielle, lisibilité du code, gestion des compétences de l'équipe et donc ressources humaines, ...
-
-En bref, un domaine de techs pour les techs. Et c'est ce point sur lequel on va mettre l'accent dans la suite.
-
-## Qualité du consultant développeur informatique
-TODO c'est cool un code de bonne qualité, mais ça n'est pas la seule métrique du succès d'un projet informatique.
-
-### En général
-#### Des process adaptés à ceux qui les utilisent
-TODO
-On se rapproche un peu du "software craftsmanship", cf leur manifeste: https://manifesto.softwarecraftsmanship.org/
-
-#### Une bonne estimation du savoir
-On sait estimer ce qu'on sait (et à quel point on le sait/maîtrise), mais aussi ce que l'on ne sait pas.
-
-On sait également estimer les connaissances de notre prochain dans les domaines professionnels qui nous concernent, pour savoir quand il vaut mieux faire valoir son point de vue, et quand il vaut mieux écouter celui qui en sait plus que nous et peut nous enrichir par la même occasion. 
-
-### Proche de nous
-J'ai interviewé plusieurs managers pour savoir ce qu'ils pensaient d'un bon projet d'une part et d'un bon développeur d'autre part. J'ai également interviewé un membre de Shift Acceleration, pour avoir un peu de variété.
-
-TODO résutlat des interviews
-
-## Qualité du code
+## Qualité du code et de la codebase
 TODO
 
 On va voir ici plein de concepts, dont certains se contredisent. Ne prenez rien pour acquis, mais je vous déconseille de jeter le bébé avec l'eau du bain ;-)
@@ -104,30 +34,19 @@ Bob développe les fonctionnalités A et B; les fonctionnalités sont là, lais 
 
 Quelques jours plus tard, le client se rend compte que la fonctionnalité B ne marche plus; Bob, après un rapide audit via le "git blame" intégré à VSCode pointe du doigt le travail récent d'Alice. Le client est très énervé (ça n'est pas le premier retard ni la première régression du projet, et c'est loin d'être la fin), et demande d'enlever un des deux développeurs du projet; en tant que lead dev, allez-vous essayer de préserver Alice ou Bob?
 
-### Quels causes baissent la qualité de la codebase?
+### Quels causes à une baisse de qualité?
 - un mauvais design: on appelle plus volontiers le design une architecture, dans notre discipline.
 - les devs n'intègrent pas nativement dans leurs livrables / tâches des contrôles de la qualité du code, ni n'ont explicitement ce type de contrôles dans leur flow de réalisation d'une tâche. Il existe par exemple la code review, mais on peut songer à d'autres formes de contrôle comme une liste de points de contrôle.
 - un projet ne permettant pas de lancer facilement des outils de contrôle automatisés: le linter doit s'interfacer avec l'IDE (bon le linter de vscode craint un peu, il faut installer manuellement une l'exécutable eslint, c'est pas la faute du dev), et 
 
-### La maintenabilité
-#### Pourquoi c'est problématique, un code non maintenable, y compris dans des projets de 2 mois?
-On prend en compte qu'on fait souvent des projets de 2 mois, et qu'on est amené à travailler à plusieurs dessus - y compris dans le cas où ça ne fait pas partie de la spec initiale du projet.
-
-TODO cf intro de Clean code
-
-#### Techniques générales/théoriques d'amélioration de la maintenabilité
+## Axes d'amélioration
 TODO
 Exemples:
 - une communication d'équipe fluide
 - des process de travail normés (tout en étant aussi peu contraignants que possible)
-- une architecture à différentes granularités:
-  * au niveau du projet (multi-composants)
-  * du composant (un exécutable donné)
-  * du fichier
-  * de la fonction
-  * de la ligne
+- une architecture à chaque niveau de granularité: projet (multi-composants), composant (un exécutable donné), fichier, fonction, ligne
 
-#### Exemples pratiques
+### Exemples pratiques
 Les technos / frameworks / etc listés ici n'y sont qu'à titre d'exemples, et on chacun au moins une alternative dans leur domaine. À vous de chercher!
 
 #### Linting
@@ -135,39 +54,79 @@ Les technos / frameworks / etc listés ici n'y sont qu'à titre d'exemples, et o
 TODO eslint: règles paramétrables.
 Important: vous devez savoir pourquoi - et vous justifier si on vous demande quand - vous ajoutez chaque règle! Évitez dont de bêtement prendre le premier set de règles venu, ce qui peut être contraignant!
 
-##### Typescript
+#### Typescript
 TODO Typescript
 Aussi bien un linter type ESLint (mais non paramétrable) qu'un langage à part entière.
 
-##### Automatisation de la CI
+#### Automatisation de la CI
 TODO github flows et scripts shell
 
-##### Automatisation de la CD
+#### Automatisation de la CD
 Outils populaires: Github Actions, Azure devops / pipelines, Jenkins
 
-##### Docker
+#### Docker
 TODO
 Un peu hors scope, donc on va passer rapidement dessus
 Un compagnon idéal pour la portabilité (compatibilité), avec son bonus devops
 
-### Une bonne architecture
-L'architecture doit être adaptée aux besoins / spécificités du projet. Inutile "d'over-enigeer-er".
+### Architecture
+Définition (https://www.cnrtl.fr/definition/architecture): Principe d'organisation d'un ensemble, agencement, structure.
+
+On peut inférer que l'architecture informatique est la manière de structurer un système informatique, mais aussi le code qui leui sert de base.
 
 L'architecture informatique est comme l'architecture classique ou l'architecture d'intérieur. Il s'agit de décider de la disposition des pièces et meubles les uns par rapport aux autres, car chaque chose a une place: les chaussettes propres et sèches vont a priori dans la chambre, les couverts à la cuisine, etc. Et ceci car nos chaussettes servent à nous habiller, nos couverts à manger, etc. Dans notre codebase aussi, les bouts de code dont l'objectif, l'environnement (dont domaine technique/métier) et/ou les dépendances sont communes iront à des endroits similaires.
 
-Dans le domaine du développeur comme dans celui des métiers de la maison, il y a plusieurs niveaux / grains d'architectures:
+Toujours par analogie avec l'architecture classique, l'architecture informatique doit être adaptée aux besoins / spécificités du projet. Inutile "d'over-enigeer-er".
+
+### Quelques méthodologies et architectures connues
+TODO
+Je n'ai pas séparé architecture et méthodologie, car la plupart des architectures sont intrinsèquement liées aux méthodologies permettant de les mettre en place. C'est valable par exemple dans le cas de la 12FA.
+
+Note: "Pattern" (motif en français) désigne également une forme (simple) d'architecture.
+
+- MVC
+- REST
+- 12FA (twelve-factors app)
+- Clean Code
+- Clean Architecture
+- Onion Architecture
+- Hexagonale / Ports & Adapters
+- Domain Driven Design (DDD)
+- Microservices
+- MVVM
+- TDD, BDD
+- Flux
+- LAMP
+
+Pour une liste plus complète: https://fr.wikipedia.org/wiki/Cat%C3%A9gorie:Architecture_logicielle
+
+### Système de classement des normes architecturales
+Dans le domaine du développeur comme dans celui des métiers de la maison, il y a plusieurs niveaux / grains d'action des règles d'architectures:
 - gros grain: l'urbanisme (ça s'appelle aussi comme ça en informatique). Cette discipline est plutôt orientée designers et administrateurs systèmes.
 - moyen-gros grain: l'architecture inter-composants (logiciels), comparable à l'architecture d'un complexe (hôtelier), d'un quartier résidentiel ou d'un immeuble. Un composant logiciel d'un projet est un exécutable prévu en fonctionnement dans la phase d'exploitation nominale du projet.
 - moyen grain: l'architecture intra-composants (logiciels), tel que l'architecture des pièces de l'appartement: l'emplacement des fenêtres, du garage, de l'atelier, du balcon, etc. En informatique, il s'agit de l'arborescence de fichiers, de ce qu'on pet dans chaque fichier et de comment on le nomme.
-- grain fin: l'architecture intra-fichier, qu'on peut comparer à l'architecture d'interieur. On y parle notamment de nommage des fonctions et agencement de celles-ci entre elles. 
+- grain fin: l'architecture intra-fichier, qu'on peut comparer à l'architecture d'interieur (mais aussi aux placements de sculptures et bas-reliefs sur une façade extérieure). On y parle notamment de nommage des fonctions et agencement de celles-ci entre elles. 
 - grain très fin: l'architecture intra-fonction: nommage des variables, algorithmie, aération du code, taille des fonctions, ...
 
+Ce moyen de classer les règles/normes d'architecture n'est bien sûr pas le seul, mais c'est celui que je vous propose d'utiliser ici. Une architecture va être un ensemble de ces règles, à un ou plusieurs niveaux. Par exemple, la méthodologie 12FA agit (au moins) aux granularités projet et composant.
+
 #### Entre les composants logiciels
+TODO
+
+##### REx
 On parle souvent de microservices: c'est loin d'être systématiquement une bonne idée, par rapport à du monolithique... Gaffe à la lourdeur des interfaces de communication entre les différents composants (y compris au niveau de la gestion des erreurs, sérialisation d'éléments supplémentaires, toussa).
 
 De l'event-driven pour la communication entre les composants est aussi possible et assez scalable (kafka, RabbitMQ, ...), même si ça nécessite des connaissances / une expérience spécifique(s) pour éviter de faire du code spaghetti - et donc une équipe formée à cette manière de faire.
 
 #### À l'intérieur du composant logiciel
+Comme je l'ai dit à plusieurs d'entre vous à une formation précédente, une fonction de 100+ lignes ça n'existe juste pas, et une fcontion de 60+ lignes c'est rare et spécifique au JSX; pour le JS, la moyenne devrait être à 20-30 lignes, et le max à 40. Aller au-delà de cette ligne, c'est très probablement intriquer différents objectifs, et c'est le début d'un code spaghetti, ou d'un God Object.
+
+TODO
+
+##### Clean Code
+TODO
+
+##### REx
 Ex: si différentes temporalités, de l'event-driven est intéressant.
 
 Ex: Pour des cas de traçabilité, penser à l'event sourcing.
@@ -184,13 +143,7 @@ De manière générale, faire du SoC au niveau des fichiers (1 objectif max par 
 - j'évite au possible le code stateful - et donc les classes. Il y en a uniquement aux endroits où elles sont significativement plus adaptées que du code non-objet, comme par exemple une API nécessitant des credentials, que je vais appeler un certain nombre de fois, potentiellement éloignés de là où je lui passe ses credentials.
 - Pour le nommage de mes variables et noms de fonctions, j'utilise notamment (mais pas que) le language ubuquitaire tel que défini par le DDD - disons plus simplement le "langage métier".
 
-Bref, je mange - sans complexe - à tous les rateliers (de l'archirecture logicielle) ^^'
-
-#### Manuellement
-Comme je l'ai dit à plusieurs d'entre vous à une formation précédente, une fonction de 100+ lignes ça n'existe juste pas, et une fcontion de 60+ lignes c'est rare et spécifique au JSX; pour le JS, la moyenne devrait être à 20-30 lignes, et le max à 40. Aller au-delà de cette ligne, c'est très probablement intriquer diférents objectifs, et c'est le début d'un code spaghetti, ou d'un God Object.
-
-##### Clean Code
-TODO
+Bref, je mange - sans complexe - à tous les rateliers (de l'architecture logicielle) ^^'
 
 ## Techniques spécifiques
 ### Guidelines de dev
