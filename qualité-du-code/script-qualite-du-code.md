@@ -1,13 +1,21 @@
-# Qualité du code
+# Qualité du développeur informatique
 ## Introduction
-On va voir ici plein de concepts, dont certains se contredisent. Ne prenez rien pour acquis, mais je vous déconseille de jeter le bébé avec l'eau du bain ;-)
+La qualité est souvent une discipline complexe interagissant avec de multiples domaines, et l'informatique n'échappe pas à cette règle.
 
-## C'est quoi, une codebase de qualité?
+J'étais parti initialement pour vous parler uniquement de qualité de code, et de pourquoi / en quoi elle est importante et bénéfique pour les projets; bref, vous donner suffisamment envie d'en faire pour que vous mettiez en pratique de vous-même ce que l'on a vu lors de l'atelier "Clean Code".
 
-### Proche de nous
-TODO interviews
+Je me suis rendu compte peu de temps après l'avoir commencé de deux choses. D'une part que la qualité du code dépend certes d'outils et de méthodologies, mais aussi en partie de processus et d'intéractions avec des membres de l'équipe (sans toutefois empiéter sur notre "shift accelerator" favori ^^), dev/tech ou pas.
 
-### De manière générale
+D'autre part, il me manquait des avis humains de ceux qui travaillent avec nous, et parmi eux encore plus ceux qui signent notre chèque mensuel ou décident de nous augmenter en fin d'année, et ceux qui innfluent sur ces derniers. Le monde a cela d'injuste que ce que nous valons (notre revenu) n'est pas décidé par des experts de notre domaine, mais par d'autres membres. Leur apporter ce qu'ils considèrent comme la qualité (pour un peu qu'ils sachent ce qu'ils veulent et aient une bonne capacité de judgement, bien évidemment; mais ça, je laisse chacun en juger lui-même), c'est pragmatiquement augmenter votre salaire.
+
+### Plan
+1. Qualité du projet: le travail d'équipe lorsqu'on est tech.
+2. Qualité du consultant informatique: Soyez ce qu'on attend de vous, et raflez toujours plus de $$$, à Saegus comme ailleurs.
+3. Qualité du code: le sujet initial. On va parler méthodologies et cas pratiques; un mélange entre formations théoriques et ateliers donc.
+
+## Qualité du projet informatique
+Une introduction nous permettant d'évoquer quelques valeurs importantes à garder en tête pour ce qui suit.
+
 #### État de l'art
 D'après https://fr.wikipedia.org/wiki/Qualit%C3%A9_logicielle .
 
@@ -19,11 +27,7 @@ Indicateurs de qualité logicielle - norme ISO 25010:
   * la maintenabilité, qui mesure l'effort nécessaire à corriger ou transformer le logiciel. En font partie l'extensibilité, c'est-à-dire le peu d'effort nécessaire pour y ajouter de nouvelles fonctions ;
   * la portabilité, c'est-à-dire l'aptitude d'un logiciel à fonctionner dans un environnement matériel ou logiciel différent de son environnement initial. En font partie la facilité d'installation et de configuration dans le nouvel environnement.
 
-Parallèlement à ces indicateurs, on note dans la "Gestion de la qualité logicielle" des ensembles de pages dédiés à:
-- Compréhension et contrôle du code source
-- Remaniements (refactors)
-- Principes de programmation
-- Mauvaises pratiques
+On peut les voir comme des objectifs haut niveau et long terme du projet. À garder dans un coin de la tête et à ressortir quand on doit prendre une décision avec impact à long terme, comme l'introduction d'une dépendance, un changement d'architecture, le choix d'un linter, introduction initiale de tests, ...
 
 ### Prise de conscience au sein des équipes de projet
 Tous les indicateurs ci-dessus sont importants, on doit donc s'assurer de les adresser tous simultanément dans nos projets.
@@ -44,7 +48,49 @@ Mais c'est aussi celui que nous négligeons le plus:
   * d'une part parce que nous sommes quasiment les seuls à pouvoir en comprendre les tenants et les aboutissants
   * d'autre part car cette discipline est complexe, et que le champ de recherche est pluri-disciplinaire: architecture logicielle, lisibilité du code, gestion des compétences de l'équipe et donc ressources humaines, ...
 
-En bref, un domaine de techs pour les techs. Et c'est spécifiquement sur celui-ci qu'on va se concentrer dans la suite.
+En bref, un domaine de techs pour les techs. Et c'est ce point sur lequel on va mettre l'accent dans la suite.
+
+## Qualité du code
+TODO
+
+On va voir ici plein de concepts, dont certains se contredisent. Ne prenez rien pour acquis, mais je vous déconseille de jeter le bébé avec l'eau du bain ;-)
+
+
+## C'est quoi, une codebase de qualité?
+Ici on tente TODO
+
+### Proche de nous
+TODO interviews
+
+### De manière générale
+On note dans le portail de la "Gestion de la qualité logicielle" (https://fr.wikipedia.org/wiki/Qualit%C3%A9_logicielle#Voir_aussi) des ensembles de pages dédiés à:
+- Compréhension et contrôle du code source
+- Remaniements (refactors)
+- Principes de programmation
+- Mauvaises pratiques
+
+Ce portail regorge de notions intéressantes (oui, je parle bien de wikipedia), mais faire une formation dessus ne présenterait que peu de valeur ajoutée: après tout il vous suffit de cliquer sur des liens pour avoir du contenu à lire, et les articles wikipedia sont très souvent digestes et accessibles (contrairement aux articles de recherche ou aux brevets).
+
+## C'est quoi, une codebase de mauvaise qualité?
+TODO
+- le code n'est pas lisible: gros pavés non aérés, lignes trop longues, ...
+- le code n'est pas compréhensible: on n'arrive pas à voir d'organisation s'en dégager (des vues, layouts, composants génériques, composants spécialisés, presenters, data transformers, routes, contrôleurs, modèles, entités, authentification, helpers, code réutilisable, etc)
+- le code et bug-prone (sujet/vulnérable aux bugs): un code où des objectifs/fonctionnalités différent(e)s se mélangent risque beaucoup plus une régression sur la fonctionnalité A lorsqu'on améliore la fonctionnalité B qu'un code où les obectifs ont correctement séparés, et bien indentifiables par les noms des variables et des fonctions.
+- le code ne permet pas l'intégration / l'utilisation aisée d'outils d'aide à l'amélioration de la qualité du code: il est difficile de faire des tests unitaires (pas de dependency injection), les développeurs ne connaissent pas la commande pour linter le code, ...
+
+### Le code sujet aux bugs: illustration
+Cette propriété est particulièrement injuste: en voici un exemple.
+
+Imaginons les développeurs Alice et Bob: Alice produit un code clair, alors que Bob n'en n'a pas grand chose à faire (par exemple, Bob pourrait croire qu'une techno magique - au hasard typescript - est nécessaire et/ou suffisante pour faire de son code un code de grande qualité).
+
+Bob développe les fonctionnalités A et B; les fonctionnalités sont là, lais le code est difficilement compréhensible, et très bug-prone. Alice doit intervenir sur la fonctionnalité A, et donc sur le code de Bob. Elle rencontre des difficultés à intégrer son travail (qui n'auraient pas existé si Bob avait fait quelque chose de qualité), et délivre finalement son code avec un délai de retard (par rapport à son estimation). Alice est une développeuse talentueuse (son style a déjà été mis en avant par ses collègues 'autre projets), mais son code n'est pas d'une aussi bonne qualité qu'elle aurait voulu (elle est perfectionniste): l'environnement ne le permettait pas et aurait nécessité un refactor de grande ampleur.
+
+Quelques jours plus tard, le client se rend compte que la fonctionnalité B ne marche plus; Bob, après un rapide audit via le "git blame" intégré à VSCode pointe du doigt le travail récent d'Alice. Le client est très énervé (ça n'est pas le premier retard ni la première régression du projet, et c'est loin d'être la fin), et demande d'enlever un des deux développeurs du projet; en tant que lead dev, allez-vous essayer de préserver Alice ou Bob?
+
+## Quels causes baissent la qualité de la codebase?
+- un mauvais design: on appelle plus volontiers le design une architecture, dans notre discipline.
+- les devs n'intègrent pas nativement dans leurs livrables / tâches des contrôles de la qualité du code, ni n'ont explicitement ce type de contrôles dans leur flow de réalisation d'une tâche. Il existe par exemple la code review, mais on peut songer à d'autres formes de contrôle comme une liste de points de contrôle.
+- un projet ne permettant pas de lancer facilement des outils de contrôle automatisés: le linter doit s'interfacer avec l'IDE (bon le linter de vscode craint un peu, il faut installer manuellement une l'exécutable eslint, c'est pas la faute du dev), et 
 
 ## La maintenabilité
 ### Pourquoi c'est problématique, un code non maintenable, y compris dans des projets de 2 mois?
@@ -89,6 +135,7 @@ Un compagnon idéal pour la portabilité (compatibilité), avec son bonus devops
 
 ### Une bonne architecture
 L'architecture doit être adaptée aux besoins / spécificités du projet. Inutile "d'over-enigeer-er".
+L'architecture informatique est comme l'architecture classique ou l'architecture d'intérieur. Il s'agit de décider de la disposition des pièces et meubles les uns par rapport aux autres, car chaque chose a une place: les chaussettes propres et sèches vont a priori dans la chambre, les couverts à la cuisine, etc. Et ceci car nos chaussettes servent à nous habiller, nos couverts à manger, etc. Dans notre codebase aussi, les bouts de code dont l'objectif, l'environnement (dont domaine technique/métier) et/ou les dépendances sont communes iront à des endroits similaires.
 
 #### Entre les composants
 On parle souvent de microservices: c'est loin d'être systématiquement une bonne idée, par rapport à du monolithique... Gaffe à la lourdeur des interfaces de communication entre les différents composants (y compris au niveau de la gestion des erreurs, sérialisation d'éléments supplémentaires, toussa).
@@ -137,7 +184,22 @@ On sait également estimer les connaissances de notre prochain dans les domaines
 TODO: cf les guidelines de contribution sur github de technos populaires: Angular, React, Next.js, Mongoose, Prisma, Sequelize.
 
 ### Signaler un bug / un comportement étrange à un dev
-TODO: cf les formulaires d'ouvertures de github issues de technos populaires: Angular, React, Next.js, Mongoose, Prisma, Sequelize.
+Nous travaillons avec des systèmes complexes. À l'instar des docteurs et du corps humain, nous et notre logiciel avons besoin de différents éléments de diagnostics pour poser un diagnostic de ce qui ne va pas, avant de le résoudre: radios, analyses sanguines et ausculataion au stéthoscope deviennent logs applicatifs, `console.log()` placés ponctuellement et debuggers.
+
+Dans ce cadre, il nous arrive régulièrement d'avoir à échanger autour de nos problèmes avec des collègues pour résoudre des problèmes.
+
+Il est donc fondamental:
+- de savoir fournir le plus de données possibles à l'établissement du diagnostic, et en premier lieu différents types de logs: logs de sortie et d'erreur d'un routeur, logs applicatifs de (node, docker, ...), sortie d'une commande (par exemple pour le build d'une image docker, le mieux est la sortie de `docker compose build <service> --progress=plain`), logs systèmes (ex.: dmesg, journalctl), etc
+- de savoir parmi tous les outils qu'on a sous la main lesquels sont les plus pertinents (histoire de ne pas flooder notre interlocuteur d'informations inutiles)
+- de savoir ajouter les éléments pertinents à sa demande d'aide. Votre interlocuteur n'est pas dans votre tête: à vous de lui fournir suffisamment d'éléments pour:
+  1. d'une part qu'il comprenne votre objectif: "je veux ... et pour ce faire, j'ai besoin de ... mais je suis bloqué par ..."
+  2. d'autre part qu'il juge si il a les connaissances nécessaires pour vous aider,
+  3. également que vous êtes dans une situation suffisamment problématique pour qu'il vous accorde son temps (son temps est précieux, ne le gâchez pas sans avoir déjà sérieusement cherché des solutions de votre côté)
+  4. et enfin qu'il ait un minimum (voir pas) de questions à vous poser: minimisez les allers-retours
+- de savoir bien formuler sa demande d'aide:
+  * par exemple commencer sa demande par "ça ne marche pas (quand je fais X)" puis attendre qu'on nous réponde, c'est pas très efficace - ni très respectueux de votre interlocuteur. C'est mieux si vous fournissez la liste exhaustive des actions faites / commandes lancées en vous étant assuré que le comportement est bien évidmment reproductible, ainsi qu'un retour exhaustif du système menant au comportement problématique: par exemple si il s'agit d'une commande, l'ensemble de la sortie de la commande depuis son lancement (et pas juste les 5 dernières lignes).
+  * D'autre part, soyez polis et concis: le temps de votre interlocuteur est précieux, ne le gâchez pas. Si vous avez du mal à visualiser ce point, imaginez que vous vous adressez à David ou Frédéric.
+  * la (quasi-?)totalité des projets populaires sur Github possèdent des formulaires d'ouvertures de github issues de technos populaires: Angular, React, Next.js, Mongoose, Prisma, Sequelize. On peut d'ailleurs aller y faire un tour rapide, pour voir à quoi ils ressemblent.
 
 ### Le boy scout
 On laisse le code dans un aussi bon état - voir meilleur - que celui dans lequel on l'a trouvé. Par exemple, si on trouve un comportement suspect:
@@ -145,157 +207,9 @@ On laisse le code dans un aussi bon état - voir meilleur - que celui dans leque
 - on signale ce comportement à l'équipe, avec laquelle on collabore potentiellement en tant que lanceur de l'alerte initiale.
 
 ### Le SoC pendant le dev d'une nouvelle feature
-#### L'exemple du JSON imbriqué à représenter en table HTML
-Objectif:
+Cf `./new-feature-SoC.md`
 
-Passer de:
-```
-const data = [{
-  label: "ligne 1",
-  champ_ventilé: [{
-    label: "sous-ligne 1"
-  }, {
-    label: "sous-ligne 2"
-  }],
-}];
-```
-à du HTML rendant:
-```
---------------------------------------------
-| label principal | label de champ ventilé |
---------------------------------------------
-|                 |      sous-ligne 1      |
-|     ligne 1     |------------------------|
-|                 |      sous-ligne 2      |
---------------------------------------------
-```
+## Qualité du développeur informatique
+### Proche de nous
+TODO interviews
 
-En pensant que le HTML en question devra être extensible / customisable (style + rendering + listeners), au niveau de la table, des headers, des lignes et des cellules, car on va très probablement vouloir customiser cette table par la suite.
-
-Spoiler: les maquettes livrées 1 ou 2 mois après prévoyaient effectivement d'utiliser intensivement ces possibilités d'extensivité... Autant y penser maintenant, vu le morceau, c'est une bonne idée de ne pas avois à y toucher trop souvent, pour éviter les régressions ^^
-
-##### État des lieux
-On possède une très jeune application React, en react-admin. L'architecture est légère: tous les composants sont dans un dossier "composants/". On n'a pas de tests en place (encore).
-
-Notre code n'aura aucune dépendance (un bouton déjà existant, un composant créateur de table déjà existant, ...). Tout est à faire, mais on a de la liberté, et peu de chance que l'évolution d'une dépendance casse le code de la fonctionnalité (maintenant ou dans le futur).
-
-On a cherché des libs sur NPM qui visent à repésenter des cellules fusionnées/aggrégées de JSON imbriqué dans une table HTML, sans succès. Il va falloir développer la notre. 
-
-Au niveau de l'architecture, on a déjà sur d'autres fonctionnalités un composant "glue" qui fait le lien entre des composants génériques de rendu et du code react-admin (c'est ce code qui va passer l'objet "data" à notre composant de rendu), lui-même appelé par une (sous-)vue, elle-même appelée par un layout, etc.
-
-##### Conception initiale
-On pressent pas mal de lignes de code. Par simplicité, on va garder dans un premier temps le code de la feature (le composant "glue" + le composant "générique") dans le fichier qui l'appelle (la sous-vue).
-
-On songe aussi par la suite à appliquer le pattern container/presenter, assez connu en react. Au-delà de faire du SoC et d'introduire des points de contrôle supplémentaires, ce pattern va nous permettre de pouvoir changer rapidement de composant de rendu pur si besoin (de <table><tbody><tr><td> à <div><div><div><div> notamment, mais on peut aussi penser à du d3.js).
-
-Au niveau de la philosophie, on va créer ce composant (logiciel, pas "React") comme une bibliothèque qu'on aurait utilisé si elle avait existé.
-Par exemple, si Datatables permettait une telle fonctionnalité et qu'on l'avait utilisé. On va d'ailleurs s'inspirer de l'interface de datatables pour la définition des colonnes, "définitions de colonnes" qui servira à la fois à générer les en-têtes et les données du corps de notre table.
-
-S'inspirer pour l'interface de ses composants réutilisables de celles des libs externes populaires est d'ailleurs un moyen à la fois peu risqué et peu couteux cognitivement d'arriver à un résultat durable. On peut aussi s'inspirer d'autres éléments, comme par exemple l'ontologie d'un module manipulant des objets similaires à ceux de notre fonctionnalité.
-
-##### Réalisation initiale
-On fait un PoC dans un fichier existant. Certaines de nos fonctions font jusqu'à 60 lignes, on a ajouté en tout 140 lignes; l'ensemble des spécifications n'est pas encore présente, mais on a un "coeur de fonctionnalité".
-
-##### Premier refactor
-On voit maintenant plus clairement ce qu'on entrevoyait avant d'entammer le premier jet. On applique donc plus strictement:
-- la séparation "react-admin" / reste
-- la séparation React (JSX + hooks) / pure JS (une manière de mettre en place container/presenter)
-
-On sépare aussi nos grosses fonctions en plus petites, généralement en les groupant par utilisation simultanées de différentes variables.
-
-##### Re-conception
-On commence à créer une ontologie, pour mettre un vocabulaire plus explicite à nos variables: on créer un champ lexical de "lignes aggrégées / ventilées", "DOM virtuel" (du JSON facilement transformable en table HTML), etc.
-
-Le virtual DOM en question ressemble par exemple à:
-```
-const data = [{
-  data: {
-    "label": "ligne 1",
-    "champ_ventilé.label": "sous-ligne 1",
-  },
-  numéro_ligne: 1,
-  numéro_sous_ligne: 1,
-  nombre_sous_lignes: 2,
-}, {
-  data: {
-    "label": "ligne 1",
-    "champ_ventilé.label": "sous-ligne 2",
-  },
-  numéro_ligne: 1,
-  numéro_sous_ligne: 2,
-  nombre_sous_lignes: 2,
-}];
-```
-
-On va trouver des noms à nos "plus petites fonctions": des noms en rapport avec les (sous-)objectifs que représentent ces différents bouts de code. Cela nous amène parfois à re-fusionner des fonctions qu'on vient de découper à l'étape précédente.
-
-##### Seconde phase de réalisation
-On réalise les spécifications (sous-fonctionnalités) manquantes. Cela rajoute environ 40 lignes de code, à différents endroits.
-
-On prend conscience que le coeur de l'intelligence de notre code n'est pas dans le présenteur, mais celui-ci est une documentation idéale pour monter l'utilisation et les possibilités de notre virtual DOM de rows aggrégés.
-
-##### Dernière conception
-La précédente étape nous a permis de tester si on doit encore séparer différents objectifs, on se sert du résultat ici. 
-
-Elle a fait ressortir que deux de nos "plus petites fonctions" ont beaucoup grossi avec l'arrivée des "fonctionnalités secondaires". Elles représentent a priori les points privilégiés pour l'extensivité de l'ensemble du module, on aménage donc leurs arguments - ainsi que ceux de la fonction d'entrée / d'administration pour accueillir cette extensivité. Parties concernées: rendering des cellules, génération des attributs du vDOM, présenteur par défaut.
-
-Également, on a mis du code lié à notre virtual dom dans le présenteur (pour permettre à l'utilisateur de numéroter les sous-rows et de repérer le dernier, via des classes CSS), on va le transformer en génération d'attributs dans le vDOM à la place.
-
-##### Réalisation finale: nettoyage
-On transforme le PoC en quelque chose de propre.
-
-Le code va dans plusieurs fichiers séparés:
-- le composant "glue" va dans le fichier dédié à ce type de composants. On en profite pour lui ajouter une finctionnalité qu'on retrouve sur d'autres comosant de ce fichier: le shimmering.
-- le présenteur et le code de génération du vDOM () vont pour l'instant tous les deux dans GroupedRows.jsx . On fait en sorte le maximiser l'extensibilité, pour optimiser l'utilisation du principe open/closed (le "O" des principes SOLID)
-
-Les fonctions se décomposent au final en:
-- coeur de métier:
-  * degroupedRow
-  * generateVirtualDOM
-  * degroupedRowVirtualDOM
-  * dont auxiliaires:
-    - isChildPath
-    - isCommonPart
-- exports de composants facilement utilisables (et à valeur de documentation pour notre coeur de fonctionnalité):
-  * GroupedRowsPresenter
-  * GroupedRows
-  * GroupedBodyRows
-  * dont auxiliaires:
-    - GroupedRowsError
-    - classnameCellFactory
-    - defaultRenderer
-    - DefaultCell
-
-##### Rétrospective
-Le compromis entre noms explicites et noms simples n'est pas forcément optimal, pour le coeur de fonctionnalité. Les noms ne sont pas tous explicites sur ce qu'ils font ou ce qu'ils retournent. Quand on lit leur noms, on ne voit pas une histoire claire se dégager.
-
-On voit tout de même un lien de parenté entre degroupedRow et degroupedRowVirtualDOM, ainsi qu'entre degroupedRowVirtualDOM et generateVirtualDOM.
-
-Également, du code de GroupedRows devrait être placé dans une fonction dédiée en pur JS, et se faire instancier par le conteneur react.
-
-##### Addendum
-Une autre manière d'architecturer un composant est la "méthode des couches/layers".
-
-Lorsqu'on clique sur un lien dans une page HTML vers un domaine externe, cela déclenche toute une série d'évènements, qui va notamment passer par les couches OSI. Pour visualiser: https://fr.wikipedia.org/wiki/Mod%C3%A8le_OSI .
-
-Ce qu'on observe, c'est que chaque couche a son propre objectif, et a un exécutable/périphérique (ou plusieurs) dédié à la réalisation de cet objectif. Puisque chaque objectif est finement défini, l'exécutable en charge de l'appliquer n'est pas énorme, et sa maintenance rendue aisée par sa petite taille.
-
-Une couche OSI n'est pas qu'un objectif, c'est aussi un ensemble de sous-fonctionnalités ainsi qu'un langage / monde spécifique (protocoles et services). La sortie de chaque couche est une enveloppe (élargissons à une transformation) de son entrée, et l'entrée et la sortie de chaque couche sont clairement définis (par des datagrammes dans le modèle OSI)
-
-On va s'inspirer de ce "découpage mental" dans nos fonctionnalités complexes et imaginer le cheminement de notre transformation (du JSON imbriqué initial au JSX final) au travers de nos propres couches. Par exemple pour un composant JSX de lignes aggrégées (qui affiche du JSON imbriqué dans une table HTML), on imagine:
-- une couche de dégroupage du JSON (degroupedRow), qui nous ressort un tableau de lignes dégroupées.
-- une couche de rendu du DOM virtuel (generateVirtualDOM), qui est notamment chargé de créer les cellules du DOM virtuel à partir de la définition des colonnes.
-- une couche d'enrichissement des lignes dégroupées (degroupedRowVirtualDOM + la partie JS de GroupedRows)
-- une couche de rendu HTML/JSX (GroupedRowsPresenter), qui va transformer le virtual DOM en une table HTML
-
-##### Conclusion
-Plus on a d'outils (mentaux/architecturaux ici), plus on peut choisir le meilleur.
-
-On ne fait pas parfait du premier coup - ni même du 2e, cf la rétrospective; mais on peut quand même faire quelque chose de plutôt lisible et durable sans y passer trop de temps.
-
-Cet exercice est inspiré de l'exercice de refactor de Robert C Martins, dans "Clean Code", chapitre "Refactoring serialdate", qui lui adopte une approche très différente, plus simple mentalement que les deux présentées ci-dessus mais tout aussi instructive.
-TODO
-
-
-### l'exemple de l'export excel sur eCSAR
-TODO
