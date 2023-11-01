@@ -1,6 +1,6 @@
-# Qualité du développeur informatique
+# Qualité du développement informatique
 ## Introduction
-La qualité est souvent une discipline complexe interagissant avec de multiples domaines, et l'informatique n'échappe pas à cette règle.
+La qualité est souvent une discipline complexe intéragissant avec de multiples domaines, et l'informatique n'échappe pas à cette règle.
 
 J'étais parti initialement pour vous parler uniquement de qualité de code, et de pourquoi / en quoi elle est importante et bénéfique pour les projets; bref, vous donner suffisamment envie d'en faire pour que vous mettiez en pratique de vous-même ce que l'on a vu lors de l'atelier "Clean Code".
 
@@ -50,6 +50,24 @@ Mais c'est aussi celui que nous négligeons le plus:
 
 En bref, un domaine de techs pour les techs. Et c'est ce point sur lequel on va mettre l'accent dans la suite.
 
+## Qualité du consultant développeur informatique
+TODO c'est cool un code de bonne qualité, mais ça n'est pas la seule métrique du succès d'un projet informatique.
+
+### En général
+#### Des process adaptés à ceux qui les utilisent
+TODO
+On se rapproche un peu du "software craftsmanship", cf leur manifeste: https://manifesto.softwarecraftsmanship.org/
+
+#### Une bonne estimation du savoir
+On sait estimer ce qu'on sait (et à quel point on le sait/maîtrise), mais aussi ce que l'on ne sait pas.
+
+On sait également estimer les connaissances de notre prochain dans les domaines professionnels qui nous concernent, pour savoir quand il vaut mieux faire valoir son point de vue, et quand il vaut mieux écouter celui qui en sait plus que nous et peut nous enrichir par la même occasion. 
+
+### Proche de nous
+J'ai interviewé plusieurs managers pour savoir ce qu'ils pensaient d'un bon projet d'une part et d'un bon développeur d'autre part. J'ai également interviewé un membre de Shift Acceleration, pour avoir un peu de variété.
+
+TODO résutlat des interviews
+
 ## Qualité du code
 TODO
 
@@ -58,9 +76,6 @@ On va voir ici plein de concepts, dont certains se contredisent. Ne prenez rien 
 
 ## C'est quoi, une codebase de qualité?
 Ici on tente TODO
-
-### Proche de nous
-TODO interviews
 
 ### De manière générale
 On note dans le portail de la "Gestion de la qualité logicielle" (https://fr.wikipedia.org/wiki/Qualit%C3%A9_logicielle#Voir_aussi) des ensembles de pages dédiés à:
@@ -71,14 +86,16 @@ On note dans le portail de la "Gestion de la qualité logicielle" (https://fr.wi
 
 Ce portail regorge de notions intéressantes (oui, je parle bien de wikipedia), mais faire une formation dessus ne présenterait que peu de valeur ajoutée: après tout il vous suffit de cliquer sur des liens pour avoir du contenu à lire, et les articles wikipedia sont très souvent digestes et accessibles (contrairement aux articles de recherche ou aux brevets).
 
-## C'est quoi, une codebase de mauvaise qualité?
-TODO
+### C'est quoi, une codebase de mauvaise qualité?
+Plutôt que de donner une définition quelque peu abstraite ici, passons en revue des situations courantes dans le monde du développement informatique:
 - le code n'est pas lisible: gros pavés non aérés, lignes trop longues, ...
 - le code n'est pas compréhensible: on n'arrive pas à voir d'organisation s'en dégager (des vues, layouts, composants génériques, composants spécialisés, presenters, data transformers, routes, contrôleurs, modèles, entités, authentification, helpers, code réutilisable, etc)
 - le code et bug-prone (sujet/vulnérable aux bugs): un code où des objectifs/fonctionnalités différent(e)s se mélangent risque beaucoup plus une régression sur la fonctionnalité A lorsqu'on améliore la fonctionnalité B qu'un code où les obectifs ont correctement séparés, et bien indentifiables par les noms des variables et des fonctions.
 - le code ne permet pas l'intégration / l'utilisation aisée d'outils d'aide à l'amélioration de la qualité du code: il est difficile de faire des tests unitaires (pas de dependency injection), les développeurs ne connaissent pas la commande pour linter le code, ...
 
-### Le code sujet aux bugs: illustration
+De manière générale, le développement initial est assez peu un problème ici: tous les devs savent développer une fonctionnalité. La qualité décrit le travail dont toute une partie des fichiers sera moins souvent réécrit, celui dans lequel on aura moins souvent de bugs & régressions; celui qui est agréable à consulter, compréhensible, maintenable et qui dure dans le temps.
+
+#### Le code sujet aux bugs: illustration
 Cette propriété est particulièrement injuste: en voici un exemple.
 
 Imaginons les développeurs Alice et Bob: Alice produit un code clair, alors que Bob n'en n'a pas grand chose à faire (par exemple, Bob pourrait croire qu'une techno magique - au hasard typescript - est nécessaire et/ou suffisante pour faire de son code un code de grande qualité).
@@ -87,18 +104,18 @@ Bob développe les fonctionnalités A et B; les fonctionnalités sont là, lais 
 
 Quelques jours plus tard, le client se rend compte que la fonctionnalité B ne marche plus; Bob, après un rapide audit via le "git blame" intégré à VSCode pointe du doigt le travail récent d'Alice. Le client est très énervé (ça n'est pas le premier retard ni la première régression du projet, et c'est loin d'être la fin), et demande d'enlever un des deux développeurs du projet; en tant que lead dev, allez-vous essayer de préserver Alice ou Bob?
 
-## Quels causes baissent la qualité de la codebase?
+### Quels causes baissent la qualité de la codebase?
 - un mauvais design: on appelle plus volontiers le design une architecture, dans notre discipline.
 - les devs n'intègrent pas nativement dans leurs livrables / tâches des contrôles de la qualité du code, ni n'ont explicitement ce type de contrôles dans leur flow de réalisation d'une tâche. Il existe par exemple la code review, mais on peut songer à d'autres formes de contrôle comme une liste de points de contrôle.
 - un projet ne permettant pas de lancer facilement des outils de contrôle automatisés: le linter doit s'interfacer avec l'IDE (bon le linter de vscode craint un peu, il faut installer manuellement une l'exécutable eslint, c'est pas la faute du dev), et 
 
-## La maintenabilité
-### Pourquoi c'est problématique, un code non maintenable, y compris dans des projets de 2 mois?
+### La maintenabilité
+#### Pourquoi c'est problématique, un code non maintenable, y compris dans des projets de 2 mois?
 On prend en compte qu'on fait souvent des projets de 2 mois, et qu'on est amené à travailler à plusieurs dessus - y compris dans le cas où ça ne fait pas partie de la spec initiale du projet.
 
 TODO cf intro de Clean code
 
-### Techniques générales/théoriques d'amélioration de la maintenabilité
+#### Techniques générales/théoriques d'amélioration de la maintenabilité
 TODO
 Exemples:
 - une communication d'équipe fluide
@@ -110,7 +127,7 @@ Exemples:
   * de la fonction
   * de la ligne
 
-### Exemples pratiques
+#### Exemples pratiques
 Les technos / frameworks / etc listés ici n'y sont qu'à titre d'exemples, et on chacun au moins une alternative dans leur domaine. À vous de chercher!
 
 #### Linting
@@ -135,14 +152,22 @@ Un compagnon idéal pour la portabilité (compatibilité), avec son bonus devops
 
 ### Une bonne architecture
 L'architecture doit être adaptée aux besoins / spécificités du projet. Inutile "d'over-enigeer-er".
+
 L'architecture informatique est comme l'architecture classique ou l'architecture d'intérieur. Il s'agit de décider de la disposition des pièces et meubles les uns par rapport aux autres, car chaque chose a une place: les chaussettes propres et sèches vont a priori dans la chambre, les couverts à la cuisine, etc. Et ceci car nos chaussettes servent à nous habiller, nos couverts à manger, etc. Dans notre codebase aussi, les bouts de code dont l'objectif, l'environnement (dont domaine technique/métier) et/ou les dépendances sont communes iront à des endroits similaires.
 
-#### Entre les composants
+Dans le domaine du développeur comme dans celui des métiers de la maison, il y a plusieurs niveaux / grains d'architectures:
+- gros grain: l'urbanisme (ça s'appelle aussi comme ça en informatique). Cette discipline est plutôt orientée designers et administrateurs systèmes.
+- moyen-gros grain: l'architecture inter-composants (logiciels), comparable à l'architecture d'un complexe (hôtelier), d'un quartier résidentiel ou d'un immeuble. Un composant logiciel d'un projet est un exécutable prévu en fonctionnement dans la phase d'exploitation nominale du projet.
+- moyen grain: l'architecture intra-composants (logiciels), tel que l'architecture des pièces de l'appartement: l'emplacement des fenêtres, du garage, de l'atelier, du balcon, etc. En informatique, il s'agit de l'arborescence de fichiers, de ce qu'on pet dans chaque fichier et de comment on le nomme.
+- grain fin: l'architecture intra-fichier, qu'on peut comparer à l'architecture d'interieur. On y parle notamment de nommage des fonctions et agencement de celles-ci entre elles. 
+- grain très fin: l'architecture intra-fonction: nommage des variables, algorithmie, aération du code, taille des fonctions, ...
+
+#### Entre les composants logiciels
 On parle souvent de microservices: c'est loin d'être systématiquement une bonne idée, par rapport à du monolithique... Gaffe à la lourdeur des interfaces de communication entre les différents composants (y compris au niveau de la gestion des erreurs, sérialisation d'éléments supplémentaires, toussa).
 
 De l'event-driven pour la communication entre les composants est aussi possible et assez scalable (kafka, RabbitMQ, ...), même si ça nécessite des connaissances / une expérience spécifique(s) pour éviter de faire du code spaghetti - et donc une équipe formée à cette manière de faire.
 
-#### Au niveau du composant
+#### À l'intérieur du composant logiciel
 Ex: si différentes temporalités, de l'event-driven est intéressant.
 
 Ex: Pour des cas de traçabilité, penser à l'event sourcing.
@@ -166,18 +191,6 @@ Comme je l'ai dit à plusieurs d'entre vous à une formation précédente, une f
 
 ##### Clean Code
 TODO
-
-## Autre qualités du consultant développeur
-TODO c'est cool un code de bonne qualité, mais ça n'est pas la seule métrique du succès d'un projet informatique.
-
-### Des process adaptés à ceux qui les utilisent
-TODO
-On se rapproche un peu du "software craftsmanship", cf leur manifeste: https://manifesto.softwarecraftsmanship.org/
-
-### Une bonne estimation du savoir
-On sait estimer ce qu'on sait (et à quel point on le sait/maîtrise), mais aussi ce que l'on ne sait pas.
-
-On sait également estimer les connaissances de notre prochain dans les domaines professionnels qui nous concernent, pour savoir quand il vaut mieux faire valoir son point de vue, et quand il vaut mieux écouter celui qui en sait plus que nous et peut nous enrichir par la même occasion. 
 
 ## Techniques spécifiques
 ### Guidelines de dev
@@ -208,8 +221,4 @@ On laisse le code dans un aussi bon état - voir meilleur - que celui dans leque
 
 ### Le SoC pendant le dev d'une nouvelle feature
 Cf `./new-feature-SoC.md`
-
-## Qualité du développeur informatique
-### Proche de nous
-TODO interviews
 
