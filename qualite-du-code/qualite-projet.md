@@ -1,5 +1,9 @@
 ## Qualité du projet informatique
-Une introduction nous permettant d'évoquer quelques valeurs importantes à garder en tête pour ce qui suit.
+On va sortir un peu la tête hors de l'eau qu'est la technique pour revoir les objectifs à long terme qu'on doit avoir en tête lorsqu'on produit du code.
+
+Un code de bonne qualité est central, ici on va parler d'un des facteurs qui influent sur sa production - les process du projet - ainsi que de l'environnement du développeur qui produit ce code - le projet. 
+
+Par exemple, lorsqu'on travaille en équipe, on établit une Definition of Done qui contient une liste de tâches à exécuter dont une partie tourne autour de la qualité. Ce qui rend dan ce cas le code de qualité, c'est le process de Continuous Integration.
 
 #### État de l'art
 D'après https://fr.wikipedia.org/wiki/Qualit%C3%A9_logicielle .
@@ -33,12 +37,14 @@ Vous connaissez - voir devinez aisément - les problématiques causés par l'ins
 #### La maintenabilité
 Pourquoi c'est problématique, un code non maintenable, y compris dans des projets de 2 mois?
 
-On prend en compte qu'on fait souvent des projets de 2 mois, et qu'on est amené à travailler à plusieurs dessus - y compris dans le cas où ça ne fait pas partie de la spec initiale du projet.
-
-TODO cf intro de Clean code
+On prend en compte qu'on fait plus ou moins souvent des projets de 2 mois, et qu'on est amené à travailler à plusieurs dessus - y compris dans le cas où ça ne fait pas partie de la spec initiale du projet.
 
 #### La portabilité
-TODO
+Des différences de comportement entre l'UX rapportée par les utilisateurs et l'UX sur les machines des devs. On n'arrive pas à reproduire un problème de prod sur nos machines locales.
+
+Des différences de comportement entre les machines des devs. "Ça marche chez moi, c'est sûrement toi qui a mal fait un truc".
+
+On n'arrive pas à déployer rapidement et efficacement la solution sur un nouvel environnement / une nouvelle instance.
 
 ### Focus sur la maintenabilité
 Ce domaine-là est celui sur lequel nous, les experts de la technique, avons un entier pouvoir et maîtrisons le mieux.
@@ -46,6 +52,24 @@ Mais c'est aussi celui que nous négligeons le plus:
   * d'une part parce que nous sommes quasiment les seuls à pouvoir en comprendre les tenants et les aboutissants
   * d'autre part car cette discipline est complexe, et que le champ de recherche est pluri-disciplinaire: architecture logicielle, lisibilité du code, gestion des compétences de l'équipe et donc ressources humaines, ...
 
-En bref, un domaine de techs pour les techs. Et c'est ce point sur lequel on va mettre l'accent dans la suite.
+#### Quelques passages de Clean Code
+Pour enfoncer le clou, résumé de l'intro de Clean Code:
 
-TODO
+![foo](https://www.osnews.com/images/comics/wtfm.jpg "title")
+
+##### Comment couler une boite
+Je connais une entreprise qui, à la fin des années 80, a développé une application très performante. Elle était très populaire et de nombreux professionnels l'ont achetée et utilisée. Mais ensuite, les cycles de sortie ont commencé à s'allonger. Les bugs n'ont pas été réparés d'une version à l'autre. Les temps de chargement ont augmenté et les crashs se sont multipliés. Je me souviens du jour où j'ai fermé le produit par frustration et ne l'ai jamais utilisé à nouveau. Peu de temps après, l'entreprise a fait faillite.
+
+Deux décennies plus tard, j'ai rencontré l'un des premiers employés de cette entreprise et je lui ai demandé ce qui s'était passé. La réponse a confirmé mes craintes. Ils avaient précipité la mise sur le marché du produit et avaient créé un énorme chaos dans le code. À mesure qu'ils ajoutaient de plus en plus de fonctionnalités, le code devenait de plus en plus mauvais jusqu'à ce qu'ils ne puissent tout simplement plus le gérer. C'est le mauvais code qui a conduit à la chute de l'entreprise.
+
+##### Le coût total de posséder un bordel
+Si vous êtes programmeur depuis plus de deux ou trois ans, vous avez probablement été considérablement ralenti par le code désordonné de quelqu'un d'autre. Si vous êtes programmeur depuis plus de deux ou trois ans, vous avez probablement été ralenti par du code désordonné. Le degré de ralentissement peut être significatif. Sur une période d'un an ou deux, des équipes qui avançaient très rapidement au début d'un projet peuvent se retrouver à avancer à un rythme d'escargot. Chaque modification apportée au code casse deux ou trois autres parties du code. Aucun changement n'est trivial. Chaque ajout ou modification au système nécessite que les entrelacs, les torsions et les nœuds soient "compris" afin que d'autres entrelacs, torsions et nœuds puissent être ajoutés. Avec le temps, le désordre devient tellement grand, profond et élevé qu'ils ne peuvent pas le nettoyer. Il n'y a absolument aucun moyen.
+
+À mesure que le désordre s'accumule, la productivité de l'équipe continue de diminuer, approchant asymptotiquement zéro. À mesure que la productivité diminue, le management ne peut faire qu'une chose: ajouter plus de personnel au projet dans l'espoir d'augmenter la productivité. Cependant, ce nouveau personnel n'est pas familiarisé avec la conception du système. Ils ne font pas la distinction entre un changement qui correspond à l'intention de conception et un changement qui contrecarre cette intention de conception. De plus, eux et tous les autres membres de l'équipe sont soumis à une pression horrible pour augmenter la productivité. Ainsi, ils créent de plus en plus de désordre, poussant la productivité de plus en plus vers zéro.
+
+
+
+
+
+
+

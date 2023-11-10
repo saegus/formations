@@ -1,6 +1,6 @@
 
 # Le SoC pendant le dev d'une nouvelle feature
-Ces exercices sont inspirés de l'exercice de refactor de Robert C Martins, dans "Clean Code", chapitre "Refactoring serialdate". Uncle Bob adopte pour sa part une approche très différente, plus simple mentalement que les deux présentées ci-dessus mais tout aussi instructive.
+Ces exercices sont inspirés de l'exercice de refactor de Robert C Martins, dans "Clean Code", chapitre 16: "Refactoring serialdate". Uncle Bob adopte pour sa part une approche très différente, plus simple mentalement que les deux présentées ci-dessus mais tout aussi instructive.
 
 Les exemples suivants proposent différentes approches, toutes itératives.
 
@@ -21,10 +21,12 @@ Par exemple, `const points = updateStatusAndReprocessPoints({status})` se transf
 À utiliser quand on manque d'inspiration.
 
 ### les cas particuliers
-- Une fonction sensée renvoyer un booléen sera plus volontiers préfisée de "is", "should", "can", "must", etc. Exemple: `isEven`, `canHandleAzertySpecialObjs`.
+- Une fonction sensée renvoyer un booléen sera plus volontiers préfixée de "is", "should", "can", "must", etc. Exemple: `isEven`, `canHandleAzertySpecialObjs`.
 - Les contrôleurs seront préfixés du verbe HTTP utilisé pour les appeler: `postUser`, `getAttachedBooster`, etc.
 - Les vues sont suffixées par `view`, `panel`, etc.
 - Les layouts sont suffixées par `layout`.
+- Les fonctions appliquant le pattern "factory" sont suffixées par "Factory". Pour des exemples d'utilisation de ce pattern, cf le code d'eCSAR.
+- Les reducers (de Array.reduce, de Redux, de useState(), etc) sont suffixées par "Reducer". Pour des exemples, cf le code d'eCSAR.
 
 ## création d'un composant générique / réutilisable
 Une feature complexe: approche de la "pseudo-external-library".
@@ -96,7 +98,7 @@ Cette approche est à opposer à la philosophie suivante:
 c'est un autre bout de mon code que je peux modifier aussi librement qu'une vue, c'est pas grave si il est codé un peu en spaghetti / fait appel à des dépendances pas forcément obligatoires / etc
 ```
 
-Elle a pour avantage de favoriser des composants durables car respectant le principe Open/closed (le "O" de SOLID)
+Elle a pour avantage de favoriser des composants durables car respectant le principe Open/closed (le "O" de SOLID, le "principe des plugins")
 
 S'inspirer pour l'interface de ses composants réutilisables de celles des libs externes populaires est d'ailleurs un moyen à la fois peu risqué et peu couteux cognitivement d'arriver à un résultat durable. On peut aussi s'inspirer d'autres éléments, comme par exemple l'ontologie d'un module manipulant des objets similaires à ceux de notre fonctionnalité.
 
@@ -158,7 +160,7 @@ On transforme le PoC en quelque chose de propre.
 
 Le code va dans plusieurs fichiers séparés:
 - le composant "glue" va dans le fichier dédié à ce type de composants. On en profite pour lui ajouter une finctionnalité qu'on retrouve sur d'autres comosant de ce fichier: le shimmering.
-- le présenteur et le code de génération du vDOM () vont pour l'instant tous les deux dans GroupedRows.jsx . On fait en sorte le maximiser l'extensibilité, pour optimiser l'utilisation du principe open/closed (le "O" des principes SOLID)
+- le présenteur et le code de génération du vDOM () vont pour l'instant tous les deux dans GroupedRows.jsx . On fait en sorte le maximiser l'extensibilité, pour optimiser l'utilisation du principe open/closed (le "O" des principes SOLID, le "principe des plugins")
 
 Les fonctions se décomposent au final en:
 - coeur de métier:

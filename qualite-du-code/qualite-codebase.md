@@ -55,8 +55,25 @@ TODO eslint: règles paramétrables.
 Important: vous devez savoir pourquoi - et vous justifier si on vous demande quand - vous ajoutez chaque règle! Évitez dont de bêtement prendre le premier set de règles venu, ce qui peut être contraignant!
 
 #### Typescript
-TODO Typescript
-Aussi bien un linter type ESLint (mais non paramétrable) qu'un langage à part entière.
+L'écosystème typescript peut être vu aussi bien comme un linter type ESLint (mais non paramétrable) que comme un langage à part entière.
+
+##### Avantages
+- permet (souvent) d'éviter les erreurs d'inattention de typage
+- interfaçage avec l'IDE (intellisense), au plus proche du moment de l'écriture du code (et pas en phase de déploiement/CI par ex.)
+- permet de documenter efficacement (et en partie automatiquement, dépendant de l'usage qu'on en fait) des types pouvant être complexes sur des grosses application telles que celles qu'on écrit plus ou moins souvent. Pratique notamment pour le travail en équipe 
+- maintenabilité: tendance à fixer le code / le rendre moins aisément réécrivable: pratique quand on est en train d'écrire une lib de fonctions/composants réutilisables, qui devraient peu/pas bouger dans le temps
+- interfaçage avec des outils populaires comme swagger
+
+##### Inconvénients
+- norme beaucoup le style d'écriture du JS
+- non paramétrable sur les règles de linting (contrairement à un linter classique)
+- Configuration difficile: on aimerait par exemple avoir un mode qui transpile en JS en enlevant juste les annotations TS, sans réécrire le JS. On ne comprend pas pourquoi une fonction de transpilation de version de JS à été ajoutée obligatoirement au type checker et au transpiler TS->JS - qui auraient juste bien fait le job.
+- potentiel de rendre le JS moins lisible V1: les annotations s'intriquant profondément dans le JS et, si on ne fait pas attention à son écriture, rend l'algorithmie difficile à lire
+- potentiel de rendre le JS moins lisible V2: les @ts-ignore peuvent vite devenir envahissants si on n'y fait pas gaffe - ai même titre que les annotations d'ignorance des linters.
+- maintenabilité: tendance à fixer le code / le rendre moins aisément réécrivable: c'est gênant lorsqu'on doit faire évoluer des composants
+- Des devs ont tendance à s'appuyer uniquement dessus pour la qualité de peur code, en négligeant les autres outils / leviers qui permettent d'avoir un code de qualité. Typescript est un outil parmi d'autres, ce n'est pas l'alpha et l'oméga
+- Des devs ont tendance à mettre TS partout sans vraiment réfléchir à si il est pertinent de l'ajouter. TODO REx d'eCSAR et du retrieve + transform, qui auraient été un enfer à maintenir si j'avais typé les réponses des APIs externes => pas adapté à des types qui peuvent évoluer régulièrement et dont on n'a pas la main dessus.
+- plus value diminuée (mais aps annulée) si on utilise des tests
 
 #### Automatisation de la CI
 TODO github flows et scripts shell
@@ -65,9 +82,11 @@ TODO github flows et scripts shell
 Outils populaires: Github Actions, Azure devops / pipelines, Jenkins
 
 #### Docker
-TODO
-Un peu hors scope, donc on va passer rapidement dessus
-Un compagnon idéal pour la portabilité (compatibilité), avec son bonus devops
+Docker est un peu hors scope, donc on va passer rapidement dessus.
+
+C'est un compagnon idéal pour la portabilité (compatibilité), avec son bonus devops: environnements d'exécution uniformes pour tout les devs ainsi que pour les environnements déployés, ce qui permet d'éviter les classiques problèmes de différences d'environnements.
+
+Pour un tuto sur docker, cf la dormation que j'ai donné en début d'année.
 
 ### Architecture
 Définition (https://www.cnrtl.fr/definition/architecture): Principe d'organisation d'un ensemble, agencement, structure.
@@ -78,7 +97,7 @@ L'architecture informatique est comme l'architecture classique ou l'architecture
 
 Toujours par analogie avec l'architecture classique, l'architecture informatique doit être adaptée aux besoins / spécificités du projet. Inutile "d'over-enigeer-er".
 
-### Quelques méthodologies et architectures connues
+#### Quelques méthodologies et architectures connues
 TODO
 Je n'ai pas séparé architecture et méthodologie, car la plupart des architectures sont intrinsèquement liées aux méthodologies permettant de les mettre en place. C'est valable par exemple dans le cas de la 12FA.
 
@@ -92,6 +111,8 @@ Note: "Pattern" (motif en français) désigne également une forme (simple) d'ar
 - Onion Architecture
 - Hexagonale / Ports & Adapters
 - Domain Driven Design (DDD)
+- CQRS
+- Event Sourcing
 - Microservices
 - MVVM
 - TDD, BDD
@@ -100,7 +121,7 @@ Note: "Pattern" (motif en français) désigne également une forme (simple) d'ar
 
 Pour une liste plus complète: https://fr.wikipedia.org/wiki/Cat%C3%A9gorie:Architecture_logicielle
 
-### Système de classement des normes architecturales
+#### Système de classement des normes architecturales
 Dans le domaine du développeur comme dans celui des métiers de la maison, il y a plusieurs niveaux / grains d'action des règles d'architectures:
 - gros grain: l'urbanisme (ça s'appelle aussi comme ça en informatique). Cette discipline est plutôt orientée designers et administrateurs systèmes.
 - moyen-gros grain: l'architecture inter-composants (logiciels), comparable à l'architecture d'un complexe (hôtelier), d'un quartier résidentiel ou d'un immeuble. Un composant logiciel d'un projet est un exécutable prévu en fonctionnement dans la phase d'exploitation nominale du projet.
@@ -110,21 +131,26 @@ Dans le domaine du développeur comme dans celui des métiers de la maison, il y
 
 Ce moyen de classer les règles/normes d'architecture n'est bien sûr pas le seul, mais c'est celui que je vous propose d'utiliser ici. Une architecture va être un ensemble de ces règles, à un ou plusieurs niveaux. Par exemple, la méthodologie 12FA agit (au moins) aux granularités projet et composant.
 
-#### Entre les composants logiciels
+##### Entre les composants logiciels
 TODO
 
-##### REx
+###### REx
 On parle souvent de microservices: c'est loin d'être systématiquement une bonne idée, par rapport à du monolithique... Gaffe à la lourdeur des interfaces de communication entre les différents composants (y compris au niveau de la gestion des erreurs, sérialisation d'éléments supplémentaires, toussa).
 
 De l'event-driven pour la communication entre les composants est aussi possible et assez scalable (kafka, RabbitMQ, ...), même si ça nécessite des connaissances / une expérience spécifique(s) pour éviter de faire du code spaghetti - et donc une équipe formée à cette manière de faire.
 
-#### À l'intérieur du composant logiciel
+##### À l'intérieur du composant logiciel
 Comme je l'ai dit à plusieurs d'entre vous à une formation précédente, une fonction de 100+ lignes ça n'existe juste pas, et une fcontion de 60+ lignes c'est rare et spécifique au JSX; pour le JS, la moyenne devrait être à 20-30 lignes, et le max à 40. Aller au-delà de cette ligne, c'est très probablement intriquer différents objectifs, et c'est le début d'un code spaghetti, ou d'un God Object.
 
 TODO
 
-##### Clean Code
+###### Clean Code
 TODO
+- noms des variables (dont fonctions) (chap. 2)
+- fonctions (chap. 3)
+- commentaires (chap. 4)
+- formatage: taille de fichier & aération du code (chap. 5)
+- itérations courtes (dont tâches) et refactoring régulier (chap. 14)
 
 ##### REx
 Ex: si différentes temporalités, de l'event-driven est intéressant.
@@ -141,9 +167,36 @@ De manière générale, faire du SoC au niveau des fichiers (1 objectif max par 
 - L'idée de séparer le code métier du code "technique" est inspirée de Clean Architecture(d'autres archis le font également), qui veut séparer le code "d'infrastructure" du code "métier"
 - Au coeur de la réflexion également: une architecture connue est plus à même d'être maîtrisée par toute l'équipe / les nouveaux arrivants, et donc moins de risque de la casser.
 - j'évite au possible le code stateful - et donc les classes. Il y en a uniquement aux endroits où elles sont significativement plus adaptées que du code non-objet, comme par exemple une API nécessitant des credentials, que je vais appeler un certain nombre de fois, potentiellement éloignés de là où je lui passe ses credentials.
-- Pour le nommage de mes variables et noms de fonctions, j'utilise notamment (mais pas que) le language ubuquitaire tel que défini par le DDD - disons plus simplement le "langage métier".
+- Pour le nommage de mes variables et noms de fonctions, j'utilise notamment (mais pas que) le language ubuquitaire tel que défini par le DDD - disons plus simplement le "langage métier". Ils doivent révéler l'intention du développeur; par exemple, ça permet à celui qui passera ensuite de déterminer si il doit plutôt modifier cette fonction (et de quelle manière) ou en créer une nouvelle.
+- loi de demeter: une fonction ne dépend pas des implémentations des autres fonctions qu'elle appelle. Uniquement de la processe du résultat délivré, qu'on infère via le nom de la fonction. 
+- fonctions pures: mes fonctions sont au possible sans effets de bords. Une bonne partie des fonctions d'un dev junior peuvent s'inspirer des différents tutos sur l'immutabilité en JS pour voir comment faire.
+- CQRS revisité V1: mes fonctions sont au possible immutables, car les effets de bords ne sont pas très compatibles avec la qualité.
+  * soit des fonctions "de haut niveau", orchestratrices d'autres fonctions, 
+  * soit des fonctions qui agissent sur un objet et un objectif défini (utilisant directement ou indirectement au plus un import ou une famille d'imports - comme les modèles)
+- CQRS revisité V2 + bonus fonctions pures: au possible, mes fonctions agissent sur des variables:
+  * internes, en les créant, les accédant et les modifiant 
+  * passées en argument, mais ne les modifient pas et retournent une valeur ("Query").
+  * passées en argument, les modifient mais ne retournent pas de valeur ("Command"). Cette dernière catégorie doit être restreinte au minimum, cf fonctions pures.
 
 Bref, je mange - sans complexe - à tous les rateliers (de l'architecture logicielle) ^^'
+
+### Patterns & anti-patterns
+Il s'agit d'une sélection minimaliste de divers motifs architecturaux que j'ai régulièrement croisé dans mes lectures de code, et/ou qui sont particulièrement connus.
+Ces motifs ont également une importance supérieure à beaucoup d'autres de même niveau (sans vouloir rabaisser les autres), et sont relativement faciles à corriger.
+
+Attention: même si cette liste est un bon point de départ, elle est insuffisante pour écrire du bon code. Je vous suggère dès votre compréhension de ces motifs de:
+- Apprenez le JS. Tout le monde n'a pas l'air de connaître Array.reduce().map().filter() dans la team, et c'est chaud si vous faites du JS depuis plus d'un an - on parle d'ES2015 hein, il y a 8 ans. Pour les méthodes d'Array: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array; et pour Object: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
+- nommez correctement vos variables (dont fonctions)
+- lisez Clean Code
+
+##### Patterns
+- SoC / SRP (le "S" de SOLID) / etc: on sépare le code en objectifs différents. Sûrement le principe le plus important pour la mise à l'échelle d'une codebase.
+- Open/Closed principle, ou "principe des plugins" (le "O" de SOLID): quand on branche un plugin à un logiciel, le plugin en change pas le code interne du logiciel, mais change quand même sa manière de fonctionner: il peut faire ça en donnant au logiciel des inputs différents, et notamment des hooks. C'est excellent pour la modularité du code, et donc son évolutivité.
+
+##### Code smells
+- god object / code spaghetti: le contraire du SoC
+- magic numbers https://dev.to/producthackers/code-smell-magic-numbers-3ngc et https://haridy29.medium.com/magic-numbers-2df3ae9dec94
+- cf Clean Code, chapitre 17: Smells and Heuristics
 
 ## Techniques spécifiques
 ### Guidelines de dev
