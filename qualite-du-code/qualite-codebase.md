@@ -1,11 +1,10 @@
 ## Qualité du code et de la codebase
-TODO
+Qu'est-ce qu'une codebase de qualité? À quoi est-elle utile/bénéfique? À quel point est-elle profitable pour le projet, en terme de temps & délais, d'organisation, d'argent? Quels efforts l'équipe doit-elle produire (formation des collaborateurs, tâches "moins plaisantes" comme fix manuel des règles de lingting ou écriture des tests, temps supplémentaire pris par ces tâches de routine, etc)?
 
 On va voir ici plein de concepts, dont certains se contredisent. Ne prenez rien pour acquis, mais je vous déconseille de jeter le bébé avec l'eau du bain ;-)
 
 
 ## C'est quoi, une codebase de qualité?
-Ici on tente TODO
 
 ### De manière générale
 On note dans le portail de la "Gestion de la qualité logicielle" (https://fr.wikipedia.org/wiki/Qualit%C3%A9_logicielle#Voir_aussi) des ensembles de pages dédiés à:
@@ -40,10 +39,9 @@ Quelques jours plus tard, le client se rend compte que la fonctionnalité B ne m
 - un projet ne permettant pas de lancer facilement des outils de contrôle automatisés: le linter doit s'interfacer avec l'IDE (bon le linter de vscode craint un peu, il faut installer manuellement une l'exécutable eslint, c'est pas la faute du dev), et 
 
 ## Axes d'amélioration
-TODO
-Exemples:
-- une communication d'équipe fluide
-- des process de travail normés (tout en étant aussi peu contraignants que possible)
+Grandes familles de pistes à explorer:
+- communication d'équipe: cf plus loin dans la formation
+- process de travail normés: cf plus loin dans la formation
 - une architecture à chaque niveau de granularité: projet (multi-composants), composant (un exécutable donné), fichier, fonction, ligne
 
 ### Exemples pratiques
@@ -51,11 +49,30 @@ Les technos / frameworks / etc listés ici n'y sont qu'à titre d'exemples, et o
 
 #### Linting
 ##### ESLint
-TODO eslint: règles paramétrables.
-Important: vous devez savoir pourquoi - et vous justifier si on vous demande quand - vous ajoutez chaque règle! Évitez dont de bêtement prendre le premier set de règles venu, ce qui peut être contraignant!
+On en a déjà parlé avant comme un outil de règles communes d'équipe, ici on va le voir comme un moyen d'augmenter la qualité à l'échelle individuelle.
+
+Les règles ESlint peuvent être classées de différentes manière:
+- celles qui sont auto-fixables et celles qui ne le sont pas
+- celles qui sont essentiellement stylistiques (ex.: quotes, comma-dangle), celles qui augmentent la lisibilité (ex.: max-lines-per-function) et celles qui permettent d'éviter des bugs (ex. no-undef)
+- celles qui retournent souvent des endroits où la qualité du code peut être améliorée et celles qui retournent plus de "faux positifs"
+
+Il est important de savoir pourquoi - et vous justifier si on vous demande quand - vous ajoutez chaque règle! Évitez dont de bêtement prendre le premier set de règles venu, ce qui peut être contraignant pour vos collègues voir contre-productif (en terme de lisibilité)!
 
 #### Typescript
 L'écosystème typescript peut être vu aussi bien comme un linter type ESLint (mais non paramétrable) que comme un langage à part entière.
+
+##### REx eCSAR
+Sur eCSAR, j'ai dû développer deux nanoservices, l'un scrappant les données de différentes APIs internes, et l'autre assemblant les données de ces différents API - avec notamment des jointures sur des champs.
+
+Nous nous sommes retrouvés à régulièrement (plusieurs fois par mois) changer les APIS pour d'autres APIs ou d'autres versions. Les APIs renvoyaient des réponses aux schémas complexes, dont je n'avais pas de typage fourni a priori. Réécrire des types à chaque changement aurait été coûteux en temps, et l'expérience a montré que le peu de régressions qui a existé a été résolu assez rapidement. On a gagné du temps en n'utilisant que des maquettes & un healthcheck (une forme de test d'intégration) plutôt que typescript. 
+
+D'autre part, le projet est centré sur de la data avec des règles métier complexes. Une partie de ces règles n'était tout simplement pas représentable avec Typescript, comme par exemple le fait que telle API ne nous renvoie que les FIL codes publiés, et pas l'ensemble des FIL codes qu'on lui a demandé en input.
+
+Si typescript n'avait pas sa place sur ces composants logiciels, il a toutefois plus de pertinences à d'autres endroits; un autre composant logiciel, en charge d'appliquer des règles de validation et de transformation du formulaire NMPA précédemment généré, est composé d'un orchestrateur et de règles. En typant les deux et en prévoyant une structure modulaire, on a ajouté une documentation automatique à un code dont on a prévu préalablement les points fixes (l'orchestrateur ne devrait a priori plus être touché) et les points amenés à changer souvent (les règles elles-mêmes) dans le code.
+
+Est-ce que TS est très utile ici? Je n'en sais pas grand-chose - après tout, le code des règles existantes sans TS (en JS pur) est une excellente base pour écrire une nouvelle règle par mimétisme; en tout cas TS ici ne devrait pas freiner le développeur avec des types trop rigides / incompréhensibles (par rapport à l'expérience du retrieve et du transform).
+
+En bref, Typescript n'est pas adapté à tous les projets, et notamment pas à ceux dont des types peuvent évoluer régulièrement et dont on n'a pas la main dessus.
 
 ##### Avantages
 - permet (souvent) d'éviter les erreurs d'inattention de typage
@@ -72,11 +89,27 @@ L'écosystème typescript peut être vu aussi bien comme un linter type ESLint (
 - potentiel de rendre le JS moins lisible V2: les @ts-ignore peuvent vite devenir envahissants si on n'y fait pas gaffe - ai même titre que les annotations d'ignorance des linters.
 - maintenabilité: tendance à fixer le code / le rendre moins aisément réécrivable: c'est gênant lorsqu'on doit faire évoluer des composants
 - Des devs ont tendance à s'appuyer uniquement dessus pour la qualité de peur code, en négligeant les autres outils / leviers qui permettent d'avoir un code de qualité. Typescript est un outil parmi d'autres, ce n'est pas l'alpha et l'oméga
-- Des devs ont tendance à mettre TS partout sans vraiment réfléchir à si il est pertinent de l'ajouter. TODO REx d'eCSAR et du retrieve + transform, qui auraient été un enfer à maintenir si j'avais typé les réponses des APIs externes => pas adapté à des types qui peuvent évoluer régulièrement et dont on n'a pas la main dessus.
+- Des devs ont tendance à mettre TS partout sans vraiment réfléchir à si il est pertinent de l'ajouter. Cf REx d'eCSAR.
 - plus value diminuée (mais aps annulée) si on utilise des tests
 
 #### Automatisation de la CI
-TODO github flows et scripts shell
+Des flows populaires:
+- Git flow: préfixage de branches avec automatisations de commandes git: https://docs.github.com/en/get-started/quickstart/github-flow
+- One flow, une spin-off de Git flow
+- Github flow: il s'agit d'un flow à features requests: https://docs.github.com/en/get-started/quickstart/github-flow
+- Gitlab flow: ressemble un peu au Github flow
+- Trunk-based development: on travaille sur une branche commune, avec parfois des feature branches: https://www.toptal.com/software/trunk-based-development-git-flow
+
+Queslaues comparatifs:
+- https://medium.com/@patrickporto/4-branching-workflows-for-git-30d0aaee7bf
+- https://www.nicoespeon.com/fr/2013/08/quel-git-workflow-pour-mon-projet/
+
+##### Un flow personnel
+Je travaille souvent directement sur la branche de développement (`dev` chez moi). J'utilise rebase (plutôt que "squash", le mode par défaut). Je fais plein de petits commits, plutôt qu'un gros. Je stash plutôt que de faire des feature branches (même si j'en fais parfois). Avantages & inconvénients:
+- en travaillant directement sur dev, mon code est plus facilement - et donc plus souvent - synchronisé (dans un sens ou dans l'autre) avec le code commun distant. Mes merge conflicts sont donc moins gros. Si utilisé avec des petits commits, mes merges conflicts sont souvent plus simples à gérer.
+- le rebase rend certains merge conflicts plus longs à résoudre, d'autres moins.
+- le rebase met en valeur les commits aux messages bien rédigés.
+- le rebase vient avec plus de commandes git. Par exemple des stashs systématiquement avant les pulls. Pour contrebalancer cette charge supplémentaire, on peut créer des scripts (disons des scripts bash, normalement compatibles avec tous les OS), qui vont lancer ces commandes pour nous (checkout/pull/checkout/(merge/rebase)/checkout/rebase/push par exemple). On peut en profiter pour leur donner un peu d'intelligence afin qu'ils automatisent toujours plus le flow.
 
 #### Automatisation de la CD
 Outils populaires: Github Actions, Azure devops / pipelines, Jenkins
@@ -98,7 +131,6 @@ L'architecture informatique est comme l'architecture classique ou l'architecture
 Toujours par analogie avec l'architecture classique, l'architecture informatique doit être adaptée aux besoins / spécificités du projet. Inutile "d'over-enigeer-er".
 
 #### Quelques méthodologies et architectures connues
-TODO
 Je n'ai pas séparé architecture et méthodologie, car la plupart des architectures sont intrinsèquement liées aux méthodologies permettant de les mettre en place. C'est valable par exemple dans le cas de la 12FA.
 
 Note: "Pattern" (motif en français) désigne également une forme (simple) d'architecture.
@@ -135,7 +167,7 @@ Ce moyen de classer les règles/normes d'architecture n'est bien sûr pas le seu
 TODO
 
 ###### REx
-On parle souvent de microservices: c'est loin d'être systématiquement une bonne idée, par rapport à du monolithique... Gaffe à la lourdeur des interfaces de communication entre les différents composants (y compris au niveau de la gestion des erreurs, sérialisation d'éléments supplémentaires, toussa).
+On parle souvent de microservices: c'est loin d'être systématiquement une bonne idée, par rapport à du monolithique... Attention à la lourdeur des interfaces de communication entre les différents composants (y compris au niveau de la gestion des erreurs, sérialisation d'éléments supplémentaires, toussa). L'expérience eCSAR me fait estimer à environ 3 semaines sur 34 le temps perdu par le fait d'avoir choisi une architecture microservices plutôt que monolithique (le choix n'est pas de moi), soit environ 9% du temps du projet.
 
 De l'event-driven pour la communication entre les composants est aussi possible et assez scalable (kafka, RabbitMQ, ...), même si ça nécessite des connaissances / une expérience spécifique(s) pour éviter de faire du code spaghetti - et donc une équipe formée à cette manière de faire.
 
