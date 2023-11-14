@@ -99,6 +99,7 @@ Des flows populaires:
 - Github flow: il s'agit d'un flow à features requests: https://docs.github.com/en/get-started/quickstart/github-flow
 - Gitlab flow: ressemble un peu au Github flow
 - Trunk-based development: on travaille sur une branche commune, avec parfois des feature branches: https://www.toptal.com/software/trunk-based-development-git-flow
+- dev-based branch: ce flow est facile à mettre en place, et présente des avantages certains (responsabilisation du dev sur sa branche), mais présente aussi des inconvénients; suffisamment d'inconvénients pour qu'il ne soit pas conseillé à l'utilsation en équipe.
 
 Queslaues comparatifs:
 - https://medium.com/@patrickporto/4-branching-workflows-for-git-30d0aaee7bf
@@ -172,7 +173,7 @@ On parle souvent de microservices: c'est loin d'être systématiquement une bonn
 De l'event-driven pour la communication entre les composants est aussi possible et assez scalable (kafka, RabbitMQ, ...), même si ça nécessite des connaissances / une expérience spécifique(s) pour éviter de faire du code spaghetti - et donc une équipe formée à cette manière de faire.
 
 ##### À l'intérieur du composant logiciel
-Comme je l'ai dit à plusieurs d'entre vous à une formation précédente, une fonction de 100+ lignes ça n'existe juste pas, et une fcontion de 60+ lignes c'est rare et spécifique au JSX; pour le JS, la moyenne devrait être à 20-30 lignes, et le max à 40. Aller au-delà de cette ligne, c'est très probablement intriquer différents objectifs, et c'est le début d'un code spaghetti, ou d'un God Object.
+Comme je l'ai dit à plusieurs d'entre vous à une formation précédente, une fonction de 100+ lignes ça n'existe juste pas, et une fonction de 60+ lignes c'est rare et spécifique au JSX; pour le JS, la moyenne devrait être à 20-30 lignes, et le max à 40. Aller au-delà de cette ligne, c'est très probablement intriquer différents objectifs, et c'est le début d'un code spaghetti, ou d'un God Object.
 
 TODO
 
