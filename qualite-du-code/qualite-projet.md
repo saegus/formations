@@ -3,7 +3,7 @@ On va sortir un peu la tête hors de l'eau qu'est la technique pour revoir les o
 
 Un code de bonne qualité est central, ici on va parler d'un des facteurs qui influent sur sa production - les process du projet - ainsi que de l'environnement du développeur qui produit ce code - le projet. 
 
-Par exemple, lorsqu'on travaille en équipe, on établit une Definition of Done qui contient une liste de tâches à exécuter dont une partie tourne autour de la qualité. Ce qui rend dan ce cas le code de qualité, c'est le process de Continuous Integration.
+Par exemple, lorsqu'on travaille en équipe, on établit une Definition of Done qui contient une liste de tâches à exécuter dont une partie tourne autour de la qualité. Ce qui rend dans ce cas le code de qualité, c'est le process de Continuous Integration.
 
 #### État de l'art
 D'après https://fr.wikipedia.org/wiki/Qualit%C3%A9_logicielle .
@@ -25,7 +25,7 @@ La capacité fonctionnelle et la facilité d'utilisation sont les domaines du PO
 
 La fiabilité est un point déjà considéré comme important par les chefs de projets (essayez de livrer des codes peu fiables, c'est nettement plus difficile à faire passer auprès du client que des codes peu maintenables).
 
-La performance est un problème pas toujours bien adressé (par manque de connaissances), et source de sur-ingénierie (over-engineering). Toutefois notre marge de manoeuvre - à nous les devs - est faible dans le cadre des projets que nous livrons habituellement à Saegus, et une grande partie de ce qui doit être mis en place dans ce domine l'est déjà (en partie par les frameworks et outils que nous utilisons).
+La performance est un problème pas toujours bien adressé (par manque de connaissances), et source de sur-ingénierie (over-engineering). Toutefois notre marge de manoeuvre - à nous les devs - est faible dans le cadre des projets que nous livrons habituellement à Saegus, et une grande partie de ce qui doit être mis en place dans ce domaine l'est déjà (en partie par les frameworks et outils que nous utilisons).
 
 La portabilité est pour les webapps souvent divisée en une partie orientée techs (ex: serveurs tournant sour Mac, Windows, Python2 ou 3, ...) et une partie orientée utilisateurs (ex: UI sous écrans 13", 20", responsive tablette/mobile, ...).
 
@@ -39,6 +39,8 @@ Pourquoi c'est problématique, un code non maintenable, y compris dans des proje
 
 On prend en compte qu'on fait plus ou moins souvent des projets de 2 mois, et qu'on est amené à travailler à plusieurs dessus - y compris dans le cas où ça ne fait pas partie de la spec initiale du projet.
 
+ - TODO -> il faut completer cette section
+
 #### La portabilité
 Des différences de comportement entre l'UX rapportée par les utilisateurs et l'UX sur les machines des devs. On n'arrive pas à reproduire un problème de prod sur nos machines locales.
 
@@ -51,7 +53,7 @@ Ce domaine-là est celui sur lequel nous, les experts de la technique, avons un 
 
 Mais c'est aussi celui que nous négligeons le plus:
   * d'une part parce que nous sommes quasiment les seuls à pouvoir en comprendre les tenants et les aboutissants
-  * d'autre part car cette discipline est complexe, et que le champ de recherche est pluri-disciplinaire: architecture logicielle, lisibilité du code, gestion des compétences de l'équipe et donc ressources humaines, ...
+  * d'autre part car cette discipline est complexe, et que le champ de recherche est pluri-disciplinaire: architecture logicielle, lisibilité du code, gestion des compétences de l'équipe et donc (ressources humaines), ...
 
 #### Quelques passages de Clean Code
 Pour enfoncer le clou, résumé de l'intro de Clean Code:
@@ -70,7 +72,7 @@ Deux décennies plus tard, j'ai rencontré l'un des premiers employés de cette 
 ##### Le coût total de posséder un bordel
 Ce qui suit est une traduction de l'intro de Clean Code.
 
-Si vous êtes programmeur depuis plus de deux ou trois ans, vous avez probablement été considérablement ralenti par le code désordonné de quelqu'un d'autre. Si vous êtes programmeur depuis plus de deux ou trois ans, vous avez probablement été ralenti par du code désordonné. Le degré de ralentissement peut être significatif. Sur une période d'un an ou deux, des équipes qui avançaient très rapidement au début d'un projet peuvent se retrouver à avancer à un rythme d'escargot. Chaque modification apportée au code casse deux ou trois autres parties du code. Aucun changement n'est trivial. Chaque ajout ou modification au système nécessite que les entrelacs, les torsions et les nœuds soient "compris" afin que d'autres entrelacs, torsions et nœuds puissent être ajoutés. Avec le temps, le désordre devient tellement grand, profond et élevé qu'ils ne peuvent pas le nettoyer. Il n'y a absolument aucun moyen.
+Si vous êtes programmeur depuis plus de deux ou trois ans, vous avez probablement été considérablement ralenti par le code désordonné de quelqu'un d'autre. Le degré de ralentissement peut être significatif. Sur une période d'un an ou deux, des équipes qui avançaient très rapidement au début d'un projet peuvent se retrouver à avancer à un rythme d'escargot. Chaque modification apportée au code casse deux ou trois autres parties du code. Aucun changement n'est trivial. Chaque ajout ou modification au système nécessite que les entrelacs, les torsions et les nœuds soient "compris" afin que d'autres entrelacs, torsions et nœuds puissent être ajoutés. Avec le temps, le désordre devient tellement grand, profond et élevé qu'ils ne peuvent pas le nettoyer. Il n'y a absolument aucun moyen.
 
 À mesure que le désordre s'accumule, la productivité de l'équipe continue de diminuer, approchant asymptotiquement zéro. À mesure que la productivité diminue, le management ne peut faire qu'une chose: ajouter plus de personnel au projet dans l'espoir d'augmenter la productivité. Cependant, ce nouveau personnel n'est pas familiarisé avec la conception du système. Ils ne font pas la distinction entre un changement qui correspond à l'intention de conception et un changement qui contrecarre cette intention de conception. De plus, eux et tous les autres membres de l'équipe sont soumis à une pression horrible pour augmenter la productivité. Ainsi, ils créent de plus en plus de désordre, poussant la productivité de plus en plus vers zéro.
 

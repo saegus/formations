@@ -12,7 +12,7 @@ D'autre part, il me manquait des avis humains de ceux qui travaillent avec nous,
 Après la formation "Atelier introduction à Clean Code", j'ai remarqué que l'adoption des règles qu'on a vu étaient faibles. J'ai identifié 3 raisons à cela:
 - certains points de la formation étaient trop théoriques pour vous, comme le bon nommage des variables. Vous trouviez le sujet pertinent et avez envie de vous améliorer sur ce point, mais n'avez pas compris comment.
 - La formation ne parlait que trop peu des raisons pour lesquelles l'application de ces normes valaient l'effort qu'elle coûtaient. Ne voyant pas d'intérêt par rapport à votre fonctionnement habituel, vous n'avez pas changé vos habitudes qu'à la marge.
-- Plusieurs d'entre vous travaillent avec d'autres devs; ci vous ne sentez pas d'adoption de ces normes chez eux, vous n'avez pas envie d'être le seul à faire des efforts. Notamment car que vous ne serez pas le seul à en récolter les résultats, et que vous morflerez pour le manque de normes des autres.
+- Plusieurs d'entre vous travaillent avec d'autres devs; si vous ne sentez pas d'adoption de ces normes chez eux, vous n'avez pas envie d'être le seul à faire des efforts. Notamment car que vous ne serez pas le seul à en récolter les résultats, et que vous morflerez pour le manque de normes des autres.
 - Bonus: vous êtes des feignasses et vous n'avez pas été creuser le sujet par vous-même. Au-delà du fait que j'ai un peu eu l'impression de pisser dans un violon en vous faisant cet atelier, votre flemme et votre désinterêt pour des sujets qui font la différence entre un bon et un mauvais développeur influent directement sur votre le succès de votre carrière professionnelle. Deal with it.
 
 Pour répondre à ces points:
