@@ -1,11 +1,9 @@
-## Qualité du code et de la codebase
+# Qualité du code et de la codebase
 Qu'est-ce qu'une codebase de qualité? À quoi est-elle utile/bénéfique? À quel point est-elle profitable pour le projet, en terme de temps & délais, d'organisation, d'argent? Quels efforts l'équipe doit-elle produire (formation des collaborateurs, tâches "moins plaisantes" comme fix manuel des règles de lingting ou écriture des tests, temps supplémentaire pris par ces tâches de routine, etc)?
 
 On va voir ici plein de concepts, dont certains se contredisent. Ne prenez rien pour acquis, mais je vous déconseille de jeter le bébé avec l'eau du bain ;-)
 
-
 ## C'est quoi, une codebase de qualité?
-
 ### De manière générale
 On note dans le portail de la "Gestion de la qualité logicielle" (https://fr.wikipedia.org/wiki/Qualit%C3%A9_logicielle#Voir_aussi) des ensembles de pages dédiés à:
 - Compréhension et contrôle du code source
@@ -33,10 +31,19 @@ Bob développe les fonctionnalités A et B; les fonctionnalités sont là, lais 
 
 Quelques jours plus tard, le client se rend compte que la fonctionnalité B ne marche plus; Bob, après un rapide audit via le "git blame" intégré à VSCode pointe du doigt le travail récent d'Alice. Le client est très énervé (ça n'est pas le premier retard ni la première régression du projet, et c'est loin d'être la fin), et demande d'enlever un des deux développeurs du projet; en tant que lead dev, allez-vous essayer de préserver Alice ou Bob?
 
+Un code de qualité n'est pas un code que vous avez écrit et trouvez clair, c'est un code que vous avez écrit et que les autres développeurs de votre équipe trouvent clair. Un code qui fait qu'ils risquent peu d'introduire des régressions.
+
 ### Quels causes à une baisse de qualité?
 - un mauvais design: on appelle plus volontiers le design une architecture, dans notre discipline.
 - les devs n'intègrent pas nativement dans leurs livrables / tâches des contrôles de la qualité du code, ni n'ont explicitement ce type de contrôles dans leur flow de réalisation d'une tâche. Il existe par exemple la code review, mais on peut songer à d'autres formes de contrôle comme une liste de points de contrôle.
 - un projet ne permettant pas de lancer facilement des outils de contrôle automatisés: le linter doit s'interfacer avec l'IDE (bon le linter de vscode craint un peu, il faut installer manuellement une l'exécutable eslint, c'est pas la faute du dev), et 
+
+## Code de qualité et valeurs de Seagus
+Si vous voulez relier le code de qualité aux valeurs de Saegus, un code de qualité:
+- c'est agréable ("fun") à lire, et on est à l'aise sur un projet qui en a
+- c'est l'excellence, presque par définition (en vrai c'est une bonne qualité et pas une excellente, mais je ne vais pas chipoter ^^)
+
+Notez que si vous produisez de l'excellence, parfois elle ne se voit pas du premier coup d'oeil (un client qui est PO et donc souvent non tech va avoir du mal à comprendre la qualité de la codebase et des process d'équipe), c'est à vous de prendre le temps d'expliquer les tenants et aboutissants, de lui donner des métriques (régressions hebdo now VS il y a 2 mois) pour qu'il puisse mesurer la pertinence du clean code, et comment par exemple ça lui permet de mieux planifier le projet (moins de régressions = agenda plus prévisible), rendre ses utilisateurs heureux (les MEP contiennent moins de mauvaises surprises donc les users ouvrent moins de tickets), rendre ses développeurs heureux - car c'est rarement agréable de travailler au milieu d'un code spaghetti dont les noms des objets informatiques (fonctions, variables) n'ont que peu de sens.
 
 ## Axes d'amélioration
 Grandes familles de pistes à explorer:

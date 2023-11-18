@@ -48,6 +48,7 @@ On n'arrive pas à déployer rapidement et efficacement la solution sur un nouve
 
 ### Focus sur la maintenabilité
 Ce domaine-là est celui sur lequel nous, les experts de la technique, avons un entier pouvoir et maîtrisons le mieux.
+
 Mais c'est aussi celui que nous négligeons le plus:
   * d'une part parce que nous sommes quasiment les seuls à pouvoir en comprendre les tenants et les aboutissants
   * d'autre part car cette discipline est complexe, et que le champ de recherche est pluri-disciplinaire: architecture logicielle, lisibilité du code, gestion des compétences de l'équipe et donc ressources humaines, ...
@@ -96,7 +97,9 @@ Lorsqu'on rencontre un tel code, on évalue le coût (nombre de lignes à change
 
 Le temps passé à refactor, si il n'y a pas d'US dédié à ce refactor, est à compter sur les autres US, en augmentant par exemple les points de complexité et en mettant une note sous la tâche.
 
-Le côté individuel de cette règle est responsabilisant, et son côté "légèreté administrative" en fait un champion de l'agilité - sans compter sa qualité "à la demande". Ses principaux challenges:
+Le côté individuel de cette règle est responsabilisant, et son côté "légèreté administrative" en fait un champion de l'agilité - sans compter sa qualité "à la demande". 
+
+Ses principaux challenges:
 - elle nécessite un état d'esprit volontariste, à l'image des scouts
 - il faut au possible des US à peu de points: ajouter un refactor à une US déjà complexe est parfois contre-productif en terme de temps et de fatigue développeur
 - il semble un peu plus facile de mettre ça en place alors que la DoD ne contient que peu d'items.
@@ -111,6 +114,17 @@ D'autre part, le désordre appelle le désordre, et on n'a pas envie d'écrire u
 Une technique assez souvent utilisée dans les équipes de dev est de faire des "sprints de refactors". C'est mieux que rien, mais ce n'est pas assez à mon sens: la règle du boy scout est plus optimale.
 
 ## Mise en place et conservation des process de qualité
+Convaincre notre équipe pour mettre en place une norme de qualité est essentiel: tout seul, vous n'irez pas loin, et vous fatiguerez de voir les autres ne pas faire les efforts que vous vous imposez. Parfois même, vous vous ferez disputer parce que vous aurez introduit une régression (même avec un autofix de linter).
+
+### Des process adaptés à ceux qui les utilisent
+On est philosophiquement proche du "software craftsmanship", cf leur manifeste: https://manifesto.softwarecraftsmanship.org/
+
+Par exemple, c'est important de garder un linter d'équipe léger en règles: il faut trouver le bon compromis entre liberté d'écriture et normes de qualité.
+
+Sur un petit projet, si les devs sont experts (notamment autonomes) et sont sur la même longueur d'onde, une partie des rituels "obligatoires" peuvent être adaptés à leurs manière de fonctionner; par exemple, le backlog grooming à la demande (voir en 1 vs. 1) plutôt qu'à des moments fixes dans le sprint.
+
+Bref, les process doivent s'adapter aux singularités de l'ensemble des personnes qui en prennent part; ici, SCRUM - et notamment les rétrospectives - permettent de parler de ces sujets.
+
 ### Communication d'équipe
 Une communication d'équipe fluide et efficace est à la base d'une partie des process de qualité, comme par exemple le fait de discuter des détails fonctionnels de la tâche qu'un dev va commencer, pour s'assurer qu'il n'ait pas de choix fonctionnels/ergonomique à faire (sinon ça occasionne des réflexions parfoir épineuses voir décourageantes du côté du dev, une insatisfaction côté recettage, ...).
 
@@ -122,14 +136,18 @@ D'autre part, une bonne entente humaine est nécessaire; pour cela faites attent
 Il est important que l'ensemble de l'équipe comprenne (j'insiste sur ce mot, qui est différent de "obéir au chef") chacune des règles de qualité. Cela inclut comment les mettre en place, leur intérêt, mais aussi ce qui arrive lorsqu'on ne les suit pas: pas seulement dans la théorie, mais de préférence des exemples réels, si possibles tirés de précédents liés au projet / à l'équipe actuel(le), avec des chiffres comme l'évolution du nombre hebdo de tickets d'incidents.
 Il faut potentiellement le rappeler régulièrement (à chaque fin de sprint ou de rétro).
 
-Ces process peuvent s'appuyer sur une Definition of Done (DoD) spécifique aux devs, qui doit être simple à mettre en place par un développeur au sein de son process de développement d'US. Par exemple: 
+Ces process peuvent s'appuyer sur une Definition of Done (DoD) spécifique aux devs, qui doit être simple à mettre en place par un développeur au sein de son process de développement d'US. 
+
+Par exemple: 
 * une colonne pour chaque point à valider dans le kanban
 * un fichier `dod.md` commited dans le repo
 * une extention VSCode avec un système de cases à cocher qu'on aurait paramétré pour n'autoriser le push qu'ne fois toutes les cases commited, et qui se remet à zéro à chaque push
 * dans un système de pull requests, un bot qui au sein d'une PR vérifie automatiuement les points qui peuvent l'être (linting dans la CI, ...) et demande au développeur de cocher les cases restantes
 * utiliser husky pour faire des pré-commit hooks permet d'automatiser une partie des checks
 
-Également, il est important que ces process soient d'une part normés, c'est-à-dire qu'on ait tous la même définition de ce qui doit être fait: c'est le rôle de la DoD "étendue", le complément de la DoD "résumée" qui doit être une référence qu'on peut consulter rapidement. Et d'autre part, ces process doivent être aussi peu contraignants pour chaque développeut que possible. On peut pr exemple observer les règles suivantes:
+Également, il est important que ces process soient d'une part normés, c'est-à-dire qu'on ait tous la même définition de ce qui doit être fait: c'est le rôle de la DoD "étendue", le complément de la DoD "résumée" qui doit être une référence qu'on peut consulter rapidement.
+
+Et d'autre part, ces process doivent être aussi peu contraignants pour chaque développeur que possible. On peut pr exemple observer les règles suivantes:
 - les outils doivent remonter de l'information pertinente. Une commande testant ou lintant un fichier en particulier et qui se relance au rafraîchissement de celui-ci a tout à fait sa place dans les npm scripts. Pour eslint, des packages comme `lint-staged` et des commandes comme `eslint --fix $(git diff --name-only HEAD | xargs)` ne lintent qu'un sous-ensemble des fichiers souvent pertinents.
 - les outils doivent pouvoir être lancés rapidement. Utiliser le cache d'un programme comme ESLint pour l'accélérer s'envisage aussi: `eslint --cache --cache-strategy metadata .`. Les tests avec Jest doivent aussi pouvoir se lancer sur un seul fichier de test.
 - les outils doivent être peu contraignants pour le dev, ils ne doivent pas dégouter celui-ci de les lancer. Le linter doit contenir autant que faire se peut uniquement des rêgles autofixables; l'ajout d'autres règles doit être limité au strict nécessaire pour la qualité du projet. Un dev peut vouloir rajouter des règles sur son code (des règles d'auto-fix par exemple), si c'est possible le projet doit lui permettre d'exécuter ses règles personnelles en plus des règles de l'équipe.

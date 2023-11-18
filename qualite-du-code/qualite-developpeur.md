@@ -1,15 +1,16 @@
-## Qualité du consultant développeur informatique
+Note pour le 23 novembre:
+- Petit addendum à la formation précédente: cf "Des process adaptés à ceux qui les utilisent".
+- Mise en place de la review de formation
+
+
+# Qualité du consultant développeur informatique
 On a vu que le code de bonne qualité dépend notamment des process et de l'environnement du projet, intéressons-nous maintenant aux producteurs directs de code, isolément.
 
 ### En général
-#### Des process adaptés à ceux qui les utilisent
-On est philosophiquement proche du "software craftsmanship", cf leur manifeste: https://manifesto.softwarecraftsmanship.org/
+Votre formation personnelle (à votre initiative et dans votre coin, sans compter sur une formation proposée par Saegus) est primordiale pour votre carrière professionnelle. Si vous ne vous documentez pas par vous-même, si vous ne faites pas d'expérience (par ex. sur des technos que vous ne connaissez) pas pendant votre temps de travail, comment comptez-vous monter en compétence?
 
-Par exemple, c'est important de garder un linter d'équipe léger en règles: il faut trouver le bon compromis entre liberté d'écriture et normes de qualité.
-
-Sur un petit projet, si les devs sont experts (notamment autonomes) et sont sur la même longueur d'onde, une partie des rituels "obligatoires" peuvent être adaptés à leurs manière de fonctionner; par exemple, le backlog grooming à la demande (voir en 1 vs. 1) plutôt qu'à des moments fixes dans le sprint.
-
-Bref, les process doivent s'adapter aux singularités de l'ensemble des personnes qui en prennent part; ici, SCRUM - et notamment les rétrospectives - permettent de parler de ces sujets.
+Ce que vous vous auto-formez mènera à la revalorisation de votre valeur par votre manager, et très probablement de votre salaire et votre position. Si vous stagnez professionnellement, Rappelez-vous ça.
+La multiplication des missions n'a que peu de sens sur votre CV si vous ne diversifiez pas leur contenu.
 
 #### Une bonne estimation du savoir
 On sait estimer ce qu'on sait (et à quel point on le sait/maîtrise), mais aussi ce que l'on ne sait pas.
@@ -20,7 +21,6 @@ On sait également estimer les connaissances de notre prochain dans les domaines
 J'ai interviewé plusieurs managers pour savoir ce qu'ils pensaient d'un bon projet d'une part et d'un bon développeur d'autre part. J'ai également interviewé un membre de Shift Acceleration, pour avoir un peu de variété.
 
 Nommément (dans l'ordre d'interview): David Guedj, Frédéric Brajon, Charlotte Zekraoui et Théo Andre.
-
 Voici leurs réponses.
 
 ### Un logiciel quali
@@ -115,8 +115,6 @@ Bonne nouvelle: Au bout d'un ou 2 ans de dev, pour pouvez normalement prévoir p
 Organisez votre emploi du temps et votre code: vos collaborateurs doivent pouvoir s'y retrouver sans avoir à vous demander des précisions dessus trop régulièrement; rendez-leur votre travail clair pour qu'ils n'aient que peu de choses à vous demander.
 
 Dans mon emploi du temps, le refactor est prioritaire face aux fonctionnalités, le bon code est prioritaire par rapport aux features; je le fais dès que je le repère, bien souvent pendant le dev d'une autre feature. Je répercute le temps passé dans le chiffracge de mes US (souvent 1/3 du temps). Résultat: pas de retards sur ce que je livre depuis 6 mois.
-
-
 
 ### Tuto: Identifier les problèmes
 Lorsque vous avez un problème dans votre US qui vous fait perdre du temps, il peut notamment s'agir de:
