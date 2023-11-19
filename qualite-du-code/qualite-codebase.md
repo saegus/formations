@@ -163,16 +163,31 @@ Pour une liste plus complète: https://fr.wikipedia.org/wiki/Cat%C3%A9gorie:Arch
 
 #### Système de classement des normes architecturales
 Dans le domaine du développeur comme dans celui des métiers de la maison, il y a plusieurs niveaux / grains d'action des règles d'architectures:
-- gros grain: l'urbanisme (ça s'appelle aussi comme ça en informatique). Cette discipline est plutôt orientée designers et administrateurs systèmes.
-- moyen-gros grain: l'architecture inter-composants (logiciels), comparable à l'architecture d'un complexe (hôtelier), d'un quartier résidentiel ou d'un immeuble. Un composant logiciel d'un projet est un exécutable prévu en fonctionnement dans la phase d'exploitation nominale du projet.
+- gros grain: l'architecture d'urbanisme (ça s'appelle comme ça en informatique comme en architecture de ville).
+- moyen-gros grain: l'architecture inter-composants (logiciels), comparable à l'architecture d'un complexe (hôtelier), d'un quartier résidentiel ou d'un immeuble.
 - moyen grain: l'architecture intra-composants (logiciels), tel que l'architecture des pièces de l'appartement: l'emplacement des fenêtres, du garage, de l'atelier, du balcon, etc. En informatique, il s'agit de l'arborescence de fichiers, de ce qu'on pet dans chaque fichier et de comment on le nomme.
 - grain fin: l'architecture intra-fichier, qu'on peut comparer à l'architecture d'interieur (mais aussi aux placements de sculptures et bas-reliefs sur une façade extérieure). On y parle notamment de nommage des fonctions et agencement de celles-ci entre elles. 
 - grain très fin: l'architecture intra-fonction: nommage des variables, algorithmie, aération du code, taille des fonctions, ...
 
 Ce moyen de classer les règles/normes d'architecture n'est bien sûr pas le seul, mais c'est celui que je vous propose d'utiliser ici. Une architecture va être un ensemble de ces règles, à un ou plusieurs niveaux. Par exemple, la méthodologie 12FA agit (au moins) aux granularités projet et composant.
 
+Remarquez que si je ne parle pas du niveau "architecture intra-objet mais inter-fonction", c'est totalement volontaire:
+- je n'aime pas l'OOP, et m'en passe dès que je peux (c'est à dire pas loin de tout le temps)
+- c'est une formation centrée autour du JS et, bien que le langage prévoit des structures orientées objet, on peut parfaitement s'en passer en utilisant des modules.
+- il n'y a que peu à en dire de plus qu'au niveau des modules ESM, qui est normalement couvert par l'architecture intra-fichier.
+
+##### Urbanisme
+Cette discipline est plutôt orientée designers IT (pas nos designers UI/UX à Saegus) et administrateurs systèmes (gestionnaires de SI).
+
+Il s'agit du niveau d'architecture où on organise les projets les uns par rapport aux autres. Exemples: APIGee, l'instance nginx-proxy-manager de notre serveur de dev, event-driven architecture (EDA), etc.
+
+Cf https://fr.wikipedia.org/wiki/Urbanisation_(informatique) .
+
 ##### Entre les composants logiciels
-TODO
+Un composant logiciel d'un projet est un exécutable prévu en fonctionnement dans la phase d'exploitation nominale du projet.
+
+Ici on est au plus haut niveau qui concerne un projet en particulier.
+Exemple: Docker-Compose File (DCF), ressource (= serveur, type P1v3) & container Azure, microservices, event-driven architecture (EDA), twelve-factors app (12FA), etc.
 
 ###### REx
 On parle souvent de microservices: c'est loin d'être systématiquement une bonne idée, par rapport à du monolithique... Attention à la lourdeur des interfaces de communication entre les différents composants (y compris au niveau de la gestion des erreurs, sérialisation d'éléments supplémentaires, toussa). L'expérience eCSAR me fait estimer à environ 3 semaines sur 34 le temps perdu par le fait d'avoir choisi une architecture microservices plutôt que monolithique (le choix n'est pas de moi), soit environ 9% du temps du projet.
@@ -180,17 +195,22 @@ On parle souvent de microservices: c'est loin d'être systématiquement une bonn
 De l'event-driven pour la communication entre les composants est aussi possible et assez scalable (kafka, RabbitMQ, ...), même si ça nécessite des connaissances / une expérience spécifique(s) pour éviter de faire du code spaghetti - et donc une équipe formée à cette manière de faire.
 
 ##### À l'intérieur du composant logiciel
-Comme je l'ai dit à plusieurs d'entre vous à une formation précédente, une fonction de 100+ lignes ça n'existe juste pas, et une fonction de 60+ lignes c'est rare et spécifique au JSX; pour le JS, la moyenne devrait être à 20-30 lignes, et le max à 40. Aller au-delà de cette ligne, c'est très probablement intriquer différents objectifs, et c'est le début d'un code spaghetti, ou d'un God Object.
+On parle ici essentiellement de l'arborescence des fichiers, et de quel fichier est sensé contenir quel genre de code.
+Exemple: MVC, MVVM, DDD, Yelling Architecture, Clean Architecture, Onion Architecture, Ports & Adapters, data/network/... layer, etc.
 
-TODO
-
+##### À l'intérieur du fichier
 ###### Clean Code
-TODO
+Clean code est un ensemble de règles établies empiriquement par Robert C. Martins dans le livre éponyme. L'homme est également connu sous le pseudonyme "Uncle Bob", et est le père de la méthodologie SOLID (orientée objets, mais très intéressante dans d'autres perspectives), et de "Clean Architecture", et co-auteur du "Manifeste Agile".
+
+Voici une sélection toute personnelle de quelques principes de Clean code, pour que vous puissiez vous imaginer de quoi il retourne:
 - noms des variables (dont fonctions) (chap. 2)
 - fonctions (chap. 3)
+  Comme je l'ai dit à plusieurs d'entre vous à une formation précédente, une fonction de 100+ lignes ça n'existe juste pas, et une fonction de 60+ lignes c'est rare et spécifique au JSX; pour le JS, la moyenne devrait être à 20-30 lignes, et le max à 40. Aller au-delà de cette ligne, c'est très probablement intriquer différents objectifs, et c'est le début d'un code spaghetti, ou d'un God Object.
 - commentaires (chap. 4)
 - formatage: taille de fichier & aération du code (chap. 5)
 - itérations courtes (dont tâches) et refactoring régulier (chap. 14)
+
+Les parties de formation `clean-code.md` et `new-feature-SoC.md` qui suivront rentreront plus dans le détail et dans le concret / l'illustration, respectivement. 
 
 ##### REx
 Ex: si différentes temporalités, de l'event-driven est intéressant.
