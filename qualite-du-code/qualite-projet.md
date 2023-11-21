@@ -39,7 +39,7 @@ Pourquoi c'est problématique, un code non maintenable, y compris dans des proje
 
 On prend en compte qu'on fait plus ou moins souvent des projets de 2 mois, et qu'on est amené à travailler à plusieurs dessus - y compris dans le cas où ça ne fait pas partie de la spec initiale du projet.
 
- - TODO -> il faut completer cette section
+TODO
 
 #### La portabilité
 Des différences de comportement entre l'UX rapportée par les utilisateurs et l'UX sur les machines des devs. On n'arrive pas à reproduire un problème de prod sur nos machines locales.
@@ -90,7 +90,7 @@ Pouvez-vous imaginer travailler sur un projet où le code s'améliore simplement
 
 <sup>5. Cela a été adapté du message d'adieu de Robert Stephenson Smyth Baden-Powell aux scouts : "Essayez de laisser ce monde un peu meilleur que vous ne l'avez trouvé..."</sup>
 
-Note Anis: je connais relativement mal Lord Baden-Powell, mais il a créé le scoutisme et a été anobli par la reine d'Angleterre. C'est pas un rigolo quoi. Et ne crachez pas sur les scouts SVP, j'ai fait partie du scoutisme laïque.
+Note Anis: je connais relativement mal Lord Baden-Powell, mais il a créé le scoutisme (50 millions de persones d'après Wikipedia, pas loin de la population française donc) et a été anobli par la reine d'Angleterre. C'est pas un rigolo quoi. Et ne crachez pas sur les scouts SVP, j'ai fait partie du scoutisme laïque.
 
 ##### La règle du boy scout revisitée
 Il s'agit d'appliquer cette règle du boy scout de manière agressive: dès qu'on rencontre un bout de code peu clair au sein d'une de nos lecture (analyse de code servant à établir la stratégie d'écriture d'une US, code review, ...), on refactor.

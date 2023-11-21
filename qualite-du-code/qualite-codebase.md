@@ -54,19 +54,31 @@ Grandes familles de pistes à explorer:
 ### Exemples pratiques
 Les technos / frameworks / etc listés ici n'y sont qu'à titre d'exemples, et on chacun au moins une alternative dans leur domaine. À vous de chercher!
 
-#### Linting
+#### Linting / formatting
 ##### ESLint
 On en a déjà parlé avant comme un outil de règles communes d'équipe, ici on va le voir comme un moyen d'augmenter la qualité à l'échelle individuelle.
 
-Les règles ESlint peuvent être classées de différentes manière:
+Les règles ESlint peuvent être classées de différentes manières:
 - celles qui sont auto-fixables et celles qui ne le sont pas
 - celles qui sont essentiellement stylistiques (ex.: quotes, comma-dangle), celles qui augmentent la lisibilité (ex.: max-lines-per-function) et celles qui permettent d'éviter des bugs (ex. no-undef)
 - celles qui retournent souvent des endroits où la qualité du code peut être améliorée et celles qui retournent plus de "faux positifs"
 
 Il est important de savoir pourquoi - et vous justifier si on vous demande quand - vous ajoutez chaque règle! Évitez dont de bêtement prendre le premier set de règles venu, ce qui peut être contraignant pour vos collègues voir contre-productif (en terme de lisibilité)!
 
+##### Prettier
+Il y a sûrement plein de choses bien à en dire - sa popularité ne sort pas de nulle part, mais je n'utilise pas l'outil donc je m'arrête là.
+
+##### Sonarqube
+Sonarqube est un outil open source d'analyse statique de code. Il est édité par SonarSource une boite qui vise à améliorer la qualité du code et sa sécurité.
+
+C'est un outil mis en place dans la CI des projets d'un client populaire chez nous, tout le monde parmi nous sauf 1 travaille pour lui - et est donc a priori concerné ;-)
+
+Je n'ai pas encore eu l'occasion de tester l'outil, je ne pourrais pas vous en faire un feedback.
+
+Une note toutefois: Si SonarSource se vante d'être le plus gros fournisseur de solutions "Clean Code" en surfant sur la vague du mouvement éponyme, Uncle Bob n'a pas reconnu de lien avec ni émis d'opinion sur SonarSource ni SonarQube (info de janvier 2022). Le seul point commun est l'objectif affiché d'un code de qualité.
+
 #### Typescript
-L'écosystème typescript peut être vu aussi bien comme un linter type ESLint (mais non paramétrable) que comme un langage à part entière.
+L'écosystème typescript peut être vu aussi bien comme un linter type ESLint (mais non paramétrable) que comme un langage à part entière (mettant en avant sa caractéristique de langage typé).
 
 ##### REx eCSAR
 Sur eCSAR, j'ai dû développer deux nanoservices, l'un scrappant les données de différentes APIs internes, et l'autre assemblant les données de ces différents API - avec notamment des jointures sur des champs.
@@ -108,7 +120,7 @@ Des flows populaires:
 - Trunk-based development: on travaille sur une branche commune, avec parfois des feature branches: https://www.toptal.com/software/trunk-based-development-git-flow
 - dev-based branch: ce flow est facile à mettre en place, et présente des avantages certains (responsabilisation du dev sur sa branche), mais présente aussi des inconvénients; suffisamment d'inconvénients pour qu'il ne soit pas conseillé à l'utilsation en équipe.
 
-Queslaues comparatifs:
+Quelques comparatifs:
 - https://medium.com/@patrickporto/4-branching-workflows-for-git-30d0aaee7bf
 - https://www.nicoespeon.com/fr/2013/08/quel-git-workflow-pour-mon-projet/
 
@@ -256,11 +268,41 @@ Attention: même si cette liste est un bon point de départ, elle est insuffisan
 ##### Code smells
 - god object / code spaghetti: le contraire du SoC
 - magic numbers https://dev.to/producthackers/code-smell-magic-numbers-3ngc et https://haridy29.medium.com/magic-numbers-2df3ae9dec94
-- cf Clean Code, chapitre 17: Smells and Heuristics
+
+Pour plus de code smells, allons voir rapidement Clean Code, chapitre 17: Smells and Heuristics.
 
 ## Techniques spécifiques
 ### Guidelines de dev
-TODO: cf les guidelines de contribution sur github de technos populaires: Angular, React, Next.js, Mongoose, Prisma, Sequelize.
+TODO: cf les guidelines de contribution sur github de technos populaires: Angular, React, Next.js, Vite, Webpack, Mongoose, Prisma, Sequelize.
+
+#### React
+https://legacy.reactjs.org/docs/how-to-contribute.html
+
+#### Angular
+https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-submission-guidelines
+https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-coding-rules
+
+#### Next.js
+https://github.com/vercel/next.js/blob/43b075eb7ee6b4e0a92d3b8caf2de5b634f3540b/contributing.md
+(un peu différent des autres)
+
+#### Vite.js
+https://github.com/vitejs/vite/blob/main/CONTRIBUTING.md#pull-request-guidelines
+https://github.com/vitejs/vite/blob/main/CONTRIBUTING.md#maintenance-guidelines
+
+#### Webpack
+https://webpack.js.org/contribute/
+https://github.com/webpack/webpack/blob/main/CONTRIBUTING.md
+
+#### Sequelize
+TODO
+
+#### Mongoose
+TODO
+
+#### Prisma
+TODO
+
 
 ### Signaler un bug / un comportement étrange à un dev
 Nous travaillons avec des systèmes complexes. À l'instar des docteurs et du corps humain, nous et notre logiciel avons besoin de différents éléments de diagnostics pour poser un diagnostic de ce qui ne va pas, avant de le résoudre: radios, analyses sanguines et ausculataion au stéthoscope deviennent logs applicatifs, `console.log()` placés ponctuellement et debuggers.
@@ -279,6 +321,11 @@ Il est donc fondamental:
   * par exemple commencer sa demande par "ça ne marche pas (quand je fais X)" puis attendre qu'on nous réponde, c'est pas très efficace - ni très respectueux de votre interlocuteur. C'est mieux si vous fournissez la liste exhaustive des actions faites / commandes lancées en vous étant assuré que le comportement est bien évidmment reproductible, ainsi qu'un retour exhaustif du système menant au comportement problématique: par exemple si il s'agit d'une commande, l'ensemble de la sortie de la commande depuis son lancement (et pas juste les 5 dernières lignes).
   * D'autre part, soyez polis et concis: le temps de votre interlocuteur est précieux, ne le gâchez pas. Si vous avez du mal à visualiser ce point, imaginez que vous vous adressez à David ou Frédéric.
   * la (quasi-?)totalité des projets populaires sur Github possèdent des formulaires d'ouvertures de github issues de technos populaires: Angular, React, Next.js, Mongoose, Prisma, Sequelize. On peut d'ailleurs aller y faire un tour rapide, pour voir à quoi ils ressemblent.
+
+Quelques exemples sur de gros projets open source:
+- https://github.com/facebook/react/issues/new/choose
+- https://github.com/angular/angular/issues/new/choose
+- https://github.com/vitejs/vite/issues/new/choose
 
 ### Le boy scout
 On laisse le code dans un aussi bon état - voir meilleur - que celui dans lequel on l'a trouvé. Par exemple, si on trouve un comportement suspect:

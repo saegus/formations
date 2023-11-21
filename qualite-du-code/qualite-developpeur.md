@@ -1,6 +1,12 @@
 Note pour le 23 novembre:
 - Petit addendum à la formation précédente: cf "Des process adaptés à ceux qui les utilisent".
 - Mise en place de la review de formation
+- l'assistant de la semaine dernière doit me transmettre ses notes, vu que je n'ai pas de PR
+- j'élis mon assistant d'aujourd'hui
+- On m'a parlé à plusieurs reprises de code review. Si je n'ai pas déjà répondu en public:
+  - C'est prévu de les mettre en place dès la fin de cette session de formations, car elle sert notamment à vous donner des outils utiles pour vos relectures
+  - si vous êtes préssés, vous pouvez simplement me demander de relire un de vos commits sur votre ordi, pendant 1/2H
+  - lire un code extrêmement éloigné des standards actuels de qualité a tendance à m'attrister, me désespérer voir me mettre en colère. Ne vous étonnez donc pas si cela transparaît dans mes notes de PR. Ne le prenez pas non plus personnellement.
 
 
 # Qualité du consultant développeur informatique
