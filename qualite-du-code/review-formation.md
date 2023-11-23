@@ -38,10 +38,10 @@ Vous ne notez pas:
 
 ## Responsables de relecture
 1e session de formation, `intro-plan.md` (~16 notes) et `qualite-projet.md` (~61 notes):
-- TODO
-- TODO
+- Victor (à faire pour jeudi 30)
+- Gilles (à faire pour jeudi 30)
 
-2e session de formation, `qualite-developpeur.md` (~81 notes) et `qualite-codebase.md` (du début à la fin de "C'est quoi, une codebase de qualité?", ~21 notes):
-- TODO
-- TODO
+2e session de formation, `qualite-developpeur.md` (~81 notes) et `qualite-codebase.md` (du début à la fin du chapitre "Typescript", ~59 notes):
+- Éric (à faire pour jeudi 30)
+- Jiad (à faire pour jeudi 30)
 
