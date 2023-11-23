@@ -18,16 +18,22 @@ Votre formation personnelle (à votre initiative et dans votre coin, sans compte
 Ce que vous vous auto-formez mènera à la revalorisation de votre valeur par votre manager, et très probablement de votre salaire et votre position. Si vous stagnez professionnellement, Rappelez-vous ça.
 La multiplication des missions n'a que peu de sens sur votre CV si vous ne diversifiez pas leur contenu.
 
+<!-- + -->
+
 #### Une bonne estimation du savoir
 On sait estimer ce qu'on sait (et à quel point on le sait/maîtrise), mais aussi ce que l'on ne sait pas.
 
 On sait également estimer les connaissances de notre prochain dans les domaines professionnels qui nous concernent, pour savoir quand il vaut mieux faire valoir son point de vue, et quand il vaut mieux écouter celui qui en sait plus que nous et peut nous enrichir par la même occasion. 
+
+<!-- ++ -->
 
 ### Proche de nous
 J'ai interviewé plusieurs managers pour savoir ce qu'ils pensaient d'un bon projet d'une part et d'un bon développeur d'autre part. J'ai également interviewé un membre de Shift Acceleration, pour avoir un peu de variété.
 
 Nommément (dans l'ordre d'interview): David Guedj, Frédéric Brajon, Charlotte Zekraoui et Théo Andre.
 Voici leurs réponses.
+
+<!-- +++ démarche hyper intéréssante même si les avis sont un peu convenus et attendus -->
 
 ### Un logiciel quali
 Quelles sont les qualités & défauts du logiciel dont tu serais client / PO (ex.: foreseeds)?
@@ -122,6 +128,8 @@ Organisez votre emploi du temps et votre code: vos collaborateurs doivent pouvoi
 
 Dans mon emploi du temps, le refactor est prioritaire face aux fonctionnalités, le bon code est prioritaire par rapport aux features; je le fais dès que je le repère, bien souvent pendant le dev d'une autre feature. Je répercute le temps passé dans le chiffracge de mes US (souvent 1/3 du temps). Résultat: pas de retards sur ce que je livre depuis 6 mois.
 
+<!-- ++ démarche intéréssante mais peut être pas utile de nous raconter tout ce qu'il nous remonte surtout les plus obvious -->
+
 ### Tuto: Identifier les problèmes
 Lorsque vous avez un problème dans votre US qui vous fait perdre du temps, il peut notamment s'agir de:
 - Design fonctionnel: vous n'avez pas suffisamment précisément défini le comportement fonctionnel que vous vouliez
@@ -140,3 +148,5 @@ Pour chacun de ces problèmes, il y a une solution.
 - Connaissance outil: allez lire la doc de l'outil
 - Environnement: demandez de l'aide à toute l'équipe en daily. Avoir un code séparé en objectifs (SoC) permet d'identifier plus rapidement ces divers endroits et ce qu'on doit y modifier exactement. Si l'environnement n'est pas clair, c'est parce que vos coequipiers - ou vous-même - n'avez pas pris le temps de le nettoyer pour qu'il le soit.
 - bug: Stackoverflow et les issues Github sont vos amis. Si ça ne donne rien... OK celui-là est dur à résoudre.
+
+<!-- +++ -->

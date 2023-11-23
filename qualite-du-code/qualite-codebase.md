@@ -3,6 +3,8 @@ Qu'est-ce qu'une codebase de qualité? À quoi est-elle utile/bénéfique? À qu
 
 On va voir ici plein de concepts, dont certains se contredisent. Ne prenez rien pour acquis, mais je vous déconseille de jeter le bébé avec l'eau du bain ;-)
 
+<!-- ++ -->
+
 ## C'est quoi, une codebase de qualité?
 ### De manière générale
 On note dans le portail de la "Gestion de la qualité logicielle" (https://fr.wikipedia.org/wiki/Qualit%C3%A9_logicielle#Voir_aussi) des ensembles de pages dédiés à:
@@ -22,6 +24,8 @@ Plutôt que de donner une définition quelque peu abstraite ici, passons en revu
 
 De manière générale, le développement initial est assez peu un problème ici: tous les devs savent développer une fonctionnalité. La qualité décrit le travail dont toute une partie des fichiers sera moins souvent réécrit, celui dans lequel on aura moins souvent de bugs & régressions; celui qui est agréable à consulter, compréhensible, maintenable et qui dure dans le temps.
 
+<!-- ++ assez bateau des exemples auraient été plus pertinent -->
+
 #### Le code sujet aux bugs: illustration
 Cette propriété est particulièrement injuste: en voici un exemple.
 
@@ -33,10 +37,14 @@ Quelques jours plus tard, le client se rend compte que la fonctionnalité B ne m
 
 Un code de qualité n'est pas un code que vous avez écrit et trouvez clair, c'est un code que vous avez écrit et que les autres développeurs de votre équipe trouvent clair. Un code qui fait qu'ils risquent peu d'introduire des régressions.
 
+<!-- ++ pareil ça aurait été plus pertinent avec un exemple -->
+
 ### Quels causes à une baisse de qualité?
 - un mauvais design: on appelle plus volontiers le design une architecture, dans notre discipline.
 - les devs n'intègrent pas nativement dans leurs livrables / tâches des contrôles de la qualité du code, ni n'ont explicitement ce type de contrôles dans leur flow de réalisation d'une tâche. Il existe par exemple la code review, mais on peut songer à d'autres formes de contrôle comme une liste de points de contrôle.
 - un projet ne permettant pas de lancer facilement des outils de contrôle automatisés: le linter doit s'interfacer avec l'IDE (bon le linter de vscode craint un peu, il faut installer manuellement une l'exécutable eslint, c'est pas la faute du dev), et 
+
+<!-- ++ et quoi ? -->
 
 ## Code de qualité et valeurs de Seagus
 Si vous voulez relier le code de qualité aux valeurs de Saegus, un code de qualité:
@@ -45,14 +53,20 @@ Si vous voulez relier le code de qualité aux valeurs de Saegus, un code de qual
 
 Notez que si vous produisez de l'excellence, parfois elle ne se voit pas du premier coup d'oeil (un client qui est PO et donc souvent non tech va avoir du mal à comprendre la qualité de la codebase et des process d'équipe), c'est à vous de prendre le temps d'expliquer les tenants et aboutissants, de lui donner des métriques (régressions hebdo now VS il y a 2 mois) pour qu'il puisse mesurer la pertinence du clean code, et comment par exemple ça lui permet de mieux planifier le projet (moins de régressions = agenda plus prévisible), rendre ses utilisateurs heureux (les MEP contiennent moins de mauvaises surprises donc les users ouvrent moins de tickets), rendre ses développeurs heureux - car c'est rarement agréable de travailler au milieu d'un code spaghetti dont les noms des objets informatiques (fonctions, variables) n'ont que peu de sens.
 
+<!-- +++ -->
+
 ## Axes d'amélioration
 Grandes familles de pistes à explorer:
 - communication d'équipe: cf plus loin dans la formation
 - process de travail normés: cf plus loin dans la formation
 - une architecture à chaque niveau de granularité: projet (multi-composants), composant (un exécutable donné), fichier, fonction, ligne
 
+<!-- +++ d'accord sur le principe, mais beaucoup plus dur à mettre en pratique quand on travail sur des projets différents avec des technos différentes -->
+
 ### Exemples pratiques
 Les technos / frameworks / etc listés ici n'y sont qu'à titre d'exemples, et on chacun au moins une alternative dans leur domaine. À vous de chercher!
+
+<!-- + aucun interet  -->
 
 #### Linting / formatting
 ##### ESLint
@@ -65,6 +79,8 @@ Les règles ESlint peuvent être classées de différentes manières:
 
 Il est important de savoir pourquoi - et vous justifier si on vous demande quand - vous ajoutez chaque règle! Évitez dont de bêtement prendre le premier set de règles venu, ce qui peut être contraignant pour vos collègues voir contre-productif (en terme de lisibilité)!
 
+<!-- +++ intéressant mais avec des exemples ça aurait été mieux -->
+
 ##### Prettier
 Il y a sûrement plein de choses bien à en dire - sa popularité ne sort pas de nulle part, mais je n'utilise pas l'outil donc je m'arrête là.
 
@@ -76,6 +92,8 @@ C'est un outil mis en place dans la CI des projets d'un client populaire chez no
 Je n'ai pas encore eu l'occasion de tester l'outil, je ne pourrais pas vous en faire un feedback.
 
 Une note toutefois: Si SonarSource se vante d'être le plus gros fournisseur de solutions "Clean Code" en surfant sur la vague du mouvement éponyme, Uncle Bob n'a pas reconnu de lien avec ni émis d'opinion sur SonarSource ni SonarQube (info de janvier 2022). Le seul point commun est l'objectif affiché d'un code de qualité.
+
+<!-- +++ -->
 
 #### Typescript
 L'écosystème typescript peut être vu aussi bien comme un linter type ESLint (mais non paramétrable) que comme un langage à part entière (mettant en avant sa caractéristique de langage typé).
@@ -93,6 +111,8 @@ Est-ce que TS est très utile ici? Je n'en sais pas grand-chose - après tout, l
 
 En bref, Typescript n'est pas adapté à tous les projets, et notamment pas à ceux dont des types peuvent évoluer régulièrement et dont on n'a pas la main dessus.
 
+<!-- ++ besoin d'exemple concret pour comprendre ton problème avec typescript j'ai l'impression que tu en attends trop de sa part  -->
+
 ##### Avantages
 - permet (souvent) d'éviter les erreurs d'inattention de typage
 - interfaçage avec l'IDE (intellisense), au plus proche du moment de l'écriture du code (et pas en phase de déploiement/CI par ex.)
@@ -100,16 +120,20 @@ En bref, Typescript n'est pas adapté à tous les projets, et notamment pas à c
 - maintenabilité: tendance à fixer le code / le rendre moins aisément réécrivable: pratique quand on est en train d'écrire une lib de fonctions/composants réutilisables, qui devraient peu/pas bouger dans le temps
 - interfaçage avec des outils populaires comme swagger
 
+<!-- +++ facilite le travail d'équipe en imposant un début d'obligation d'homogénéité, et plus facile à reprendre par des nouveaux devs  -->
+
 ##### Inconvénients
-- norme beaucoup le style d'écriture du JS
-- non paramétrable sur les règles de linting (contrairement à un linter classique)
+- norme beaucoup le style d'écriture du JS <!-- c'est litéralement le but de typescript -->
+- non paramétrable sur les règles de linting (contrairement à un linter classique) <!-- argument totalement valable -->
 - Configuration difficile: on aimerait par exemple avoir un mode qui transpile en JS en enlevant juste les annotations TS, sans réécrire le JS. On ne comprend pas pourquoi une fonction de transpilation de version de JS à été ajoutée obligatoirement au type checker et au transpiler TS->JS - qui auraient juste bien fait le job.
 - potentiel de rendre le JS moins lisible V1: les annotations s'intriquant profondément dans le JS et, si on ne fait pas attention à son écriture, rend l'algorithmie difficile à lire
 - potentiel de rendre le JS moins lisible V2: les @ts-ignore peuvent vite devenir envahissants si on n'y fait pas gaffe - ai même titre que les annotations d'ignorance des linters.
 - maintenabilité: tendance à fixer le code / le rendre moins aisément réécrivable: c'est gênant lorsqu'on doit faire évoluer des composants
 - Des devs ont tendance à s'appuyer uniquement dessus pour la qualité de peur code, en négligeant les autres outils / leviers qui permettent d'avoir un code de qualité. Typescript est un outil parmi d'autres, ce n'est pas l'alpha et l'oméga
 - Des devs ont tendance à mettre TS partout sans vraiment réfléchir à si il est pertinent de l'ajouter. Cf REx d'eCSAR.
-- plus value diminuée (mais aps annulée) si on utilise des tests
+- plus value diminuée (mais pas annulée) si on utilise des tests
+
+<!-- +++ -->
 
 #### Automatisation de la CI
 Des flows populaires:
