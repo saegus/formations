@@ -5,7 +5,7 @@ Cette évaluation est à faire avant la semaine prochaine, même heure. Elle dev
 
 ## Process
 1. Pour chaque partie, je vais désigner deux d'entre vous
-2. Si vous faites partie des heureux élus, vous devrez créer un commit ajoutant "Relu par <votre nom>" à l'endroit idoine dans ce fichier. Vous devrez également copier le dossier "qualite-du-code" et ajouter les fichiers dupliqués dans ce commit. Ce commit sera à ajouter dans une branche "review-qualite-du-code-<votre-nom>-<la-partie-que-vous-relisez>".
+2. Si vous faites partie des heureux élus, vous devrez créer un commit mettant à jour votre statut d'avancement à côté de votre nom dans le présent fichier. Ce commit sera à ajouter dans une branche "review-qualite-du-code-<votre-nom>-<la-partie-que-vous-relisez>".
 3. Vous allez ouvrir une PR sur Github à partir de ça
 4. Dans cette PR, vous allez noter et commenter en suivant les modalités décrites ci-dessous.
 
