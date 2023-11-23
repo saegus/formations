@@ -439,7 +439,7 @@ La manière la plus simple de construire une image est donc:
 ```
 cat << EOF > Dockerfile
 FROM node:18
-echo Hello
+RUN echo Hello
 ENTRYPOINT [ "npm", "run", "dev" ]
 EOF
 
@@ -688,6 +688,7 @@ Quelques notes:
 build:
   context: .
   dockerfile: ./Dockerfile
+  TODO parler des args
 ```
 - docker run --user: j'ai précisé l'utilisateur `root`; mais vu qu'il s'agit de l'utilisateur par défaut, il n'y a pas besoin de le préciser. Je l'ai fait pour les besoins pédagogiques.
 - bind mount: Attention ici, "." dans le path hôte fait référence au working directory, pas à l'emplacement du DCF.
@@ -696,7 +697,7 @@ build:
 - volume interne de mon_service_node: il s'agit d'une astuce pour que les node_modules construits lors du builds ne soient pas écrasés par le bind mount.
 - docker network: docker-compose créé par défaut un réseau auquel il connecte tous les conteneurs. Les directives `network` mentionnées précédemment ne sont donc pas obligatoires pour les besoins réseau les plus basiques, je les ai mentionné pour montrer la correspondance avec les commandes vues précédemment. Également: les conteneurs ne sont plus connectés au réseau hôte par défaut comme avec `docker run`; pour qu'ils soient accessibles depuis le navigateur local, il faut utiliser le port binding.
 
-Il existe d'autres directives dédiées au DCF couramment utilisées:
+Il existe d'autres directives dédiées au DCF couramment utilisées (au niveau d'un service):
 - `restart`: permet de définir à quel point on doit redémarrer le conteneur lorqu'il se termine. Par exemple `restart:always` permet de redémarrer le conteneur au redémarrage de l'ordinateur
 - `depends_on`: déclarer que ce service dépend d'autres services, et sera lancé (une à plusieurs secondes) après les services listés
 - `healthcheck`: configure une routine que docker va exécuter régulièrement pour s'assurer que le conteneur est "healthy" / en bonne santé. Il s'agit d'un monitoring minimaliste, répondant aux besoins les plus basiques en la matière.
@@ -810,7 +811,7 @@ TODO ajouter des explications
 
 Problème:
 ```
-$ docker-compose down --volumes
+$ docker-compose down
  ⠿ Container node-installed       Removed                   11.6s
  ⠿ Container mysql                Removed                   11.6s
  ⠏ Volume node_modules            Removing                   0.9s
