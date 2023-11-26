@@ -1,18 +1,8 @@
-Notes pour le 23 novembre:
-- Mise en place de la review de formation
-- On m'a parlé à plusieurs reprises de code review. Si je n'ai pas déjà répondu en public:
-  - C'est prévu de les mettre en place dès la fin de cette session de formations, car elle sert notamment à vous donner des outils utiles pour vos relectures
-  - si vous êtes pressés, vous pouvez simplement me demander de relire un de vos commits sur votre ordi, pendant 1/2H
-  - lire un code extrêmement éloigné des standards actuels de qualité a tendance à m'attrister, me désespérer voir me mettre en colère. Ne vous étonnez donc pas si cela transparaît dans mes notes de PR. Ne le prenez pas non plus personnellement.
-- j'élis mon assistant d'aujourd'hui, qui a exactement le rôle de Jiad la semaine dernière.
-- Petit addendum à la formation précédente: cf "Des process adaptés à ceux qui les utilisent".
-
-
 # Qualité du consultant développeur informatique
 On a vu que le code de bonne qualité dépend notamment des process et de l'environnement du projet, intéressons-nous maintenant aux producteurs directs de code, isolément.
 
 ### En général
-Votre formation personnelle (à votre initiative et dans votre coin, sans compter sur une formation proposée par Saegus) est primordiale pour votre carrière professionnelle. Si vous ne vous documentez pas par vous-même, si vous ne faites pas d'expérience (par ex. sur des technos que vous ne connaissez) pas pendant votre temps de travail, comment comptez-vous monter en compétence?
+Votre formation personnelle (à votre initiative et dans votre coin, sans compter sur une formation proposée par Saegus) est primordiale pour votre carrière professionnelle. Si vous ne vous documentez pas par vous-même, si vous ne faites pas d'expérience (par ex. sur des technos que vous ne connaissez pas) pendant votre temps de travail, comment comptez-vous monter en compétence?
 
 Ce que vous vous auto-formez mènera à la revalorisation de votre valeur par votre manager, et très probablement de votre salaire et votre position. Si vous stagnez professionnellement, Rappelez-vous ça.
 La multiplication des missions n'a que peu de sens sur votre CV si vous ne diversifiez pas leur contenu.
@@ -119,7 +109,7 @@ Bonne nouvelle: Au bout d'un ou 2 ans de dev, pour pouvez normalement prévoir p
 
 Organisez votre emploi du temps et votre code: vos collaborateurs doivent pouvoir s'y retrouver sans avoir à vous demander des précisions dessus trop régulièrement; rendez-leur votre travail clair pour qu'ils n'aient que peu de choses à vous demander.
 
-Dans mon emploi du temps, le refactor est prioritaire face aux fonctionnalités, le bon code est prioritaire par rapport aux features; je le fais dès que je le repère, bien souvent pendant le dev d'une autre feature. Je répercute le temps passé dans le chiffracge de mes US (souvent 1/3 du temps). Résultat: pas de retards sur ce que je livre depuis 6 mois.
+Dans mon emploi du temps, le refactor est prioritaire face aux fonctionnalités, le bon code est prioritaire par rapport aux features; je le fais dès que je le repère, bien souvent pendant le dev d'une autre feature. Je répercute le temps passé dans le chiffrage de mes US (souvent 1/3 du temps). Résultat: pas de retards sur ce que je livre depuis 6 mois.
 
 ### Tuto: Identifier les problèmes
 Lorsque vous avez un problème dans votre US qui vous fait perdre du temps, il peut notamment s'agir de:
