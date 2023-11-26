@@ -101,15 +101,15 @@ En bref, Typescript n'est pas adapté à tous les projets, et notamment pas à c
 - interfaçage avec des outils populaires comme swagger
 
 ##### Inconvénients
-- norme beaucoup le style d'écriture du JS
+- norme beaucoup le style d'écriture du JS (cf annexe TS: style d'écriture)
 - non paramétrable sur les règles de linting (contrairement à un linter classique)
 - Configuration difficile: on aimerait par exemple avoir un mode qui transpile en JS en enlevant juste les annotations TS, sans réécrire le JS. On ne comprend pas pourquoi une fonction de transpilation de version de JS à été ajoutée obligatoirement au type checker et au transpiler TS->JS - qui auraient juste bien fait le job.
 - potentiel de rendre le JS moins lisible V1: les annotations s'intriquant profondément dans le JS et, si on ne fait pas attention à son écriture, rend l'algorithmie difficile à lire
 - potentiel de rendre le JS moins lisible V2: les @ts-ignore peuvent vite devenir envahissants si on n'y fait pas gaffe - ai même titre que les annotations d'ignorance des linters.
 - maintenabilité: tendance à fixer le code / le rendre moins aisément réécrivable: c'est gênant lorsqu'on doit faire évoluer des composants
-- Des devs ont tendance à s'appuyer uniquement dessus pour la qualité de peur code, en négligeant les autres outils / leviers qui permettent d'avoir un code de qualité. Typescript est un outil parmi d'autres, ce n'est pas l'alpha et l'oméga
+- Des devs ont tendance à s'appuyer uniquement dessus pour la qualité de leur code, en négligeant les autres outils / leviers qui permettent d'avoir un code de qualité. Typescript est un outil parmi d'autres, ce n'est pas l'alpha et l'oméga
 - Des devs ont tendance à mettre TS partout sans vraiment réfléchir à si il est pertinent de l'ajouter. Cf REx d'eCSAR.
-- plus value diminuée (mais aps annulée) si on utilise des tests
+- plus value diminuée (mais pas annulée) si on utilise des tests
 
 #### Automatisation de la CI
 Des flows populaires:
@@ -335,3 +335,56 @@ On laisse le code dans un aussi bon état - voir meilleur - que celui dans leque
 ### Le SoC pendant le dev d'une nouvelle feature
 Cf `./new-feature-SoC.md`
 
+
+## Annexes
+### Typescript
+#### Typescript norme le style d'écriture
+Voici deux  exemples:
+```
+interface IMyObj {
+  warning: string;
+  warn: string;
+  total_length: number;
+};
+
+type TTempObj = Omit<IMyObj, "total_length">;
+
+const warningAttr = (): string => "a warning";
+const warnAttr = (): string => "another warning";
+const getTotalLength = (res: TTempObj): number => res.warn.length + res.warning.length;
+// error TS2322: Type '() => { warning: string; warn: string; }' is not assignable to type '() => IMyObj'.
+//   Property 'total_length' is missing in type '{ warning: string; warn: string; }' but required in type 'IMyObj'.
+const propertyTotalLengthIsMissingOnType: () => IMyObj = () => {
+  const res = {
+    warning: warningAttr(),
+    warn: warnAttr(),
+  };
+
+  // J'ajoute une prop générée (en partie) à partir des props actuelles de l'objet
+  // error TS2339: Property 'total_length' does not exist on type '{ warning: string; warn: string; }'.
+  res.total_length = getTotalLength(res);
+  return res;
+};
+
+interface IMyOtherObj extends Omit<IMyObj, "total_length"> {
+  total_length?: number;
+};
+
+// Petite variation: l'ajout conditionnel d'une prop
+const propertyTotalLengthDoesNotExistOnType: (add_total: boolean) => IMyOtherObj = (add_total) => {
+  // error TS2339: Property 'total_length' does not exist on type '{ warning: string; warn: string; }'.
+  // Si on met un type "any" pour se débarasser de cette erreur: on perd la vérification des attributs de IMyOtherObj, et on peut se retrouver avec un attribut "error" au milieu de notre objet sans que TS ne nous le notifie. 
+  const res = {
+    warning: "a warning",
+    warn: "another warning",
+  };
+
+  if (add_total) {
+    res.total_length = 50;
+  }
+
+  return res;
+};
+
+```
+Dans ces 2 cas, on ne peut pas ajouter une prop à notre objet intermédiaire, alors même que notre algorithme renverra dans 100% des cas un objet de type correct. C'est une limite du compilateur.
