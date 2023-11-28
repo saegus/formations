@@ -4,16 +4,20 @@ Qu'est-ce qu'une codebase de qualité? À quoi est-elle utile/bénéfique? À qu
 On va voir ici plein de concepts, dont certains se contredisent. Ne prenez rien pour acquis, mais je vous déconseille de jeter le bébé avec l'eau du bain ;-)
 
 ## C'est quoi, une codebase de qualité?
+[jiad] je pense que cette section n'est pas très claire, pêut-être qu'il faut ajouter les "tests", parler de linter, intégration d'une bonne architcture ?
+
 ### De manière générale
 On note dans le portail de la "Gestion de la qualité logicielle" (https://fr.wikipedia.org/wiki/Qualit%C3%A9_logicielle#Voir_aussi) des ensembles de pages dédiés à:
 - Compréhension et contrôle du code source
 - Remaniements (refactors)
 - Principes de programmation
-- Mauvaises pratiques
+- Mauvaises pratiques 
 
 Ce portail regorge de notions intéressantes (oui, je parle bien de wikipedia), mais faire une formation dessus ne présenterait que peu de valeur ajoutée: après tout il vous suffit de cliquer sur des liens pour avoir du contenu à lire, et les articles wikipedia sont très souvent digestes et accessibles (contrairement aux articles de recherche ou aux brevets).
 
 ### C'est quoi, une codebase de mauvaise qualité?
+[jiad] c'est très claire
+
 Plutôt que de donner une définition quelque peu abstraite ici, passons en revue des situations courantes dans le monde du développement informatique:
 - le code n'est pas lisible: gros pavés non aérés, lignes trop longues, ...
 - le code n'est pas compréhensible: on n'arrive pas à voir d'organisation s'en dégager (des vues, layouts, composants génériques, composants spécialisés, presenters, data transformers, routes, contrôleurs, modèles, entités, authentification, helpers, code réutilisable, etc)
@@ -23,6 +27,9 @@ Plutôt que de donner une définition quelque peu abstraite ici, passons en revu
 De manière générale, le développement initial est assez peu un problème ici: tous les devs savent développer une fonctionnalité. La qualité décrit le travail dont toute une partie des fichiers sera moins souvent réécrit, celui dans lequel on aura moins souvent de bugs & régressions; celui qui est agréable à consulter, compréhensible, maintenable et qui dure dans le temps.
 
 #### Le code sujet aux bugs: illustration
+
+[jiad] je vire les deux
+
 Cette propriété est particulièrement injuste: en voici un exemple.
 
 Imaginons les développeurs Alice et Bob: Alice produit un code clair, alors que Bob n'en n'a pas grand chose à faire (par exemple, Bob pourrait croire qu'une techno magique - au hasard typescript - est nécessaire et/ou suffisante pour faire de son code un code de grande qualité).
@@ -36,9 +43,13 @@ Un code de qualité n'est pas un code que vous avez écrit et trouvez clair, c'e
 ### Quels causes à une baisse de qualité?
 - un mauvais design: on appelle plus volontiers le design une architecture, dans notre discipline.
 - les devs n'intègrent pas nativement dans leurs livrables / tâches des contrôles de la qualité du code, ni n'ont explicitement ce type de contrôles dans leur flow de réalisation d'une tâche. Il existe par exemple la code review, mais on peut songer à d'autres formes de contrôle comme une liste de points de contrôle.
-- un projet ne permettant pas de lancer facilement des outils de contrôle automatisés: le linter doit s'interfacer avec l'IDE (bon le linter de vscode craint un peu, il faut installer manuellement une l'exécutable eslint, c'est pas la faute du dev), et 
+- un projet ne permettant pas de lancer facilement des outils de contrôle automatisés: le linter doit s'interfacer avec l'IDE (bon le linter de vscode craint un peu, il faut installer manuellement une l'exécutable eslint, c'est pas la faute du dev), et
+
+[jiad] il est possible d'ajouter `prettier` (un formatteur) dans cette liste. `prettier` fonctionne très bien avec `eslint`.
 
 ## Code de qualité et valeurs de Seagus
+[jiad] 
+
 Si vous voulez relier le code de qualité aux valeurs de Saegus, un code de qualité:
 - c'est agréable ("fun") à lire, et on est à l'aise sur un projet qui en a
 - c'est l'excellence, presque par définition (en vrai c'est une bonne qualité et pas une excellente, mais je ne vais pas chipoter ^^)
@@ -66,6 +77,8 @@ Les règles ESlint peuvent être classées de différentes manières:
 Il est important de savoir pourquoi - et vous justifier si on vous demande quand - vous ajoutez chaque règle! Évitez dont de bêtement prendre le premier set de règles venu, ce qui peut être contraignant pour vos collègues voir contre-productif (en terme de lisibilité)!
 
 ##### Prettier
+[jiad] il vaut mieux l'utiliser, cela permet de sauver beaucuop de temps. 5 min par jour == 200 jours de travail * 5 = 1000 minutes par an = 16 heures = 2 jours
+
 Il y a sûrement plein de choses bien à en dire - sa popularité ne sort pas de nulle part, mais je n'utilise pas l'outil donc je m'arrête là.
 
 ##### Sonarqube
@@ -78,6 +91,7 @@ Je n'ai pas encore eu l'occasion de tester l'outil, je ne pourrais pas vous en f
 Une note toutefois: Si SonarSource se vante d'être le plus gros fournisseur de solutions "Clean Code" en surfant sur la vague du mouvement éponyme, Uncle Bob n'a pas reconnu de lien avec ni émis d'opinion sur SonarSource ni SonarQube (info de janvier 2022). Le seul point commun est l'objectif affiché d'un code de qualité.
 
 #### Typescript
+
 L'écosystème typescript peut être vu aussi bien comme un linter type ESLint (mais non paramétrable) que comme un langage à part entière (mettant en avant sa caractéristique de langage typé).
 
 ##### REx eCSAR
@@ -100,18 +114,26 @@ En bref, Typescript n'est pas adapté à tous les projets, et notamment pas à c
 - maintenabilité: tendance à fixer le code / le rendre moins aisément réécrivable: pratique quand on est en train d'écrire une lib de fonctions/composants réutilisables, qui devraient peu/pas bouger dans le temps
 - interfaçage avec des outils populaires comme swagger
 
+
 ##### Inconvénients
 - norme beaucoup le style d'écriture du JS
 - non paramétrable sur les règles de linting (contrairement à un linter classique)
 - Configuration difficile: on aimerait par exemple avoir un mode qui transpile en JS en enlevant juste les annotations TS, sans réécrire le JS. On ne comprend pas pourquoi une fonction de transpilation de version de JS à été ajoutée obligatoirement au type checker et au transpiler TS->JS - qui auraient juste bien fait le job.
 - potentiel de rendre le JS moins lisible V1: les annotations s'intriquant profondément dans le JS et, si on ne fait pas attention à son écriture, rend l'algorithmie difficile à lire
 - potentiel de rendre le JS moins lisible V2: les @ts-ignore peuvent vite devenir envahissants si on n'y fait pas gaffe - ai même titre que les annotations d'ignorance des linters.
-- maintenabilité: tendance à fixer le code / le rendre moins aisément réécrivable: c'est gênant lorsqu'on doit faire évoluer des composants
+
+[jiad]  avec beaucoup de `Generics` le code peut devenir très ilisible. Bon, après tout la lisibilité est subjectif 
+
+- maintenabilité: tendance à fixer le code / le rendre moins aisément réécrivable: c'est gênant lorsqu'on doit faire évoluer des composants ()
 - Des devs ont tendance à s'appuyer uniquement dessus pour la qualité de peur code, en négligeant les autres outils / leviers qui permettent d'avoir un code de qualité. Typescript est un outil parmi d'autres, ce n'est pas l'alpha et l'oméga
-- Des devs ont tendance à mettre TS partout sans vraiment réfléchir à si il est pertinent de l'ajouter. Cf REx d'eCSAR.
+- Des devs ont tendance à mettre TS partout sans vraiment réfléchir à si il est pertinent de l'ajouter. Cf REx d'eCSAR. [jiad] (je comprends le point de vue, TS a beaucoup d'avantage, faut pas juste le réduire à un langae typé, n'oublions pas que typescript infére beaucoup de type par défaut)
 - plus value diminuée (mais aps annulée) si on utilise des tests
 
+[jiad] on peut aussi parler de JSDOC
+
 #### Automatisation de la CI
+[jiad] je ne connais pas beaucoup mais je vais me renseigner
+
 Des flows populaires:
 - Git flow: préfixage de branches avec automatisations de commandes git: https://docs.github.com/en/get-started/quickstart/github-flow
 - One flow, une spin-off de Git flow
@@ -125,11 +147,13 @@ Quelques comparatifs:
 - https://www.nicoespeon.com/fr/2013/08/quel-git-workflow-pour-mon-projet/
 
 ##### Un flow personnel
+[jiad] je préfère merge, mais beaucoup de personnes préférent le rebase, cela permet d'avoir un git graph clean. certaines personnes font des branches et utilsent rebase
+
 Je travaille souvent directement sur la branche de développement (`dev` chez moi). J'utilise rebase (plutôt que "squash", le mode par défaut). Je fais plein de petits commits, plutôt qu'un gros. Je stash plutôt que de faire des feature branches (même si j'en fais parfois). Avantages & inconvénients:
 - en travaillant directement sur dev, mon code est plus facilement - et donc plus souvent - synchronisé (dans un sens ou dans l'autre) avec le code commun distant. Mes merge conflicts sont donc moins gros. Si utilisé avec des petits commits, mes merges conflicts sont souvent plus simples à gérer.
 - le rebase rend certains merge conflicts plus longs à résoudre, d'autres moins.
 - le rebase met en valeur les commits aux messages bien rédigés.
-- le rebase vient avec plus de commandes git. Par exemple des stashs systématiquement avant les pulls. Pour contrebalancer cette charge supplémentaire, on peut créer des scripts (disons des scripts bash, normalement compatibles avec tous les OS), qui vont lancer ces commandes pour nous (checkout/pull/checkout/(merge/rebase)/checkout/rebase/push par exemple). On peut en profiter pour leur donner un peu d'intelligence afin qu'ils automatisent toujours plus le flow.
+- le rebase vient avec plus de commandes git. Par exemple des stashs systématiquement avant les pulls. Pour contrebalancer cette charge supplémentaire, on peut créer des scripts (disons des scripts bash, normalement compatibles avec tous les OS [jiad] windows?), qui vont lancer ces commandes pour nous (checkout/pull/checkout/(merge/rebase)/checkout/rebase/push par exemple). On peut en profiter pour leur donner un peu d'intelligence afin qu'ils automatisent toujours plus le flow.
 
 #### Automatisation de la CD
 Outils populaires: Github Actions, Azure devops / pipelines, Jenkins
@@ -142,6 +166,9 @@ C'est un compagnon idéal pour la portabilité (compatibilité), avec son bonus 
 Pour un tuto sur docker, cf la dormation que j'ai donné en début d'année.
 
 ### Architecture
+
+[jiad] faut-il avoir une architecture pour les outils à Saegus ?
+
 Définition (https://www.cnrtl.fr/definition/architecture): Principe d'organisation d'un ensemble, agencement, structure.
 
 On peut inférer que l'architecture informatique est la manière de structurer un système informatique, mais aussi le code qui leui sert de base.

@@ -1,16 +1,18 @@
-Notes pour le 23 novembre:
+Note pour le 23 novembre:
+- Petit addendum à la formation précédente: cf "Des process adaptés à ceux qui les utilisent".
 - Mise en place de la review de formation
+- l'assistant de la semaine dernière doit me transmettre ses notes, vu que je n'ai pas de PR
+- j'élis mon assistant d'aujourd'hui
 - On m'a parlé à plusieurs reprises de code review. Si je n'ai pas déjà répondu en public:
   - C'est prévu de les mettre en place dès la fin de cette session de formations, car elle sert notamment à vous donner des outils utiles pour vos relectures
-  - si vous êtes pressés, vous pouvez simplement me demander de relire un de vos commits sur votre ordi, pendant 1/2H
+  - si vous êtes préssés, vous pouvez simplement me demander de relire un de vos commits sur votre ordi, pendant 1/2H
   - lire un code extrêmement éloigné des standards actuels de qualité a tendance à m'attrister, me désespérer voir me mettre en colère. Ne vous étonnez donc pas si cela transparaît dans mes notes de PR. Ne le prenez pas non plus personnellement.
-- j'élis mon assistant d'aujourd'hui, qui a exactement le rôle de Jiad la semaine dernière.
-- Petit addendum à la formation précédente: cf "Des process adaptés à ceux qui les utilisent".
 
 
 # Qualité du consultant développeur informatique
 On a vu que le code de bonne qualité dépend notamment des process et de l'environnement du projet, intéressons-nous maintenant aux producteurs directs de code, isolément.
 
+- [JIAD] 10 / 10 (je suis totalement en accord avec le pragraphe suivant, j'aimerais savoir comment tu le fais)
 ### En général
 Votre formation personnelle (à votre initiative et dans votre coin, sans compter sur une formation proposée par Saegus) est primordiale pour votre carrière professionnelle. Si vous ne vous documentez pas par vous-même, si vous ne faites pas d'expérience (par ex. sur des technos que vous ne connaissez) pas pendant votre temps de travail, comment comptez-vous monter en compétence?
 
