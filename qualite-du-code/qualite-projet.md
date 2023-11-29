@@ -125,6 +125,9 @@ Par exemple, c'est important de garder un linter d'équipe léger en règles: il
 
 Sur un petit projet, si les devs sont experts (notamment autonomes) et sont sur la même longueur d'onde, une partie des rituels "obligatoires" peuvent être adaptés à leurs manière de fonctionner; par exemple, le backlog grooming à la demande (voir en 1 vs. 1) plutôt qu'à des moments fixes dans le sprint.
 
+Si au contraire il n'y a pas encore de sensibilité / compréhension de ce qu'est la qualité et comment la mettre en place dans le code, l'ajout de process qualité est perçu comme une lourdeur non pertinente.
+Dans un premier temps, il est parfois préférable de déléguer la responsabilité de la qualité en dehors de l'équipe tech (un testeur fonctionnel, voir semi-tech; par exemple le scrum master ou le PO embauché en tant que recetteur), le temps de former l'équipe.
+
 Bref, les process doivent s'adapter aux singularités de l'ensemble des personnes qui en prennent part; ici, SCRUM - et notamment les rétrospectives - permettent de parler de ces sujets.
 
 ### Communication d'équipe
@@ -154,3 +157,8 @@ Et d'autre part, ces process doivent être aussi peu contraignants pour chaque d
 - les outils doivent pouvoir être lancés rapidement. Utiliser le cache d'un programme comme ESLint pour l'accélérer s'envisage aussi: `eslint --cache --cache-strategy metadata .`. Les tests avec Jest doivent aussi pouvoir se lancer sur un seul fichier de test.
 - les outils doivent être peu contraignants pour le dev, ils ne doivent pas dégouter celui-ci de les lancer. Le linter doit contenir autant que faire se peut uniquement des rêgles autofixables; l'ajout d'autres règles doit être limité au strict nécessaire pour la qualité du projet. Un dev peut vouloir rajouter des règles sur son code (des règles d'auto-fix par exemple), si c'est possible le projet doit lui permettre d'exécuter ses règles personnelles en plus des règles de l'équipe.
 - les règles communes doivent être comprises de tous: par exemple une règle de linting imposant les doubles quotes à la place des simple quotes a tout d'une règle stylistique subjective et rien d'une règle de qualité dans du travail d'équipe.
+
+### CI/CD & environnements de déploiement
+Tous les membres de l'équipe doivent comprendre quel est l'objectif de tel ou tel environnement (chez notre client favori, DEV/PIT/INT/PROD), ce qu'on peut faire avec et ce qu'on ne peut pas faire, et qu'on partage tous une même définition.
+
+TODO les environnements: on peut parfaitement mettre les process qualité au plus tôt sur la CI (dès DEV, voir même sur chaque PR). Toutefois, on peut vouloir également un environnement d'itérations rapides partagé (au prix d'une certaine instabilité), sans process de qualité. Dans ce cas, on fait une CI séparée pour les environnements au-dessus de dev / on paramètre la CI avec des variables d'environnement pour forcer le déploiement même en cas de non-validation des process automatiques de qualité. C'est à chaque équipe de décider de ce qui est le mieux pour elle, et d'adapter ses process à ses membres.

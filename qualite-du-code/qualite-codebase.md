@@ -177,16 +177,18 @@ Pour une liste plus complète: https://fr.wikipedia.org/wiki/Cat%C3%A9gorie:Arch
 #### Système de classement des normes architecturales
 Dans le domaine du développeur comme dans celui des métiers de la maison, il y a plusieurs niveaux / grains d'action des règles d'architectures:
 - gros grain: l'architecture d'urbanisme (ça s'appelle comme ça en informatique comme en architecture de ville).
-- moyen-gros grain: l'architecture inter-composants (logiciels), comparable à l'architecture d'un complexe (hôtelier), d'un quartier résidentiel ou d'un immeuble.
-- moyen grain: l'architecture intra-composants (logiciels), tel que l'architecture des pièces de l'appartement: l'emplacement des fenêtres, du garage, de l'atelier, du balcon, etc. En informatique, il s'agit de l'arborescence de fichiers, de ce qu'on pet dans chaque fichier et de comment on le nomme.
+- moyen-gros grain: l'architecture inter-exécutables, comparable à l'architecture d'un complexe (hôtelier), d'un quartier résidentiel ou d'un immeuble.
+- moyen grain: l'architecture intra-exécutables, tel que l'architecture des pièces de l'appartement: l'emplacement des fenêtres, du garage, de l'atelier, du balcon, etc. En informatique, il s'agit de l'arborescence de fichiers, de ce qu'on pet dans chaque fichier et de comment on le nomme.
 - grain fin: l'architecture intra-fichier, qu'on peut comparer à l'architecture d'interieur (mais aussi aux placements de sculptures et bas-reliefs sur une façade extérieure). On y parle notamment de nommage des fonctions et agencement de celles-ci entre elles. 
 - grain très fin: l'architecture intra-fonction: nommage des variables, algorithmie, aération du code, taille des fonctions, ...
+
+![Les différentes granularités depuis VSCode](./granularites-vscode.png)
 
 Ce moyen de classer les règles/normes d'architecture n'est bien sûr pas le seul, mais c'est celui que je vous propose d'utiliser ici. Une architecture va être un ensemble de ces règles, à un ou plusieurs niveaux. Par exemple, la méthodologie 12FA agit (au moins) aux granularités projet et composant.
 
 Remarquez que si je ne parle pas du niveau "architecture intra-objet mais inter-fonction", c'est totalement volontaire:
-- je n'aime pas l'OOP, et m'en passe dès que je peux (c'est à dire pas loin de tout le temps)
-- c'est une formation centrée autour du JS et, bien que le langage prévoit des structures orientées objet, on peut parfaitement s'en passer en utilisant des modules.
+- je n'aime pas l'OOP (parce que j'ai vu trop de codes obscurs en OOP et que j'aime bien le stateless), et m'en passe dès que je peux (c'est à dire pas loin de tout le temps)
+- c'est une formation centrée autour du JS et, bien que le langage prévoit des structures orientées objet, on peut parfaitement s'en passer par exemple en utilisant des modules JS (UMD/CommonJS/ESM).
 - il n'y a que peu à en dire de plus qu'au niveau des modules ESM, qui est normalement couvert par l'architecture intra-fichier.
 
 ##### Urbanisme
@@ -196,8 +198,8 @@ Il s'agit du niveau d'architecture où on organise les projets les uns par rappo
 
 Cf https://fr.wikipedia.org/wiki/Urbanisation_(informatique) .
 
-##### Entre les composants logiciels
-Un composant logiciel d'un projet est un exécutable prévu en fonctionnement dans la phase d'exploitation nominale du projet.
+##### Entre les composants exécutables
+Un composant exécutable d'un projet est un exécutable prévu en fonctionnement dans la phase d'exploitation nominale du projet.
 
 Ici on est au plus haut niveau qui concerne un projet en particulier.
 Exemple: Docker-Compose File (DCF), ressource (= serveur, type P1v3) & container Azure, microservices, event-driven architecture (EDA), twelve-factors app (12FA), etc.
@@ -207,7 +209,7 @@ On parle souvent de microservices: c'est loin d'être systématiquement une bonn
 
 De l'event-driven pour la communication entre les composants est aussi possible et assez scalable (kafka, RabbitMQ, ...), même si ça nécessite des connaissances / une expérience spécifique(s) pour éviter de faire du code spaghetti - et donc une équipe formée à cette manière de faire.
 
-##### À l'intérieur du composant logiciel
+##### À l'intérieur du composant exécutable
 On parle ici essentiellement de l'arborescence des fichiers, et de quel fichier est sensé contenir quel genre de code.
 Exemple: MVC, MVVM, DDD, Yelling Architecture, Clean Architecture, Onion Architecture, Ports & Adapters, data/network/... layer, etc.
 
@@ -258,7 +260,7 @@ Il s'agit d'une sélection minimaliste de divers motifs architecturaux que j'ai 
 Ces motifs ont également une importance supérieure à beaucoup d'autres de même niveau (sans vouloir rabaisser les autres), et sont relativement faciles à corriger.
 
 Attention: même si cette liste est un bon point de départ, elle est insuffisante pour écrire du bon code. Je vous suggère dès votre compréhension de ces motifs de:
-- Apprenez le JS. Tout le monde n'a pas l'air de connaître Array.reduce().map().filter() dans la team, et c'est chaud si vous faites du JS depuis plus d'un an - on parle d'ES2015 hein, il y a 8 ans. Pour les méthodes d'Array: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array; et pour Object: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
+- Apprenez le JS. Tout le monde n'a pas l'air de connaître Array.reduce() / Array.map() / Array.filter() de la librairie standard dans la team, c'est chaud (problématique) si vous faites du JS depuis plus d'un an. On parle d'ES2015 hein, sorti il y a environ 8 ans. Pour les méthodes d'Array: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array; et pour Object: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
 - nommez correctement vos variables (dont fonctions)
 - lisez Clean Code
 
@@ -271,6 +273,61 @@ Attention: même si cette liste est un bon point de départ, elle est insuffisan
 - magic numbers https://dev.to/producthackers/code-smell-magic-numbers-3ngc et https://haridy29.medium.com/magic-numbers-2df3ae9dec94
 
 Pour plus de code smells, allons voir rapidement Clean Code, chapitre 17: Smells and Heuristics.
+
+#### Tests
+##### Raisons de tester
+- le métier a besoin de s'assurer de non-régressions fonctionnelles:
+  - sur les fonctionnalités de l'UI
+  - sur des specs d'API
+- l'équipe de dev veut:
+  - valider le schéma du retour des composants logiciels "finaux" (front, back) (tests sur le typage)
+  - garantir l'uptime des composants logiciels finaux
+  - garantir l'uptime des composants logiciels intermédiaires (composants / bibiliothèques / services consommés par les fronts & backs monolithiques d'apps)
+  - de la documentation des composants qu'elle utilise
+  - inscrire certains composants / bibiliothèques sur la durée
+
+##### Types de tests
+3 grandes familles de tests automatisés:
+- end-to-end: TODO
+- intégration: TODO
+- unitaires: On teste une fonction, ou un ensemble de fonctions ()
+
+En détaillant par utilisateur cible, grande famille ainsi que degré d'automatisabilité:
+- Responsabilité (création et maintenance) transférable à des non-devs:
+  - tests manuels d'UI (end-to-end): un membre non-dev et non-data (ie n'importe qui) peut s'en charger
+  - tests manuels d'API (intégration): un membre data / tech-friendly peut s'en charger, par exemple avec une connaissance minimaliste de Postman.
+  - tests semi-automatisés d'API (intégration): un membre data / tech-friendly peut s'en charger. Postman possède un langage spécifique pour les tests. Il peut tester des schémas (validation) comme des valeurs de réponses, ainsi naturellement que des codes HTTP de réponse; dans le cadre d'un non-dev, on se limitera à tester des codes HTTP et éventuellement quelques valeurs de réponse.
+- Responsabilité incombant à l'équipe de dev, ou à des testeurs professionnels:
+  - tests automatisés d'API (intégration): Ex:
+    - Supertest (avec Jest)
+    - OpenAPI + @openapi-contrib/openapi-schema-to-json-schema + Newman / Postman CLI
+    - Hurl (hurl.dev)
+  - tests automatisés d'UI (end-to-end): Ex.: Cypress
+  - tests automatisés d'UI (unitaires): Ex.:
+    - @testing-library/angular
+    - @testing-library/react
+    - Enzyme (pour React)
+  - tests automatisés de composants backend (unitaires): Ex.: Jest, Mocha
+
+##### Astuces de mises en place efficace de tests
+Automatisation de la maintenance des tests, avec le swagger comme source de vérité: Swagger + @openapi-contrib/openapi-schema-to-json-schema + Newman / Postman CLI + (éventuellement) léger script bash pour générer les tests à partir des JSON schémas
+
+Exécution des test dans le process de développement d'une feature:
+- avant commit (locaux, durée <30s - idéalement 10-15s)
+- avant push (locaux, durée < 5 min)
+- avant "Ready For Testing" (dans la CI/CD)
+
+Les tests unitaires sont les plus rapides à exécuter, et donc des candidats idéaux avant commit. Toutefois certains tests d'intégration peuvent également être mis en place à ce moment.
+
+On peut optimiser la durée d'exécution des tests (pour les tests pré-commit) en ne testant qu'une partie de la codebase. Par exemple, `jest --findRelatedTests <liste de fichiers>` auquel on transmet la liste des fichiers staged - en se servant de `git status --porcelain` ou de `lint-staged`.
+
+On peut difficilement être plus précis quant à la durée d'exécution des tests, dans la mesure où elle dépend également:
+- du nombre de tests, qui dépend de la complétude de la couverture de code souhaitée, mais aussi de la maturité de l'application testée.
+- de l'utilisation de mocks, et de leur nature: JSON, mock de DB (et donc phases de seeding et de cleaning), etc.
+- de la nature du projet: un test d'intégration sur une API HTTP mono-route sans DB qui ne nécessite qu'un ou 2 appels pour tester l'ensemble de ce qu'on veut tester est avantagée par rapport à un backend d'app plus classique.
+
+
+Dans tous les cas, on souhaite que les tests avant commit n'interfèrent pas avec le développement local. Ie on veut que les tests se lancent sur notre code modifié alors même qu'on continue à développer, sans devoir s'interrompre plus de 30s entre la sauvegarde du fichier et le moment où on peut effectivement tester manuellement le résultat de notre modification (logs d'API d'une requête, où manipulation de l'UI). 
 
 ## Techniques spécifiques
 ### Guidelines de dev
@@ -304,6 +361,8 @@ TODO
 #### Prisma
 TODO
 
+### Résumer efficacement un daily
+TODO
 
 ### Signaler un bug / un comportement étrange à un dev
 Nous travaillons avec des systèmes complexes. À l'instar des docteurs et du corps humain, nous et notre logiciel avons besoin de différents éléments de diagnostics pour poser un diagnostic de ce qui ne va pas, avant de le résoudre: radios, analyses sanguines et ausculataion au stéthoscope deviennent logs applicatifs, `console.log()` placés ponctuellement et debuggers.
@@ -328,19 +387,24 @@ Quelques exemples sur de gros projets open source:
 - https://github.com/angular/angular/issues/new/choose
 - https://github.com/vitejs/vite/issues/new/choose
 
-### Le boy scout
+### Le boy scout (hors Clean Code)
 On laisse le code dans un aussi bon état - voir meilleur - que celui dans lequel on l'a trouvé. Par exemple, si on trouve un comportement suspect:
 - on essaie de reproduire, comprendre et faire cesser ce comportement, si c'est à notre portée
 - on signale ce comportement à l'équipe, avec laquelle on collabore potentiellement en tant que lanceur de l'alerte initiale.
 
-### Le SoC pendant le dev d'une nouvelle feature
+### La SoC pendant le dev d'une nouvelle feature
 Cf `./new-feature-SoC.md`
 
+### La méthodologie Clean Code
+Cf `./clean-code.md`
+
+### Code reviews
+On en reparlera après avoir revu Clean Code. Ayez en tête l'image des "WTFs/min".
 
 ## Annexes
 ### Typescript
 #### Typescript norme le style d'écriture
-Voici deux  exemples:
+Voici deux exemples:
 ```
 interface IMyObj {
   warning: string;
@@ -388,4 +452,4 @@ const propertyTotalLengthDoesNotExistOnType: (add_total: boolean) => IMyOtherObj
 };
 
 ```
-Dans ces 2 cas, on ne peut pas ajouter une prop à notre objet intermédiaire, alors même que notre algorithme renverra dans 100% des cas un objet de type correct. C'est une limite du compilateur.
+Dans ces 2 cas, on ne peut pas ajouter une prop à notre objet intermédiaire, alors même que notre algorithme renverra dans 100% des cas un objet de type correct. C'est une limite du compilateur statique, qui prend en compte en retour de fonction le type de l'objet à sa création, et pas le type de l'objet au moment du retour comme on pourrait le penser intuitivement.
