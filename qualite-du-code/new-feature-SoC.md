@@ -1,8 +1,4 @@
 
-# Le SoC pendant le dev d'une nouvelle feature
-Ces exercices sont inspirés de l'exercice de refactor de Robert C Martins, dans "Clean Code", chapitre 16: "Refactoring serialdate". Uncle Bob adopte pour sa part une approche très différente, plus simple mentalement que les deux présentées ci-dessus mais tout aussi instructive.
-
-Les exemples suivants proposent différentes approches, toutes itératives.
 
 ## Introduction
 ### Le SoC, c'est le nerf de la guerre
@@ -32,6 +28,12 @@ Par exemple, `const points = updateStatusAndReprocessPoints({status})` se transf
 Une feature complexe: approche de la "pseudo-external-library".
 
 ### Introduction
+
+# Le SoC pendant le dev d'une nouvelle feature
+Ces exercices sont inspirés de l'exercice de refactor de Robert C Martins, dans "Clean Code", chapitre 16: "Refactoring serialdate". Uncle Bob adopte pour sa part une approche très différente, plus simple mentalement que les deux présentées ci-dessus mais tout aussi instructive.
+
+Les exemples suivants proposent différentes approches, toutes itératives.
+
 Objectif: représenter du JSON imbriqué dans une table HTML; passer de:
 ```
 const data = [{

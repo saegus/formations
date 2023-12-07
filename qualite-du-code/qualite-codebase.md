@@ -1,3 +1,8 @@
+##### Les question TODO:
+  - [microsrvice] -> servent à quoi ?
+  - 
+
+
 # Qualité du code et de la codebase
 Qu'est-ce qu'une codebase de qualité? À quoi est-elle utile/bénéfique? À quel point est-elle profitable pour le projet, en terme de temps & délais, d'organisation, d'argent? Quels efforts l'équipe doit-elle produire (formation des collaborateurs, tâches "moins plaisantes" comme fix manuel des règles de lingting ou écriture des tests, temps supplémentaire pris par ces tâches de routine, etc)?
 
