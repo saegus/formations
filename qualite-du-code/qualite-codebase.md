@@ -113,6 +113,7 @@ En bref, Typescript n'est pas adapté à tous les projets, et notamment pas à c
 - plus value diminuée (mais pas annulée) si on utilise des tests
 
 #### Automatisation de la CI
+// Note: on passe ce chapitre dans`qualité-process.md` > CI/CD & environnements de déploiement?
 Des flows populaires:
 - Git flow: préfixage de branches avec automatisations de commandes git: https://docs.github.com/en/get-started/quickstart/github-flow
 - One flow, une spin-off de Git flow
@@ -130,6 +131,7 @@ Je travaille souvent directement sur la branche de développement (`dev` chez mo
 - en travaillant directement sur dev, mon code est plus facilement - et donc plus souvent - synchronisé (dans un sens ou dans l'autre) avec le code commun distant. Mes merge conflicts sont donc moins gros. Si utilisé avec des petits commits, mes merges conflicts sont souvent plus simples à gérer.
 - le rebase rend certains merge conflicts plus longs à résoudre, d'autres moins.
 - le rebase met en valeur les commits aux messages bien rédigés.
+- TODO rebase et problème de branches avec différentes versions, supprimer des commits est dangereux
 - le rebase vient avec plus de commandes git. Par exemple des stashs systématiquement avant les pulls. Pour contrebalancer cette charge supplémentaire, on peut créer des scripts (disons des scripts bash, normalement compatibles avec tous les OS), qui vont lancer ces commandes pour nous (checkout/pull/checkout/(merge/rebase)/checkout/rebase/push par exemple). On peut en profiter pour leur donner un peu d'intelligence afin qu'ils automatisent toujours plus le flow.
 
 #### Automatisation de la CD
@@ -140,12 +142,12 @@ Docker est un peu hors scope, donc on va passer rapidement dessus.
 
 C'est un compagnon idéal pour la portabilité (compatibilité), avec son bonus devops: environnements d'exécution uniformes pour tout les devs ainsi que pour les environnements déployés, ce qui permet d'éviter les classiques problèmes de différences d'environnements.
 
-Pour un tuto sur docker, cf la dormation que j'ai donné en début d'année.
+Pour un tuto sur docker, cf la formation que j'ai donné en début d'année.
 
 ### Architecture
 Définition (https://www.cnrtl.fr/definition/architecture): Principe d'organisation d'un ensemble, agencement, structure.
 
-On peut inférer que l'architecture informatique est la manière de structurer un système informatique, mais aussi le code qui leui sert de base.
+On peut inférer que l'architecture informatique est la manière de structurer un système informatique, mais aussi le code qui lui sert de base.
 
 L'architecture informatique est comme l'architecture classique ou l'architecture d'intérieur. Il s'agit de décider de la disposition des pièces et meubles les uns par rapport aux autres, car chaque chose a une place: les chaussettes propres et sèches vont a priori dans la chambre, les couverts à la cuisine, etc. Et ceci car nos chaussettes servent à nous habiller, nos couverts à manger, etc. Dans notre codebase aussi, les bouts de code dont l'objectif, l'environnement (dont domaine technique/métier) et/ou les dépendances sont communes iront à des endroits similaires.
 
@@ -169,22 +171,23 @@ Note: "Pattern" (motif en français) désigne également une forme (simple) d'ar
 - Microservices
 - MVVM
 - TDD, BDD
+- CRUD
 - Flux
 - LAMP
 
 Pour une liste plus complète: https://fr.wikipedia.org/wiki/Cat%C3%A9gorie:Architecture_logicielle
 
 #### Système de classement des normes architecturales
-Dans le domaine du développeur comme dans celui des métiers de la maison, il y a plusieurs niveaux / grains d'action des règles d'architectures:
+Dans le domaine du développement logiciel comme dans celui des métiers de la maison, il y a plusieurs niveaux / grains d'action des règles d'architectures:
 - gros grain: l'architecture d'urbanisme (ça s'appelle comme ça en informatique comme en architecture de ville).
 - moyen-gros grain: l'architecture inter-exécutables, comparable à l'architecture d'un complexe (hôtelier), d'un quartier résidentiel ou d'un immeuble.
-- moyen grain: l'architecture intra-exécutables, tel que l'architecture des pièces de l'appartement: l'emplacement des fenêtres, du garage, de l'atelier, du balcon, etc. En informatique, il s'agit de l'arborescence de fichiers, de ce qu'on pet dans chaque fichier et de comment on le nomme.
+- moyen grain: l'architecture intra-exécutables, tel que l'architecture des pièces de l'appartement: l'emplacement des fenêtres, du garage, de l'atelier, du balcon, etc. En informatique, il s'agit de l'arborescence de fichiers, de ce qu'on met dans chaque fichier et de comment on le nomme.
 - grain fin: l'architecture intra-fichier, qu'on peut comparer à l'architecture d'interieur (mais aussi aux placements de sculptures et bas-reliefs sur une façade extérieure). On y parle notamment de nommage des fonctions et agencement de celles-ci entre elles. 
 - grain très fin: l'architecture intra-fonction: nommage des variables, algorithmie, aération du code, taille des fonctions, ...
 
 ![Les différentes granularités depuis VSCode](./granularites-vscode.png)
 
-Ce moyen de classer les règles/normes d'architecture n'est bien sûr pas le seul, mais c'est celui que je vous propose d'utiliser ici. Une architecture va être un ensemble de ces règles, à un ou plusieurs niveaux. Par exemple, la méthodologie 12FA agit (au moins) aux granularités projet et composant.
+Ce moyen de classer les règles/normes d'architecture n'est bien sûr pas le seul, mais c'est celui que je vous propose d'utiliser ici. Une architecture va être un ensemble de ces règles, à un ou plusieurs niveaux. Par exemple, la méthodologie 12FA agit (au moins) aux granularités projet et exécutable.
 
 Remarquez que si je ne parle pas du niveau "architecture intra-objet mais inter-fonction", c'est totalement volontaire:
 - je n'aime pas l'OOP (parce que j'ai vu trop de codes obscurs en OOP et que j'aime bien le stateless), et m'en passe dès que je peux (c'est à dire pas loin de tout le temps)
@@ -204,14 +207,25 @@ Un composant exécutable d'un projet est un exécutable prévu en fonctionnement
 Ici on est au plus haut niveau qui concerne un projet en particulier.
 Exemple: Docker-Compose File (DCF), ressource (= serveur, type P1v3) & container Azure, microservices, event-driven architecture (EDA), twelve-factors app (12FA), etc.
 
-###### REx
-On parle souvent de microservices: c'est loin d'être systématiquement une bonne idée, par rapport à du monolithique... Attention à la lourdeur des interfaces de communication entre les différents composants (y compris au niveau de la gestion des erreurs, sérialisation d'éléments supplémentaires, toussa). L'expérience eCSAR me fait estimer à environ 3 semaines sur 34 le temps perdu par le fait d'avoir choisi une architecture microservices plutôt que monolithique (le choix n'est pas de moi), soit environ 9% du temps du projet.
+###### Un mot sur les microservices
+Je vais en parler uniquement parce que c'est un peu comme l'amour: tout le monde en parle, chacun voit midi à sa porte, ça a l'air génial; mais la réalité (du nombre de célibataires, de la misère affective, ...) est bien souvent occultée, et si on n'a pas une bonne hygiène à ce niveau les mauvaises surprises ont tendance à se multiplier.
+
+L'architecture en microservices est difficile à définir (cf métaphore précédente), mais on peut considérer ça comme un genre de SOA (https://en.wikipedia.org/wiki/Service-oriented_architecture). Leur principe est d'être faiblement couplés, et notamment le déploiement d'un changement (ex. montée en version d'une dépendance) dans un microservice n'impacte aucunement le fonctionnement des autres microservices de l'écosystème.
+
+Les avantages comme les inconvénients sont nombreux (cf https://en.wikipedia.org/wiki/Microservices); si je devais n'en garder qu'un de chaque: ils permettent de distribuer le développement d'un grand projet entre plusieurs équipes, mais ont des surcoûts en termes de divers surcharges cognitives, mais aussi de temps. En bref, c'est loin d'être systématiquement une bonne idée, par rapport à du monolithique.
+
+Un REx: Attention à la lourdeur des interfaces de communication entre les différents composants (y compris au niveau de la gestion des erreurs, sérialisation d'éléments supplémentaires, toussa). L'expérience eCSAR me fait estimer à environ 3 semaines sur 34 le temps perdu par le fait d'avoir choisi une architecture microservices plutôt que monolithique (le choix n'est pas de moi), soit environ 9% du temps du projet.
 
 De l'event-driven pour la communication entre les composants est aussi possible et assez scalable (kafka, RabbitMQ, ...), même si ça nécessite des connaissances / une expérience spécifique(s) pour éviter de faire du code spaghetti - et donc une équipe formée à cette manière de faire.
 
 ##### À l'intérieur du composant exécutable
 On parle ici essentiellement de l'arborescence des fichiers, et de quel fichier est sensé contenir quel genre de code.
 Exemple: MVC, MVVM, DDD, Yelling Architecture, Clean Architecture, Onion Architecture, Ports & Adapters, data/network/... layer, etc.
+
+À propos du DDD: un article en français: https://alexsoyes.com/ddd-domain-driven-design/
+
+Le DDD est un grand ami des microservices, car son découpage des entités du modèle est idéal pour faire de chacune un microservice.
+
 
 ##### À l'intérieur du fichier
 ###### Clean Code
@@ -225,9 +239,9 @@ Voici une sélection toute personnelle de quelques principes de Clean code, pour
 - formatage: taille de fichier & aération du code (chap. 5)
 - itérations courtes (dont tâches) et refactoring régulier (chap. 14)
 
-Les parties de formation `clean-code.md` et `new-feature-SoC.md` qui suivront rentreront plus dans le détail et dans le concret / l'illustration, respectivement. 
+Les parties de formation `clean-code.md`, `new-feat-timeline-naming.md` et `new-feature-SoC.md` qui suivront rentreront plus dans le détail et dans le concret / l'illustration, respectivement. 
 
-##### REx
+##### REx // TODO au niveau de l'exécutable ?
 Ex: si différentes temporalités, de l'event-driven est intéressant.
 
 Ex: Pour des cas de traçabilité, penser à l'event sourcing.
@@ -241,8 +255,8 @@ De manière générale, faire du SoC au niveau des fichiers (1 objectif max par 
 - en séparant différents modules non-métier assez communs dans des dossiers dédiés: routage, authentification, scripts d'initialisation, gestion des erreurs, éventuels appels réseau, ...
 - L'idée de séparer le code métier du code "technique" est inspirée de Clean Architecture(d'autres archis le font également), qui veut séparer le code "d'infrastructure" du code "métier"
 - Au coeur de la réflexion également: une architecture connue est plus à même d'être maîtrisée par toute l'équipe / les nouveaux arrivants, et donc moins de risque de la casser.
-- j'évite au possible le code stateful - et donc les classes. Il y en a uniquement aux endroits où elles sont significativement plus adaptées que du code non-objet, comme par exemple une API nécessitant des credentials, que je vais appeler un certain nombre de fois, potentiellement éloignés de là où je lui passe ses credentials.
-- Pour le nommage de mes variables et noms de fonctions, j'utilise notamment (mais pas que) le language ubuquitaire tel que défini par le DDD - disons plus simplement le "langage métier". Ils doivent révéler l'intention du développeur; par exemple, ça permet à celui qui passera ensuite de déterminer si il doit plutôt modifier cette fonction (et de quelle manière) ou en créer une nouvelle.
+- j'évite au possible le code stateful (fonctions pures) - et donc les classes. Il y en a uniquement aux endroits où elles sont significativement plus adaptées que du code non-objet, comme par exemple une API nécessitant des credentials, que je vais appeler un certain nombre de fois, potentiellement éloignés de là où je lui passe ses credentials.
+- Pour le nommage de mes variables et noms de fonctions, j'utilise notamment (mais pas que) le language ubiquitaire tel que défini par le DDD - disons plus simplement le "langage métier". Ils doivent révéler l'intention du développeur; par exemple, ça permet à celui qui passera ensuite de déterminer si il doit plutôt modifier cette fonction (et de quelle manière) ou en créer une nouvelle.
 - loi de demeter: une fonction ne dépend pas des implémentations des autres fonctions qu'elle appelle. Uniquement de la processe du résultat délivré, qu'on infère via le nom de la fonction. 
 - fonctions pures: mes fonctions sont au possible sans effets de bords. Une bonne partie des fonctions d'un dev junior peuvent s'inspirer des différents tutos sur l'immutabilité en JS pour voir comment faire.
 - CQRS revisité V1: mes fonctions sont au possible immutables, car les effets de bords ne sont pas très compatibles avec la qualité.
@@ -252,15 +266,23 @@ De manière générale, faire du SoC au niveau des fichiers (1 objectif max par 
   * internes, en les créant, les accédant et les modifiant 
   * passées en argument, mais ne les modifient pas et retournent une valeur ("Query").
   * passées en argument, les modifient mais ne retournent pas de valeur ("Command"). Cette dernière catégorie doit être restreinte au minimum, cf fonctions pures.
+- early returns: cf https://medium.com/swlh/return-early-pattern-3d18a41bba8
 
 Bref, je mange - sans complexe - à tous les rateliers (de l'architecture logicielle) ^^'
+
+##### Conclusion
+Lorsque vous découvrez une nouvelle architecture - et d'autant plus uand elle vous fascine, posez-vous ces questions:
+- Qu'est-ce qu'elle est exactement? qu'est-ce qu'elle n'est pas? Plus concrètement, en quoi est elle proche - et en quoi difère-t-elle - des autres architectures que vous connaissez?
+- Dans quel cas est-ce une bonne idée de la mettre en place? Quels en sont les bénéfices attendus? 
+- Quels en sont les inconvénients? Quels risques et challenges pose-t-elle? et quels sont les sont les précautions qu'on peut prendre pour maîtriser ces risques?
+
 
 ### Patterns & anti-patterns
 Il s'agit d'une sélection minimaliste de divers motifs architecturaux que j'ai régulièrement croisé dans mes lectures de code, et/ou qui sont particulièrement connus.
 Ces motifs ont également une importance supérieure à beaucoup d'autres de même niveau (sans vouloir rabaisser les autres), et sont relativement faciles à corriger.
 
 Attention: même si cette liste est un bon point de départ, elle est insuffisante pour écrire du bon code. Je vous suggère dès votre compréhension de ces motifs de:
-- Apprenez le JS. Tout le monde n'a pas l'air de connaître Array.reduce() / Array.map() / Array.filter() de la librairie standard dans la team, c'est chaud (problématique) si vous faites du JS depuis plus d'un an. On parle d'ES2015 hein, sorti il y a environ 8 ans. Pour les méthodes d'Array: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array; et pour Object: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
+- Apprenez le JS. Tout le monde n'a pas l'air de connaître Array.reduce() / Array.map() / Array.filter() / Object.assign() de la librairie standard dans la team, c'est chaud (problématique) si vous faites du JS depuis plus d'un an. On parle d'ES2015 hein, sorti il y a environ 8 ans. Pour les méthodes d'Array: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array; et pour Object: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
 - nommez correctement vos variables (dont fonctions)
 - lisez Clean Code
 
@@ -274,6 +296,19 @@ Attention: même si cette liste est un bon point de départ, elle est insuffisan
 
 Pour plus de code smells, allons voir rapidement Clean Code, chapitre 17: Smells and Heuristics.
 
+#### Validation des inputs (et "sanitization")
+À ne pas confondre avec la validation de formulaires. Ici on va parler spécifiquement de validation côté back, Angular et React faisant un très bon travail de sanitization des inputs.
+
+Il s'agit de sécurité: De la même manière qu'on ne va autoriser que certains utilisateurs qui correspondent à certains critères ("est connecté") dans certains espaces de notre app, on veut également que les inputs utilisateurs (GET params, body, headers, etc.) répondent à certains critères, avant d'entammer toute autre forme de traitement.
+
+La validation correspond à n'importe quel genre de critère - même si plutôt orienté métier. Par exemple, un mot de passe entre 8 et 20 caractères, avec des minuscules et des majuscules.
+
+La "sanitization" est plutôt orienté sécurite: échappement de caractères, longueur maximum du champ (pour éviter les DoS via des champs trop gros pour être traités efficacement), etc.
+
+Quelques validators populaires sur NPM: AJV (JSON schema), Joi, Yup, Zod, Validator, json-schema.
+
+OWASP en parle rapidement ici, sous le prisme de la sécurité: https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
+
 #### Tests
 ##### Raisons de tester
 - le métier a besoin de s'assurer de non-régressions fonctionnelles:
@@ -282,7 +317,7 @@ Pour plus de code smells, allons voir rapidement Clean Code, chapitre 17: Smells
 - l'équipe de dev veut:
   - valider le schéma du retour des composants logiciels "finaux" (front, back) (tests sur le typage)
   - garantir l'uptime des composants logiciels finaux
-  - garantir l'uptime des composants logiciels intermédiaires (composants / bibiliothèques / services consommés par les fronts & backs monolithiques d'apps)
+  - garantir l'uptime / respect du contrat des composants logiciels intermédiaires (composants / bibiliothèques / services consommés par les fronts & backs monolithiques d'apps)
   - de la documentation des composants qu'elle utilise
   - inscrire certains composants / bibiliothèques sur la durée
 
@@ -326,8 +361,11 @@ On peut difficilement être plus précis quant à la durée d'exécution des tes
 - de l'utilisation de mocks, et de leur nature: JSON, mock de DB (et donc phases de seeding et de cleaning), etc.
 - de la nature du projet: un test d'intégration sur une API HTTP mono-route sans DB qui ne nécessite qu'un ou 2 appels pour tester l'ensemble de ce qu'on veut tester est avantagée par rapport à un backend d'app plus classique.
 
-
 Dans tous les cas, on souhaite que les tests avant commit n'interfèrent pas avec le développement local. Ie on veut que les tests se lancent sur notre code modifié alors même qu'on continue à développer, sans devoir s'interrompre plus de 30s entre la sauvegarde du fichier et le moment où on peut effectivement tester manuellement le résultat de notre modification (logs d'API d'une requête, où manipulation de l'UI). 
+
+##### Exemples de tests automatisés
+##### Intégration: Jest + supertest
+TODO
 
 ## Techniques spécifiques
 ### Guidelines de dev
@@ -362,7 +400,12 @@ TODO
 TODO
 
 ### Résumer efficacement un daily
-TODO
+- Ce qui se conçoit clairement s'énonce clairement.
+- Technique du rubber duck
+- pas de vocabulaire technique non défini
+- résumer fonctionnellement:
+  - notre état d'avancement actuel en 1 ou 2 phrases
+  - les difficultés actuellement rencontrées (je ne sais pas faire, je dépends de qqn, ça prends plus de temps que prévu, ...)
 
 ### Signaler un bug / un comportement étrange à un dev
 Nous travaillons avec des systèmes complexes. À l'instar des docteurs et du corps humain, nous et notre logiciel avons besoin de différents éléments de diagnostics pour poser un diagnostic de ce qui ne va pas, avant de le résoudre: radios, analyses sanguines et ausculataion au stéthoscope deviennent logs applicatifs, `console.log()` placés ponctuellement et debuggers.
@@ -392,14 +435,38 @@ On laisse le code dans un aussi bon état - voir meilleur - que celui dans leque
 - on essaie de reproduire, comprendre et faire cesser ce comportement, si c'est à notre portée
 - on signale ce comportement à l'équipe, avec laquelle on collabore potentiellement en tant que lanceur de l'alerte initiale.
 
+### Les early returns
+Clean Code n'en parle pas, c'est pourtant une excellente technique pour augmenter la lisibilité des fonctions en en linéarisant le flow d'exécution.
+
+Une bonne explication: https://medium.com/swlh/return-early-pattern-3d18a41bba8
+
+### La double écriture snake_case/camlCase
+Comme vous l'avez probablement remarqué à mon style d'écriture, je nomme les variables à la fois en camlCase et en snake_case. Notre langage (le JS) est un peu particulier, et notamment une fonction peut être stockée dans une variable. Utiliser le snake case pour les variables non-fonctions me permet de distinguer d'un coup d'oeil si la variable contient une fonction ou quelque chose de non exécutable.
+
+Une conséquence bien pratique de ce style d'écriture lorsqu'on a du mal à trouver des noms de variable est qu'on peut utiliser la technique de l'object retourné, et écrire par ex.:
+`const only_ings_with_not_null_qty = onlyIngsWithNotNullQTY(obj_a_transformer)`. Dans ce cas, on a non pas à trouver 2 noms de variables mais un seul. 2x moins de travail donc.
+
+J'en profite au passage pour un petit rappel: ces conventions de nommage, en dehors du JS, dépendent plutôt des langages: camlCase pour .NET, Java, C++ et d'autres, snake_case pour Bash, PHP, Python, C et d'autres.
+
+Toutefois je considère les absolutistes de l'une et l'autre des méthodes de nommage comme ceux qui s'accrochent à une architecture, une techno ou un langage en particulier, en affirmant qu'il est meilleur que le reste: avec méfiance, dédain - et parfois pitié. Soyez curieux et ouverts d'esprit, et méfiez-vous de ceux qui ne le sont pas.
+
+Pour en revenir
+
 ### La SoC pendant le dev d'une nouvelle feature
 Cf `./new-feature-SoC.md`
+
+### Nommer ses variables
+Cf `./nommer-une-variable.md`
+
+### Planifier la réalisation d'une US
+Cf `./planification-US.md`
 
 ### La méthodologie Clean Code
 Cf `./clean-code.md`
 
 ### Code reviews
 On en reparlera après avoir revu Clean Code. Ayez en tête l'image des "WTFs/min".
+TODO
 
 ## Annexes
 ### Typescript

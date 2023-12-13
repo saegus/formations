@@ -9,7 +9,15 @@ Clean code est un ensemble de règles établies empiriquement par Robert C. Mart
 
 On parle probablement de la personne la plus célèbre dans la programmation informatique. Personnellement je n'aime pas la POO (le côté stateful des classes me donne des boutons), mais ses réalisations, son apport à un code de qualité à travers le monde et sa popularité forcent le respect.
 
-Tous les excellents développeurs que j'ai connu connaissent son surnom par coeur, et SOLID est un acronyme dont ils connaissaient l'existence avant leur remise de diplôme; être développeur et ne pas connaître ces deux termes, c'est comme être biologiste et ne pas connaître Darwin et la théorie de l'évolution: vous n'irez pas loin.
+Les excellents développeurs que j'ai connu connaissent son surnom par coeur, et SOLID est un acronyme dont ils connaissaient l'existence avant leur remise de diplôme; être développeur et ne pas connaître ces deux termes, c'est comme être biologiste et ne pas connaître Darwin et la théorie de l'évolution: vous n'irez pas loin.
+
+Le livre Clean Code s'articule autour de 4 grandes phases:
+1. Bases théoriques: pourquoi parler de code propre (le danger du code bordélique), comment donner un sens à ce qu'on va voir par la suite (Intro et 1e chapitre)
+2. Règles (chapitres 2 à 8)
+3. Architecture et techniques de refactoring (chapitres 9 à 16)
+4. Indicateurs de problèmes dans le code (et conseils précis d'amélioration de la qualité) (chapitre 17)
+
+On a déjà parlé d'une partie des bases théoriques dans `qualite-codebase.md`.
 
 ## Le besoin derrière Clean Code
 Je vous en ai parlé précédemment lorsque j'ai parlé de ce qui arrivait lorsqu'on a du mauvais code, je ne reviens donc pas dessus :-)
@@ -20,11 +28,20 @@ Comme pour l'atelier, on va se référer à https://github.com/ryanmcdermott/cle
 Je réitère ici les avertissements faits précédemment:
 Les principes issus de cette page Github sont pour partie des interprétations claires du livre de Clean Code original, et d'autres sont un peu plus sujettes à concurrence, ou sont mal adaptables au contraintes de nos environnement de développement (JS, NodeJS, ...). 
 
+Un conseil tout personnel: choisissez des limites de règles (tailles de fonctions, de lignes) qui vous sortent (au moins un peu) de votre zone de confort. Pour bien les calibrer: ces règles ne vous servent pas à votre lecture et à votre analyse au moment où vous êtes frais et votre cerveau tourne à plein régime, mais au moment où vous avez longuement travaillé, avez bien bu et/ou fait une nuit blanche la veille, vous êtes malade, etc. C'est dans ces moments où on a le cerveau le plus embué qu'on perd les réflexes (parfois inconscients) d'écriture de qualité qu'on avait avant ainsi que nos capacités à détecter les problèmes potentiels - et donc à les corriger. Lorsque vous pensez les règles de Clean Code, choisissez celles qui limitent les erreurs que vous feriez dans cet état-là, à la lecture du code comme à son écriture.
+
 ## En complément
-Il vous sera plus facile de trouver des noms de variable si vous connaissez:
-- le "bounded context" (au sens du DDD)
-- du vocabulaire de designer UX/UI: "popup", "navbar", "header principal", ...
-- du vocabulaire technique: "reducer", "factory", ...
+Sur internet il fleurit également des déclinaisons de clean code pour des technos. L'avertissement est toujours de mise ici, surtout que je suis en incapacité de juger les conseils spécifiques au technos que je connais pas, ou mal.
+- Angular.js:
+  - https://github.com/lubkoKuzenko/angular-clean-code
+  - https://itnext.io/clean-code-checklist-in-angular-%EF%B8%8F-10d4db877f74
+  - https://www.adservio.fr/post/clean-code-angular-tips-suggestions
+  - https://www.freecodecamp.org/news/best-practices-for-a-clean-and-performant-angular-application-288e7b39eb6f/
+- React.js:
+  - https://www.turing.com/kb/writing-clean-react-code
+  - https://itnext.io/7-react-clean-code-tips-you-should-know-846b8108fc46
+  - (pas vraiment du clean code mais bon) https://dev.to/sathishskdev/part-4-writing-clean-and-efficient-react-code-best-practices-and-optimization-techniques-423d
+  - (moitié clean code mais bon) https://www.freecodecamp.org/news/how-to-write-cleaner-react-code/
 
 ## Mise en place
 Objectif: passer Clean Code de cette formation à votre travail de tous les jours.
