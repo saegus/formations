@@ -12,7 +12,7 @@ Cette formation ne rentre pas du tout dans le détail de Clean Code, et se veut 
 ## Introduction
 ### Quoi?
 Une série de bonnes pratiques pour rendre son code lisible, devenues populaires vers 2015.
-Ça part du livre éponyme de Martin C. Flowers, devenu une bible avec le développement du mouvement (éponyme lui aussi).
+Ça part du livre éponyme de Robert C. Martin, devenu une bible avec le développement du mouvement (éponyme lui aussi).
 
 La plupart de ces pratiques ne sont pas liées à un paradigme de programmation en particulier, et sont adaptables à tous les langages.
 

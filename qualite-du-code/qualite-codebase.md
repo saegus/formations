@@ -115,7 +115,7 @@ En bref, Typescript n'est pas adapté à tous les projets, et notamment pas à c
 #### Automatisation de la CI
 // Note: on passe ce chapitre dans`qualité-process.md` > CI/CD & environnements de déploiement?
 Des flows populaires:
-- Git flow: préfixage de branches avec automatisations de commandes git: https://docs.github.com/en/get-started/quickstart/github-flow
+- Git flow: préfixage de branches avec automatisations de commandes git: https://danielkummer.github.io/git-flow-cheatsheet/index.fr_FR.html
 - One flow, une spin-off de Git flow
 - Github flow: il s'agit d'un flow à features requests: https://docs.github.com/en/get-started/quickstart/github-flow
 - Gitlab flow: ressemble un peu au Github flow
@@ -207,7 +207,7 @@ Un composant exécutable d'un projet est un exécutable prévu en fonctionnement
 Ici on est au plus haut niveau qui concerne un projet en particulier.
 Exemple: Docker-Compose File (DCF), ressource (= serveur, type P1v3) & container Azure, microservices, event-driven architecture (EDA), twelve-factors app (12FA), etc.
 
-###### Un mot sur les microservices
+###### Un mot sur les microservices et la SOA
 Je vais en parler uniquement parce que c'est un peu comme l'amour: tout le monde en parle, chacun voit midi à sa porte, ça a l'air génial; mais la réalité (du nombre de célibataires, de la misère affective, ...) est bien souvent occultée, et si on n'a pas une bonne hygiène à ce niveau les mauvaises surprises ont tendance à se multiplier.
 
 L'architecture en microservices est difficile à définir (cf métaphore précédente), mais on peut considérer ça comme un genre de SOA (https://en.wikipedia.org/wiki/Service-oriented_architecture). Leur principe est d'être faiblement couplés, et notamment le déploiement d'un changement (ex. montée en version d'une dépendance) dans un microservice n'impacte aucunement le fonctionnement des autres microservices de l'écosystème.
@@ -233,9 +233,11 @@ Clean code est un ensemble de règles établies empiriquement par Robert C. Mart
 
 Voici une sélection toute personnelle de quelques principes de Clean code, pour que vous puissiez vous imaginer de quoi il retourne:
 - noms des variables (dont fonctions) (chap. 2)
-- fonctions (chap. 3)
+- fonctions (chap. 3).
   Comme je l'ai dit à plusieurs d'entre vous à une formation précédente, une fonction de 100+ lignes ça n'existe juste pas, et une fonction de 60+ lignes c'est rare et spécifique au JSX; pour le JS, la moyenne devrait être à 20-30 lignes, et le max à 40. Aller au-delà de cette ligne, c'est très probablement intriquer différents objectifs, et c'est le début d'un code spaghetti, ou d'un God Object.
-- commentaires (chap. 4)
+- commentaires (chap. 4).
+  En résumé, un bon commentaire est un commentaire que l'on n'a pas besoin d'écrire (parce que le code est clair à la lecture).
+  <img src="./code-comments-vs-descriptive-code.avif" width="60%" style="margin: auto; display: block">
 - formatage: taille de fichier & aération du code (chap. 5)
 - itérations courtes (dont tâches) et refactoring régulier (chap. 14)
 
@@ -259,10 +261,8 @@ De manière générale, faire du SoC au niveau des fichiers (1 objectif max par 
 - Pour le nommage de mes variables et noms de fonctions, j'utilise notamment (mais pas que) le language ubiquitaire tel que défini par le DDD - disons plus simplement le "langage métier". Ils doivent révéler l'intention du développeur; par exemple, ça permet à celui qui passera ensuite de déterminer si il doit plutôt modifier cette fonction (et de quelle manière) ou en créer une nouvelle.
 - loi de demeter: une fonction ne dépend pas des implémentations des autres fonctions qu'elle appelle. Uniquement de la processe du résultat délivré, qu'on infère via le nom de la fonction. 
 - fonctions pures: mes fonctions sont au possible sans effets de bords. Une bonne partie des fonctions d'un dev junior peuvent s'inspirer des différents tutos sur l'immutabilité en JS pour voir comment faire.
-- CQRS revisité V1: mes fonctions sont au possible immutables, car les effets de bords ne sont pas très compatibles avec la qualité.
-  * soit des fonctions "de haut niveau", orchestratrices d'autres fonctions, 
-  * soit des fonctions qui agissent sur un objet et un objectif défini (utilisant directement ou indirectement au plus un import ou une famille d'imports - comme les modèles)
-- CQRS revisité V2 + bonus fonctions pures: au possible, mes fonctions agissent sur des variables:
+- immutabilité: mes fonctions sont au possible immutables, car les effets de bords ne sont pas très compatibles avec la qualité.
+- CQRS revisité V2: au possible, mes fonctions agissent sur des variables:
   * internes, en les créant, les accédant et les modifiant 
   * passées en argument, mais ne les modifient pas et retournent une valeur ("Query").
   * passées en argument, les modifient mais ne retournent pas de valeur ("Command"). Cette dernière catégorie doit être restreinte au minimum, cf fonctions pures.

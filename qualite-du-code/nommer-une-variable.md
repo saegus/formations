@@ -1,6 +1,7 @@
 # Nommer une variable
 ## Préambule
 On peut décomposer le nom d'une variable comme on décompose un mot en français: avec un radical (une base) d'une part, et des préfixes et suffixes "modificateurs" d'autre part.
+Appliquer des modificateurs à un radical est plutôt aisé dès lors qu'on a appris du vocabulaire; trouver le (bon) radical, c'est une autre paire de manches, qui nécessite certaines formes de créativité.
 
 ## Quelques méthodes
 Il vous sera plus facile de trouver des noms de variable si vous connaissez:
@@ -17,13 +18,22 @@ Par exemple, `const points = updateStatusAndReprocessPoints({status})` se transf
 À utiliser quand on manque d'inspiration.
 
 ### Les cas particuliers
-- Une fonction sensée renvoyer un booléen sera plus volontiers préfixée de "is", "should", "can", "must", etc. Exemple: `isEven`, `canHandleAzertySpecialObjs`.
+#### Bonnes pratiques
+- Une fonction sensée renvoyer un booléen sera plus volontiers préfixée de "is", "should", "can", "must", "check", etc. Exemple: `isEven`, `canHandleAzertySpecialObjs`.
 - Les contrôleurs seront préfixés du verbe HTTP utilisé pour les appeler: `postUser`, `getAttachedBooster`, etc.
 - Les vues sont suffixées par `view`, `panel`, etc.
 - Les layouts sont suffixées par `layout`.
 - Les fonctions appliquant le pattern "factory" sont suffixées par "Factory". Pour des exemples d'utilisation de ce pattern, cf le code d'eCSAR.
 - Les reducers (de Array.reduce, de Redux, de useState(), etc) sont suffixées par "Reducer". Pour des exemples, cf le code d'eCSAR.
+- Les fonctions qui ont pour but d'être un callback à une autre fonction se fait suffixer par "Callback" (tant qu'on ne peut pas lui touver un nom plus sémantiquement significatif)
 - on utilise le pluriel (`extractRawMaterials` plutôt que `extractRawMaterial`) quand on retourne une collection d'éléments (tableau, objet composé de plus d'un attribut "important", etc); et vice versa.
+
+#### Mauvaises pratiques
+Un qualificatif, si il est utiliseé trop souvent, perd son atout principal, qui est de faire la différence avec d'autres codes, de rendre la fonction unique et son sens particulier simple à saisir (en effet si 2 fonctions font la même chose, pourquoi ne pas garder la première et l'importer à l'endroit où on veut utiliser la 2e?). C'est valable également pour les qualificatifs vus ci-dessus.
+
+Au-delà de ce principe, il y a des noms/prefixes/suffixes/etc qui sont sur-utilisés ou polysémiques (plusieurs sens possibles; autre formulation: chacun y voit midi à sa porte), et donc à éviter d'utiliser pour la clarté de votre code. On a notamment:
+- "service": Est-ce un wervice au sens de la SOA (et donc un exécutable/conteneur)? Au sens du DDD? Au sens d'un simple module chargé par un framework d'injection de dépendances, comme j'ai déjà pu le voir? etc.
+- "handler" & "listener": si votre code base plus d'une partie de son architecture (et en EDA il y en a beaucoup) sur ces concepts, il vaut mieux oublier ces suffixes pour adopter des mots qui les différencient des autres utilisations.
 
 #### Clean Code: rappels
 Meaningful names:
@@ -35,8 +45,8 @@ Meaningful names:
 - Avoid Encodings
 
 Code Smells:
-G19: Use Explanatory Variables
-G20: Function Names Should Say What They Do
+- G19: Use Explanatory Variables
+- G20: Function Names Should Say What They Do
 
 ## Problème
 Clean Code - ainsi que la section "Nommage des fonctions" ci-dessus - nous dit comment ne pas mal nommer une variable - et nous aide à ajouter des préfixes/sufixes pour moduler le sens d'une variable, mais nous donne assez peu d'indications pour booster notre inspiration à trouver des noms.
@@ -142,7 +152,7 @@ Il existe plusieurs manières de trouver les noms des fonctions, qui dépendent 
 
 ### Méthodes d'écriture intra-fonction
 #### Méthode analytique
-Avant de donner des noms à nos méthodes/fonctions, je vais écrire leur contenu; je déciderai ensuite de quel nom leur donner, en fonction de ce contenu.
+On va définir l'interface dont on a besoin - en écrivant des prototypes de fonctions avec leurs noms et leurs agencements, puis on écrira le corps des fonctions.
 
 On va (arbitrairement) commencer par `methodePourAvoirLeRecapitulatif`: définir l'output est normalement assez aisé.
 
@@ -200,12 +210,13 @@ const fonctionDeGénérationDuRecapitulatif = ({
 
 Essayons de paraphraser le rôle de `fonctionDeGénérationDuRecapitulatif`, en nous mettant à sa place:
 - fonctionnellement:
-  - je génère - et retourne - le récapitulatif à partir de la durée du nombre de RMs et du nombre de refcoms
+  - je génère - et retourne - le récapitulatif à partir de la durée, du nombre de RMs et du nombre de refcoms
   - je génère - et retourne - le récapitulatif à partir d'informations générées par l'exécution des tâches
 - techniquement:
   - je rend un template (a priori une template string) en l'hydratant avec des informations
 
 Ce mini-brainstorming nous permet d'obtenir entre autres `renderRecap`, `renderTasksExecutionSummary`, `renderSummary`, `generateRecap`, etc.
+
 On applique Clean Code en éliminant le contexte inutile, et donc adieu `renderTasksExecutionSummary`.
 
 Le grand gagnant: `renderRecap` (notamment car on est sur une fonction à la fois technique et métier et qu'on utilise déjà "recap" pour parler du même objet dans `recapMsg`). On a donc:
@@ -289,7 +300,8 @@ retourneLaDuréeCalculée (start_date, end_date) {
   return durée;
 }
 ```
-Par expérience de développeur, la durée est souvent exprimée en plusieurs unités dans le code (au moins secondes et millisecondes); il me semble pertinent de préciser cette unité, pour le prochain développeur qui devrai manipuler cette variable. L'attribut de classe de durée peut donc s'appeler `duration_ms`. La durée à l'intérieur de `retourneLaDuréeCalculée`, peut soit s'appeler de la même manière, soit `duration`; on peut se permettre ça car on peut lire directement au-dessus l'algorithme qui génère la durée, et déduire - car on connaît la librairie standard de JS - qu'il s'agit de millisecondes.
+Par expérience de développeur, la durée est souvent exprimée en plusieurs unités dans le code (au moins secondes et millisecondes); il me semble pertinent de préciser cette unité, pour le prochain développeur qui devra manipuler cette variable. L'attribut de classe de durée peut donc s'appeler `duration_ms`.
+La durée à l'intérieur de `retourneLaDuréeCalculée`, peut soit s'appeler de la même manière, soit `duration`; on peut se permettre ça car on peut lire directement au-dessus l'algorithme qui génère la durée, et déduire - car on connaît la librairie standard de JS - qu'il s'agit de millisecondes.
 
 On obtient donc:
 ```

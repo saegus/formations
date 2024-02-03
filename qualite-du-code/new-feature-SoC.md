@@ -292,6 +292,25 @@ Arrivez-vous à bien repérer les différents domaines? et le code "glue" entre 
 
 Note: parfois on a envie de nommer "domaine" un code glue en lui assignant un objectif précis (qui peut être simplement une conséquence d'être la glue entre ces 2 domaines): ça ne pose aucun problème :-)
 
+### Autre technique: la méthode des ensembles
+Ici on utilise un découpage par couches ("layers"), via la théorie des ensembles (version vulgarisée).
+
+Un carré est un rectangle, qui est un parallélogramme, qui est un quadrilatère, etc.
+
+De la même manière, si par exemple je dois développer un module d'interaction avec une API HTTP externe - disons des services de votre client, derrière son proxy d'entreprise:
+1. Je détermine exactement ce que je veux obtenir à la fin. Ici, un module:
+  - qui apporte les fonctions d'interactions utiles à mon projet, et qui s'interfacent bien avec
+  - qui intéragit avec le proxy d'entreprise
+  - via du HTTP
+2. Je peux le découper en plusieurs ensembles imbriqués. Avec les données de l'étape précédente, je peux dire que j'ai besoin d'un module:
+  - d'interaction avec une API HTTP
+  - d'interaction avec le proxy de mon client
+  - d'interaction avec mon projet/app actuelle
+3. Me voici avec au moins 3 parties dans mon module:
+  - les fonctions d'interaction avec une API HTTP: par exemple une fonction permettant d'ajouter à la querystring d'une URL l'ensemble des entrées d'un objet passé en argument. Ces fonctions pourront servir de base à un autre module d'interaction avec une autre API HTTP.
+  - les fonctions d'interaction avec le proxy de mon client: par exemple une fonction qui permet de s'authentifier auprès du proxy, ou qui permet de set les headers demandés par le proxy. Ces fonctions pourront servir de base dans une autre projet pour interagir avec la même API HTTP (éventuellement des endpoints différents).
+  - les fonctions d'interaction dédiées à mon app/projet: du code qui ne pourra vraisemblablement pas être réutilisé sur un autre projet appelant d'autres endpoints API que le mien, ou les appelant d'une manière différente.
+
 ## Pendant le dev d'une nouvelle feature: Création d'un composant générique / réutilisable
 Cet exercice est inspiré de l'exercice de refactor de Robert C Martins, dans "Clean Code", chapitre 16: "Refactoring serialdate". Uncle Bob adopte pour sa part une approche très différente, plus simple mentalement que les deux présentées ci-dessus mais tout aussi instructive.
 
